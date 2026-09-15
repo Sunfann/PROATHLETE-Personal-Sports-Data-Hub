@@ -1,17 +1,34 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-theme="default">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>PROATHLETE · 个人多生态运动数据中枢</title>
 <style>
 :root{
-  --bg:#04060a;
   --blue:#0A84FF; --green:#30D158; --orange:#FF9F0A; --red:#FF453A;
   --purple:#BF5AF2; --teal:#64D2FF; --pink:#FF375F; --indigo:#5E5CE6;
-  --yellow:#FFD60A; --mint:#63E6E2;
+  --yellow:#FFD60A; --mint:#63E6E2; --gold:#FFD700;
   --t1:#fff; --t2:rgba(255,255,255,.72);
   --t3:rgba(255,255,255,.46); --t4:rgba(255,255,255,.28);
+  --surface-a:rgba(255,255,255,.028);
+  --surface-b:rgba(255,255,255,.05);
+  --surface-c:rgba(255,255,255,.085);
+  --surface-d:rgba(255,255,255,.14);
+  --hairline:rgba(255,255,255,.065);
+  --hairline-strong:rgba(255,255,255,.14);
+  --bg:#04060a;
+  --glass-rgb:20,22,34;
+  --glass-ink-rgb:255,255,255;
+  --glass-tint-rgb:255,255,255;
+  --glass-mode:dark;
+  --header-bg:rgba(var(--glass-rgb),.58);
+  --popover-bg:rgba(var(--glass-rgb),.94);
+  --modal-scrim:rgba(0,0,0,.62);
+  --bg-scrim:rgba(4,6,10,.62);
+  --mesh-1:rgba(10,132,255,.34); --mesh-2:rgba(191,90,242,.26);
+  --mesh-3:rgba(48,209,88,.20); --mesh-4:rgba(255,159,10,.20);
+  --mesh-5:rgba(100,210,255,.10);
   --r-xs:8px; --r-sm:12px; --r-md:16px; --r-lg:20px; --r-xl:24px; --r-2xl:30px;
   --s1:4px; --s2:8px; --s3:12px; --s4:16px; --s5:20px; --s6:24px; --s8:32px;
   --ease:cubic-bezier(.22,1,.36,1);
@@ -20,29 +37,146 @@
   --mono:'SF Mono','Menlo','Monaco','Consolas',monospace;
   --glass-base:rgba(20,22,34,.90);
   --glass-tint:rgba(255,255,255,.12);
-  --glass-blur:40px;
-  --glass-sat:170%;
-  --glass-bright:1.06;
+  --glass-blur:40px; --glass-sat:170%; --glass-bright:1.06;
   --glass-border:rgba(255,255,255,.16);
   --glass-inner:rgba(255,255,255,.10);
   --glass-shadow-a:.45;
 }
+[data-theme="dracula"]{
+  --blue:#8be9fd; --teal:#66d9e8; --green:#50fa7b; --orange:#ffb86c;
+  --red:#ff5555; --purple:#bd93f9; --pink:#ff79c6; --indigo:#6272a4;
+  --yellow:#f1fa8c; --mint:#50fa7b;
+  --t1:#f8f8f2; --t2:rgba(248,248,242,.72); --t3:rgba(248,248,242,.44); --t4:rgba(248,248,242,.26);
+  --surface-a:rgba(255,255,255,.028); --surface-b:rgba(255,255,255,.055);
+  --surface-c:rgba(255,255,255,.09); --surface-d:rgba(255,255,255,.15);
+  --hairline:rgba(255,255,255,.07); --hairline-strong:rgba(255,255,255,.15);
+  --bg:#1e2029; --glass-rgb:40,42,54;
+  --glass-ink-rgb:255,255,255; --glass-tint-rgb:255,255,255; --glass-mode:dark;
+  --bg-scrim:rgba(30,32,41,.62);
+  --mesh-1:rgba(189,147,249,.30); --mesh-2:rgba(255,121,198,.24);
+  --mesh-3:rgba(80,250,123,.16); --mesh-4:rgba(139,233,253,.18);
+  --mesh-5:rgba(255,184,108,.10);
+}
+[data-theme="nord"]{
+  --blue:#88c0d0; --teal:#8fbcbb; --green:#a3be8c; --orange:#d08770;
+  --red:#bf616a; --purple:#b48ead; --pink:#d08770; --indigo:#5e81ac;
+  --yellow:#ebcb8b; --mint:#8fbcbb;
+  --t1:#eceff4; --t2:rgba(236,239,244,.72); --t3:rgba(236,239,244,.45); --t4:rgba(236,239,244,.26);
+  --surface-a:rgba(216,222,233,.035); --surface-b:rgba(216,222,233,.06);
+  --surface-c:rgba(216,222,233,.10); --surface-d:rgba(216,222,233,.16);
+  --hairline:rgba(216,222,233,.08); --hairline-strong:rgba(216,222,233,.16);
+  --bg:#242933; --glass-rgb:46,52,64;
+  --glass-ink-rgb:216,222,233; --glass-tint-rgb:236,239,244; --glass-mode:dark;
+  --bg-scrim:rgba(36,41,51,.62);
+  --mesh-1:rgba(136,192,208,.26); --mesh-2:rgba(94,129,172,.24);
+  --mesh-3:rgba(163,190,140,.16); --mesh-4:rgba(180,142,173,.16);
+  --mesh-5:rgba(143,188,187,.10);
+}
+[data-theme="mocha"]{
+  --blue:#89b4fa; --teal:#94e2d5; --green:#a6e3a1; --orange:#fab387;
+  --red:#f38ba8; --purple:#cba6f7; --pink:#f5c2e7; --indigo:#b4befe;
+  --yellow:#f9e2af; --mint:#94e2d5;
+  --t1:#cdd6f4; --t2:rgba(205,214,244,.74); --t3:rgba(205,214,244,.46); --t4:rgba(205,214,244,.27);
+  --surface-a:rgba(205,214,244,.035); --surface-b:rgba(205,214,244,.06);
+  --surface-c:rgba(205,214,244,.10); --surface-d:rgba(205,214,244,.16);
+  --hairline:rgba(205,214,244,.08); --hairline-strong:rgba(205,214,244,.16);
+  --bg:#181825; --glass-rgb:30,30,46;
+  --glass-ink-rgb:205,214,244; --glass-tint-rgb:205,214,244; --glass-mode:dark;
+  --bg-scrim:rgba(24,24,37,.60);
+  --mesh-1:rgba(137,180,250,.26); --mesh-2:rgba(203,166,247,.24);
+  --mesh-3:rgba(166,227,161,.15); --mesh-4:rgba(250,179,135,.16);
+  --mesh-5:rgba(148,226,213,.10);
+}
+[data-theme="latte"]{
+  --blue:#1e66f5; --teal:#179299; --green:#40a02b; --orange:#fe640b;
+  --red:#d20f39; --purple:#8839ef; --pink:#ea76cb; --indigo:#7287fd;
+  --yellow:#df8e1d; --mint:#179299; --gold:#b8860b;
+  --t1:#4c4f69; --t2:rgba(76,79,105,.78); --t3:rgba(76,79,105,.54); --t4:rgba(76,79,105,.34);
+  --surface-a:rgba(76,79,105,.035); --surface-b:rgba(76,79,105,.055);
+  --surface-c:rgba(76,79,105,.085); --surface-d:rgba(76,79,105,.13);
+  --hairline:rgba(76,79,105,.10); --hairline-strong:rgba(76,79,105,.18);
+  --bg:#eff1f5; --glass-rgb:239,241,245;
+  --glass-ink-rgb:76,79,105; --glass-tint-rgb:255,255,255; --glass-mode:light;
+  --bg-scrim:rgba(239,241,245,.55);
+  --mesh-1:rgba(30,102,245,.13); --mesh-2:rgba(136,57,239,.11);
+  --mesh-3:rgba(64,160,43,.10); --mesh-4:rgba(223,142,29,.11);
+  --mesh-5:rgba(23,146,153,.08);
+}
+[data-theme="rosepine"]{
+  --blue:#9ccfd8; --teal:#9ccfd8; --green:#a3be8c; --orange:#f6c177;
+  --red:#eb6f92; --purple:#c4a7e7; --pink:#ebbcba; --indigo:#31748f;
+  --yellow:#f6c177; --mint:#9ccfd8;
+  --t1:#e0def4; --t2:rgba(224,222,244,.74); --t3:rgba(224,222,244,.46); --t4:rgba(224,222,244,.27);
+  --surface-a:rgba(224,222,244,.035); --surface-b:rgba(224,222,244,.06);
+  --surface-c:rgba(224,222,244,.10); --surface-d:rgba(224,222,244,.16);
+  --hairline:rgba(224,222,244,.08); --hairline-strong:rgba(224,222,244,.16);
+  --bg:#14121d; --glass-rgb:25,23,36;
+  --glass-ink-rgb:224,222,244; --glass-tint-rgb:224,222,244; --glass-mode:dark;
+  --bg-scrim:rgba(20,18,29,.60);
+  --mesh-1:rgba(196,167,231,.26); --mesh-2:rgba(235,111,146,.22);
+  --mesh-3:rgba(156,207,216,.15); --mesh-4:rgba(246,193,119,.15);
+  --mesh-5:rgba(49,116,143,.14);
+}
+[data-theme="tokyonight"]{
+  --blue:#7aa2f7; --teal:#7dcfff; --green:#9ece6a; --orange:#ff9e64;
+  --red:#f7768e; --purple:#bb9af7; --pink:#f7768e; --indigo:#9d7cd8;
+  --yellow:#e0af68; --mint:#73daca;
+  --t1:#c0caf5; --t2:rgba(192,202,245,.74); --t3:rgba(192,202,245,.46); --t4:rgba(192,202,245,.27);
+  --surface-a:rgba(192,202,245,.035); --surface-b:rgba(192,202,245,.06);
+  --surface-c:rgba(192,202,245,.10); --surface-d:rgba(192,202,245,.16);
+  --hairline:rgba(192,202,245,.08); --hairline-strong:rgba(192,202,245,.16);
+  --bg:#14151f; --glass-rgb:26,27,38;
+  --glass-ink-rgb:192,202,245; --glass-tint-rgb:192,202,245; --glass-mode:dark;
+  --bg-scrim:rgba(20,21,31,.60);
+  --mesh-1:rgba(122,162,247,.28); --mesh-2:rgba(187,154,247,.24);
+  --mesh-3:rgba(115,218,202,.14); --mesh-4:rgba(255,158,100,.15);
+  --mesh-5:rgba(125,207,255,.12);
+}
+[data-theme="gruvbox"]{
+  --blue:#83a598; --teal:#8ec07c; --green:#b8bb26; --orange:#fe8019;
+  --red:#fb4934; --purple:#d3869b; --pink:#d3869b; --indigo:#83a598;
+  --yellow:#fabd2f; --mint:#8ec07c;
+  --t1:#ebdbb2; --t2:rgba(235,219,178,.74); --t3:rgba(235,219,178,.46); --t4:rgba(235,219,178,.27);
+  --surface-a:rgba(235,219,178,.035); --surface-b:rgba(235,219,178,.06);
+  --surface-c:rgba(235,219,178,.10); --surface-d:rgba(235,219,178,.16);
+  --hairline:rgba(235,219,178,.08); --hairline-strong:rgba(235,219,178,.16);
+  --bg:#1d2021; --glass-rgb:40,40,40;
+  --glass-ink-rgb:235,219,178; --glass-tint-rgb:235,219,178; --glass-mode:dark;
+  --bg-scrim:rgba(29,32,33,.62);
+  --mesh-1:rgba(254,128,25,.24); --mesh-2:rgba(250,189,47,.20);
+  --mesh-3:rgba(184,187,38,.15); --mesh-4:rgba(131,165,152,.16);
+  --mesh-5:rgba(211,134,155,.12);
+}
+[data-theme="onedark"]{
+  --blue:#61afef; --teal:#56b6c2; --green:#98c379; --orange:#d19a66;
+  --red:#e06c75; --purple:#c678dd; --pink:#e06c75; --indigo:#c678dd;
+  --yellow:#e5c07b; --mint:#56b6c2;
+  --t1:#abb2bf; --t2:rgba(171,178,191,.78); --t3:rgba(171,178,191,.48); --t4:rgba(171,178,191,.28);
+  --surface-a:rgba(171,178,191,.035); --surface-b:rgba(171,178,191,.06);
+  --surface-c:rgba(171,178,191,.10); --surface-d:rgba(171,178,191,.16);
+  --hairline:rgba(171,178,191,.08); --hairline-strong:rgba(171,178,191,.16);
+  --bg:#1e2227; --glass-rgb:40,44,52;
+  --glass-ink-rgb:171,178,191; --glass-tint-rgb:171,178,191; --glass-mode:dark;
+  --bg-scrim:rgba(30,34,39,.62);
+  --mesh-1:rgba(97,175,239,.26); --mesh-2:rgba(198,120,221,.22);
+  --mesh-3:rgba(152,195,121,.15); --mesh-4:rgba(209,154,102,.15);
+  --mesh-5:rgba(86,182,194,.12);
+}
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
-html{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;-webkit-text-size-adjust:100%;}
-body{font-family:var(--font);background:var(--bg);color:var(--t1);min-height:100vh;overflow-x:hidden;line-height:1.5;letter-spacing:-.01em;}
-
+html{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;-webkit-text-size-adjust:100%;background:var(--bg);}
+body{font-family:var(--font);background:var(--bg);color:var(--t1);min-height:100vh;overflow-x:hidden;line-height:1.5;letter-spacing:-.01em;
+  transition:background-color .5s var(--ease),color .5s var(--ease);}
 .app-bg{position:fixed;inset:0;z-index:-3;background-size:cover;background-position:center;background-repeat:no-repeat;opacity:0;transition:opacity .8s var(--ease);pointer-events:none;}
 .app-bg.has-image{opacity:1;}
-.app-bg::after{content:'';position:absolute;inset:0;background:rgba(4,6,10,.62);}
-
+.app-bg::after{content:'';position:absolute;inset:0;background:var(--bg-scrim);transition:background .5s var(--ease);}
 body::before{
   content:'';position:fixed;inset:-10%;z-index:-2;
   background:
-    radial-gradient(45% 40% at 12% 8%,  rgba(10,132,255,.34) 0%, transparent 62%),
-    radial-gradient(42% 46% at 88% 12%, rgba(191,90,242,.26) 0%, transparent 62%),
-    radial-gradient(48% 42% at 72% 88%, rgba(48,209,88,.20) 0%, transparent 62%),
-    radial-gradient(40% 44% at 8% 92%,  rgba(255,159,10,.20) 0%, transparent 62%),
-    radial-gradient(36% 36% at 50% 50%, rgba(100,210,255,.10) 0%, transparent 70%);
+    radial-gradient(45% 40% at 12% 8%,  var(--mesh-1) 0%, transparent 62%),
+    radial-gradient(42% 46% at 88% 12%, var(--mesh-2) 0%, transparent 62%),
+    radial-gradient(48% 42% at 72% 88%, var(--mesh-3) 0%, transparent 62%),
+    radial-gradient(40% 44% at 8% 92%,  var(--mesh-4) 0%, transparent 62%),
+    radial-gradient(36% 36% at 50% 50%, var(--mesh-5) 0%, transparent 70%);
   animation:mesh 28s ease-in-out infinite alternate;
   transition:opacity .6s var(--ease);
 }
@@ -54,7 +188,7 @@ body.has-custom-bg::before{opacity:.25;}
   -webkit-backdrop-filter:blur(var(--glass-blur)) saturate(var(--glass-sat)) brightness(var(--glass-bright));
   backdrop-filter:blur(var(--glass-blur)) saturate(var(--glass-sat)) brightness(var(--glass-bright));
   border:1px solid var(--glass-border);
-  box-shadow:0 8px 32px rgba(0,0,0,var(--glass-shadow-a)),0 1px 0 rgba(255,255,255,.05),inset 0 1px 0 var(--glass-inner);
+  box-shadow:0 8px 32px rgba(0,0,0,var(--glass-shadow-a)),0 1px 0 var(--glass-inner),inset 0 1px 0 var(--glass-inner);
   transition:background-color .25s var(--ease),border-color .25s var(--ease),box-shadow .3s var(--ease);
 }
 .glass.shine{position:relative;overflow:hidden;}
@@ -62,25 +196,22 @@ body.has-custom-bg::before{opacity:.25;}
   background:linear-gradient(90deg,transparent,rgba(255,255,255,.07),transparent);
   transform:skewX(-22deg);pointer-events:none;transition:left .9s var(--ease);}
 .glass.shine:hover::after{left:140%;}
-
 .app{display:grid;grid-template-columns:var(--sb-w, 68px) 1fr;grid-template-rows:72px 1fr;
   grid-template-areas:"sidebar header" "sidebar main";min-height:100vh;
   transition:grid-template-columns .48s cubic-bezier(.22,1,.36,1);}
 .app.sb-expanded{--sb-w:248px;}
-
 .sidebar{grid-area:sidebar;position:sticky;top:0;height:100vh;padding:var(--s5) var(--s3);
   display:flex;flex-direction:column;gap:var(--s5);border-radius:0;border-left:none;border-top:none;border-bottom:none;z-index:100;overflow-y:auto;overflow-x:hidden;}
 .brand{display:flex;align-items:center;gap:var(--s3);padding:var(--s2) var(--s3);min-height:54px;}
 .brand .logo{width:38px;height:38px;border-radius:var(--r-sm);flex:0 0 38px;
   background:linear-gradient(135deg,var(--blue),var(--purple));
-  display:flex;align-items:center;justify-content:center;font-weight:800;font-size:19px;
-  box-shadow:0 6px 18px rgba(10,132,255,.4),inset 0 1px 0 rgba(255,255,255,.35);}
+  display:flex;align-items:center;justify-content:center;font-weight:800;font-size:19px;color:#fff;
+  box-shadow:0 6px 18px rgba(0,0,0,.28),inset 0 1px 0 rgba(255,255,255,.35);}
 .brand-text{display:flex;flex-direction:column;gap:1px;overflow:hidden;white-space:nowrap;
   opacity:1;transform:translateX(0);transition:opacity .25s var(--ease) .12s, transform .35s var(--ease) .12s;}
 .app:not(.sb-expanded) .brand-text{opacity:0;transform:translateX(-8px);transition:opacity .12s var(--ease), transform .2s var(--ease);}
 .brand-name{font-size:15px;font-weight:800;}
 .brand-sub{font-size:10px;color:var(--t3);letter-spacing:1.2px;text-transform:uppercase;font-weight:600;}
-
 .nav{display:flex;flex-direction:column;gap:2px;position:relative;isolation:isolate;}
 .nav-title{font-size:10px;font-weight:700;color:var(--t4);letter-spacing:1.1px;text-transform:uppercase;
   padding:var(--s3) var(--s3) var(--s2);overflow:hidden;white-space:nowrap;opacity:1;transition:opacity .22s var(--ease) .1s;position:relative;z-index:1;}
@@ -89,7 +220,7 @@ body.has-custom-bg::before{opacity:.25;}
   color:var(--t2);font-size:14px;font-weight:600;cursor:pointer;position:relative;user-select:none;
   transition:color .2s var(--ease);min-height:44px;background:transparent !important;z-index:1;}
 .nav-item:hover{color:var(--t1);}
-.nav-item.active{color:#fff;}
+.nav-item.active{color:var(--t1);}
 .nav-item.active::before{content:'';position:absolute;left:-10px;top:50%;transform:translateY(-50%);
   width:3px;height:18px;background:var(--blue);border-radius:0 3px 3px 0;box-shadow:0 0 10px var(--blue);z-index:3;}
 .nav-item .ico{width:22px;height:22px;flex:0 0 22px;display:flex;align-items:center;justify-content:center;font-size:17px;}
@@ -97,40 +228,35 @@ body.has-custom-bg::before{opacity:.25;}
   transition:opacity .25s var(--ease) .12s, transform .35s var(--ease) .12s;}
 .app:not(.sb-expanded) .nav-item .label{opacity:0;transform:translateX(-8px);transition:opacity .12s var(--ease), transform .2s var(--ease);}
 .nav-badge{margin-left:auto;font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px;
-  background:rgba(10,132,255,.2);color:var(--blue);opacity:1;transition:opacity .22s var(--ease) .12s;}
-.app:not(.sb-expanded) .nav-badge{opacity:0;transition:opacity .1s var(--ease);}
+  background:color-mix(in srgb, var(--blue) 22%, transparent);color:var(--blue);opacity:1;}
+.app:not(.sb-expanded) .nav-badge{opacity:0;}
 .sb-footer{margin-top:auto;}
-.sb-divider{height:1px;background:rgba(255,255,255,.07);margin:var(--s4) 0;}
-
-.nav .liquid-indicator{position:absolute;top:0;left:0;pointer-events:none;background:rgba(255,255,255,.11);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.06);z-index:0;opacity:0;
+.sb-divider{height:1px;background:var(--hairline);margin:var(--s4) 0;}
+.nav .liquid-indicator{position:absolute;top:0;left:0;pointer-events:none;background:var(--surface-d);
+  box-shadow:inset 0 1px 0 var(--glass-inner);z-index:0;opacity:0;
   transition:transform .42s cubic-bezier(.34,1.42,.64,1),width .42s cubic-bezier(.34,1.42,.64,1),
              height .42s cubic-bezier(.34,1.42,.64,1),opacity .25s var(--ease);
   will-change:transform, width, height;}
 .nav .liquid-indicator.visible{opacity:1;}
-
 .header{grid-area:header;position:sticky;top:0;z-index:90;display:flex;align-items:center;justify-content:space-between;
-  padding:0 var(--s6);background:rgba(6,8,14,.55);
+  padding:0 var(--s6);background:var(--header-bg);
   -webkit-backdrop-filter:blur(24px) saturate(160%);backdrop-filter:blur(24px) saturate(160%);
-  border-bottom:1px solid rgba(255,255,255,.06);}
+  border-bottom:1px solid var(--hairline);}
 .header-left{display:flex;align-items:center;gap:var(--s3);min-width:0;}
 .header-title{font-size:19px;font-weight:700;letter-spacing:-.3px;white-space:nowrap;}
 .header-sub{font-size:12px;color:var(--t3);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .header-actions{display:flex;align-items:center;gap:var(--s2);flex-shrink:0;}
-
 .main{grid-area:main;padding:var(--s6);max-width:1720px;width:100%;}
 .view{display:none;}
 .view.active{display:block;animation:viewIn .45s var(--ease);}
 @keyframes viewIn{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
-
 .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--s5);}
 .col-2{grid-column:span 2;}
 .col-4{grid-column:span 4;}
-
 .card{border-radius:var(--r-xl);padding:var(--s5);
   display:flex;flex-direction:column;gap:var(--s3);min-height:168px;position:relative;overflow:hidden;}
 .card.clickable{cursor:pointer;}
-.card.clickable:hover{transform:translateY(-2px);border-color:rgba(255,255,255,.28);}
+.card.clickable:hover{transform:translateY(-2px);border-color:var(--hairline-strong);}
 .card-head{display:flex;align-items:center;justify-content:space-between;gap:var(--s2);position:relative;z-index:2;}
 .card-label{font-size:13px;font-weight:600;color:var(--t2);display:flex;align-items:center;gap:7px;}
 .card-label .dot{width:8px;height:8px;border-radius:3px;flex:0 0 8px;}
@@ -144,7 +270,6 @@ body.has-custom-bg::before{opacity:.25;}
 .stat{display:flex;flex-direction:column;gap:2px;}
 .stat-v{font-size:17px;font-weight:700;letter-spacing:-.3px;}
 .stat-l{font-size:11px;color:var(--t3);font-weight:500;}
-
 .card-figure{position:absolute;inset:0;z-index:1;display:flex;align-items:center;justify-content:center;pointer-events:none;overflow:hidden;}
 .card-figure .fig-mask{
   width:66%;height:66%;max-width:280px;max-height:280px;
@@ -155,162 +280,166 @@ body.has-custom-bg::before{opacity:.25;}
 }
 .card-figure.has-image .fig-mask{display:block;}
 .card:hover .card-figure.has-image .fig-mask{opacity:.24;}
-
 .fig-upload{position:absolute;right:12px;bottom:12px;width:28px;height:28px;padding:0;border-radius:50%;
-  background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);color:var(--t2);
+  background:var(--surface-d);border:1px solid var(--hairline-strong);color:var(--t2);
   display:flex;align-items:center;justify-content:center;cursor:pointer;opacity:0;transform:translateY(4px);
   transition:opacity .22s var(--ease),transform .25s var(--spring),background .2s,color .2s;
   z-index:6;font-size:15px;line-height:1;font-family:var(--font);}
 .card:hover .fig-upload{opacity:1;transform:translateY(0);}
-.fig-upload:hover{background:rgba(255,255,255,.22);color:#fff;}
-.fig-upload.has-icon{color:var(--red);border-color:rgba(255,69,58,.4);background:rgba(255,69,58,.12);}
-.fig-upload.has-icon:hover{background:rgba(255,69,58,.24);color:#FF8A82;}
-
-.tag{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:700;}
-.tag.green{background:rgba(48,209,88,.16);color:#4BE07A;}
-.tag.blue{background:rgba(10,132,255,.16);color:#5AA9FF;}
-.tag.orange{background:rgba(255,159,10,.16);color:#FFB84D;}
-.tag.red{background:rgba(255,69,58,.16);color:#FF7A72;}
-.tag.gray{background:rgba(255,255,255,.08);color:var(--t2);}
-
+.fig-upload:hover{background:var(--surface-c);color:var(--t1);}
+.fig-upload.has-icon{color:var(--red);border-color:color-mix(in srgb, var(--red) 42%, transparent);background:color-mix(in srgb, var(--red) 14%, transparent);}
+.tag{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:700;white-space:nowrap;}
+.tag.green{background:color-mix(in srgb, var(--green) 18%, transparent);color:var(--green);}
+.tag.blue{background:color-mix(in srgb, var(--blue) 18%, transparent);color:var(--blue);}
+.tag.orange{background:color-mix(in srgb, var(--orange) 18%, transparent);color:var(--orange);}
+.tag.red{background:color-mix(in srgb, var(--red) 18%, transparent);color:var(--red);}
+.tag.gray{background:var(--surface-c);color:var(--t2);}
+.tag.gold{background:color-mix(in srgb, var(--gold) 18%, transparent);color:var(--gold);}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;
   padding:10px 18px;border-radius:14px;border:none;outline:none;
   font-family:var(--font);font-size:14px;font-weight:650;letter-spacing:-.1px;
   cursor:pointer;white-space:nowrap;user-select:none;
   transition:transform .18s var(--spring),background .2s var(--ease),box-shadow .25s var(--ease),opacity .2s;}
 .btn:active{transform:scale(.96);}
-.btn-primary{background:linear-gradient(180deg,#2E96FF,#0A6FE0);color:#fff;
-  box-shadow:0 4px 16px rgba(10,132,255,.35),inset 0 1px 0 rgba(255,255,255,.28);}
-.btn-primary:hover{box-shadow:0 6px 22px rgba(10,132,255,.5);}
-.btn-ghost{background:rgba(255,255,255,.08);color:var(--t1);border:1px solid rgba(255,255,255,.12);
+.btn-primary{background:linear-gradient(180deg,color-mix(in srgb,var(--blue) 88%, #fff 12%),var(--blue));color:#fff;
+  box-shadow:0 4px 16px color-mix(in srgb, var(--blue) 40%, transparent),inset 0 1px 0 rgba(255,255,255,.28);}
+.btn-primary:hover{box-shadow:0 6px 22px color-mix(in srgb, var(--blue) 55%, transparent);}
+.btn-ghost{background:var(--surface-c);color:var(--t1);border:1px solid var(--hairline-strong);
   -webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);}
-.btn-ghost:hover{background:rgba(255,255,255,.14);}
-.btn-danger{background:rgba(255,69,58,.15);color:#FF8A82;border:1px solid rgba(255,69,58,.28);}
-.btn-danger:hover{background:rgba(255,69,58,.24);}
+.btn-ghost:hover{background:var(--surface-d);}
+.btn-danger{background:color-mix(in srgb, var(--red) 16%, transparent);color:var(--red);border:1px solid color-mix(in srgb, var(--red) 30%, transparent);}
+.btn-danger:hover{background:color-mix(in srgb, var(--red) 26%, transparent);}
 .btn-sm{padding:7px 13px;font-size:13px;border-radius:11px;}
 .btn-icon{width:40px;height:40px;padding:0;border-radius:50%;}
 .btn:disabled{opacity:.5;cursor:not-allowed;}
-
-.tabs{display:inline-flex;gap:3px;padding:3px;border-radius:14px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.07);
+.tabs{display:inline-flex;gap:3px;padding:3px;border-radius:14px;background:var(--surface-b);border:1px solid var(--hairline);
   position:relative;isolation:isolate;}
 .tabs .tab{padding:7px 16px;border-radius:11px;font-size:13px;font-weight:600;color:var(--t2);cursor:pointer;transition:color .22s var(--ease);
   white-space:nowrap;background:transparent !important;box-shadow:none !important;position:relative;z-index:1;display:inline-flex;align-items:center;gap:6px;}
-.tabs .tab:hover{color:#fff;}
-.tabs .tab.active{color:#fff;}
-.tabs .liquid-indicator{position:absolute;top:0;left:0;border-radius:11px;background:rgba(255,255,255,.14);
-  box-shadow:0 2px 10px rgba(0,0,0,.22),inset 0 1px 0 rgba(255,255,255,.08);pointer-events:none;z-index:0;
+.tabs .tab:hover{color:var(--t1);}
+.tabs .tab.active{color:var(--t1);}
+.tabs .liquid-indicator{position:absolute;top:0;left:0;border-radius:11px;background:var(--surface-d);
+  box-shadow:0 2px 10px rgba(0,0,0,.22),inset 0 1px 0 var(--glass-inner);pointer-events:none;z-index:0;
   transition:transform .42s cubic-bezier(.34,1.42,.64,1),width .42s cubic-bezier(.34,1.42,.64,1),height .42s cubic-bezier(.34,1.42,.64,1);}
-
 .list{display:flex;flex-direction:column;gap:2px;}
 .row{display:grid;align-items:center;gap:var(--s4);padding:11px var(--s3);border-radius:var(--r-md);cursor:pointer;transition:background .18s var(--ease);}
-.row:hover{background:rgba(255,255,255,.05);}
-.row-activities{grid-template-columns:40px 1fr auto auto auto;}
+.row:hover{background:var(--surface-b);}
+.row-activities{grid-template-columns:40px 1fr auto auto auto auto;}
 .row-mini{grid-template-columns:38px 1fr auto;}
 .r-ico{width:38px;height:38px;border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;font-size:18px;flex:0 0 38px;}
-.r-ico.run{background:rgba(255,159,10,.18);}
-.r-ico.cycle{background:rgba(10,132,255,.18);}
-.r-ico.swim{background:rgba(100,210,255,.18);}
-.r-ico.gym{background:rgba(191,90,242,.18);}
-.r-ico.walk{background:rgba(48,209,88,.18);}
-.r-ico.hike{background:rgba(255,214,10,.18);}
-.r-ico.other{background:rgba(255,255,255,.1);}
+.r-ico.run{background:color-mix(in srgb, var(--orange) 20%, transparent);}
+.r-ico.cycle{background:color-mix(in srgb, var(--blue) 20%, transparent);}
+.r-ico.swim{background:color-mix(in srgb, var(--teal) 20%, transparent);}
+.r-ico.gym{background:color-mix(in srgb, var(--purple) 20%, transparent);}
+.r-ico.walk{background:color-mix(in srgb, var(--green) 20%, transparent);}
+.r-ico.hike{background:color-mix(in srgb, var(--yellow) 20%, transparent);}
+.r-ico.other{background:var(--surface-c);}
 .r-name{font-size:14px;font-weight:650;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .r-meta{font-size:11px;color:var(--t3);margin-top:1px;}
 .r-cell{display:flex;flex-direction:column;gap:1px;text-align:right;}
 .r-cell .v{font-size:14px;font-weight:650;}
 .r-cell .l{font-size:10px;color:var(--t3);font-weight:500;}
-
-.drop{border:2px dashed rgba(255,255,255,.16);border-radius:var(--r-2xl);padding:var(--s8) var(--s6);text-align:center;cursor:pointer;position:relative;transition:all .3s var(--ease);}
-.drop:hover,.drop.over{border-color:var(--blue);background:rgba(10,132,255,.07);transform:translateY(-2px);}
+.r-trophy{font-size:15px;color:var(--gold);text-shadow:0 0 8px color-mix(in srgb, var(--gold) 60%, transparent);}
+.drop{border:2px dashed var(--hairline-strong);border-radius:var(--r-2xl);padding:var(--s8) var(--s6);text-align:center;cursor:pointer;position:relative;transition:all .3s var(--ease);}
+.drop:hover,.drop.over{border-color:var(--blue);background:color-mix(in srgb, var(--blue) 8%, transparent);transform:translateY(-2px);}
 .drop input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;}
 .drop-ico{font-size:44px;margin-bottom:var(--s4);display:block;}
 .drop-title{font-size:17px;font-weight:700;margin-bottom:6px;}
 .drop-desc{font-size:13px;color:var(--t3);}
-
 .group{margin-bottom:var(--s8);}
-.group-title{font-size:16px;font-weight:700;margin-bottom:var(--s4);padding-bottom:var(--s3);border-bottom:1px solid rgba(255,255,255,.07);}
-.setting{display:flex;align-items:center;justify-content:space-between;gap:var(--s5);padding:var(--s4) 0;border-bottom:1px solid rgba(255,255,255,.045);}
+.group-title{font-size:16px;font-weight:700;margin-bottom:var(--s4);padding-bottom:var(--s3);border-bottom:1px solid var(--hairline);}
+.setting{display:flex;align-items:center;justify-content:space-between;gap:var(--s5);padding:var(--s4) 0;border-bottom:1px solid var(--hairline);}
 .setting:last-child{border-bottom:none;}
 .setting-label{font-size:14px;font-weight:600;}
 .setting-desc{font-size:11.5px;color:var(--t3);margin-top:2px;line-height:1.5;}
 .control{display:flex;align-items:center;gap:var(--s3);min-width:290px;flex-shrink:0;}
-.slider{-webkit-appearance:none;appearance:none;flex:1;height:6px;border-radius:3px;background:rgba(255,255,255,.14);outline:none;cursor:pointer;}
+.slider{-webkit-appearance:none;appearance:none;flex:1;height:6px;border-radius:3px;background:var(--surface-d);outline:none;cursor:pointer;}
 .slider::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:22px;height:22px;border-radius:50%;background:#fff;cursor:pointer;
-  box-shadow:0 2px 8px rgba(0,0,0,.4),0 0 0 1px rgba(255,255,255,.2);}
+  box-shadow:0 2px 8px rgba(0,0,0,.4),0 0 0 1px var(--hairline-strong);}
+.slider::-moz-range-thumb{width:22px;height:22px;border-radius:50%;background:#fff;cursor:pointer;border:none;
+  box-shadow:0 2px 8px rgba(0,0,0,.4);}
 .slider-val{font-size:14px;font-weight:700;min-width:58px;text-align:right;color:var(--blue);font-variant-numeric:tabular-nums;}
-
-.bg-preview{width:100%;height:120px;margin-top:var(--s3);border-radius:var(--r-md);border:1px solid rgba(255,255,255,.1);
+.bg-preview{width:100%;height:120px;margin-top:var(--s3);border-radius:var(--r-md);border:1px solid var(--hairline);
   background-size:cover;background-position:center;display:none;}
 .bg-preview.has-image{display:block;}
-
+.theme-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:var(--s3);}
+.theme-card{padding:13px 15px;border-radius:var(--r-md);border:1px solid var(--hairline-strong);
+  background:var(--surface-a);cursor:pointer;transition:all .25s var(--ease);
+  display:flex;flex-direction:column;gap:10px;position:relative;overflow:hidden;}
+.theme-card:hover{transform:translateY(-2px);border-color:var(--t4);background:var(--surface-b);}
+.theme-card.active{border-color:var(--blue);box-shadow:0 0 0 1px var(--blue),0 8px 26px color-mix(in srgb, var(--blue) 22%, transparent);}
+.theme-card .tc-top{display:flex;align-items:center;justify-content:space-between;gap:8px;}
+.theme-card .tc-name{font-size:13px;font-weight:700;letter-spacing:-.2px;}
+.theme-card .tc-sub{font-size:10.5px;color:var(--t3);margin-top:1px;}
+.theme-card .tc-dots{display:flex;gap:5px;}
+.theme-card .tc-dots span{width:16px;height:16px;border-radius:5px;box-shadow:inset 0 0 0 1px rgba(128,128,128,.18);}
+.theme-card .tc-check{width:18px;height:18px;border-radius:50%;border:1.5px solid var(--hairline-strong);
+  display:flex;align-items:center;justify-content:center;font-size:10px;color:transparent;flex:0 0 18px;transition:all .25s var(--ease);}
+.theme-card.active .tc-check{background:var(--blue);border-color:var(--blue);color:#fff;}
 .toasts{position:fixed;top:var(--s6);right:var(--s6);z-index:9999;display:flex;flex-direction:column;gap:var(--s3);pointer-events:none;}
 .toast{padding:13px 18px;border-radius:var(--r-md);min-width:250px;max-width:380px;display:flex;align-items:center;gap:11px;
   font-size:13.5px;font-weight:600;animation:tIn .4s var(--spring);pointer-events:auto;}
 .toast.out{animation:tOut .28s var(--ease) forwards;}
 @keyframes tIn{from{opacity:0;transform:translateX(50px) scale(.94);}to{opacity:1;transform:none;}}
 @keyframes tOut{to{opacity:0;transform:translateX(50px) scale(.94);}}
-
 .modal{position:fixed;inset:0;z-index:9000;display:none;align-items:center;justify-content:center;padding:var(--s6);
-  background:rgba(0,0,0,.6);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);}
+  background:var(--modal-scrim);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);}
 .modal.open{display:flex;animation:viewIn .3s var(--ease);}
 .modal-box{width:min(900px,100%);max-height:90vh;overflow-y:auto;border-radius:var(--r-2xl);padding:var(--s6);
   display:flex;flex-direction:column;gap:var(--s5);}
 .modal-head{display:flex;align-items:flex-start;justify-content:space-between;gap:var(--s4);}
-
 .metric-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:var(--s3);}
-.metric-tile{padding:var(--s3) var(--s4);border-radius:var(--r-md);background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);}
+.metric-tile{padding:var(--s3) var(--s4);border-radius:var(--r-md);background:var(--surface-a);border:1px solid var(--hairline);}
 .metric-tile .l{font-size:11px;color:var(--t3);font-weight:600;margin-bottom:3px;}
 .metric-tile .v{font-size:20px;font-weight:800;letter-spacing:-.5px;font-variant-numeric:tabular-nums;}
 .metric-tile .v .u{font-size:11px;color:var(--t3);font-weight:600;margin-left:3px;}
-
 .empty{padding:var(--s8) var(--s5);text-align:center;color:var(--t3);display:flex;flex-direction:column;align-items:center;gap:var(--s3);}
 .empty .e-ico{font-size:38px;opacity:.5;}
 .empty .e-t{font-size:15px;font-weight:600;color:var(--t2);}
 .empty .e-d{font-size:12.5px;max-width:340px;line-height:1.65;}
-
 .chart-box{width:100%;position:relative;}
 .chart-box canvas{width:100%;height:100%;display:block;}
-
 ::-webkit-scrollbar{width:8px;height:8px;}
 ::-webkit-scrollbar-track{background:transparent;}
-::-webkit-scrollbar-thumb{background:rgba(255,255,255,.13);border-radius:4px;}
-::-webkit-scrollbar-thumb:hover{background:rgba(255,255,255,.22);}
-
+::-webkit-scrollbar-thumb{background:var(--surface-d);border-radius:4px;}
+::-webkit-scrollbar-thumb:hover{background:var(--t4);}
 .fab{position:fixed;right:var(--s6);bottom:var(--s6);z-index:600;}
-
-/* ============ 详情视图 ============ */
+.heatmap-card{grid-column:span 4;padding:var(--s5);min-height:auto;overflow:visible;gap:var(--s3);}
+.heatmap-wrap{position:relative;width:100%;padding:6px 0 2px;}
+.heatmap-wrap canvas{display:block;width:100%;height:auto;touch-action:manipulation;}
+.heatmap-legend{display:flex;align-items:center;gap:var(--s4);flex-wrap:wrap;margin-top:var(--s4);padding-top:var(--s3);border-top:1px solid var(--hairline);font-size:11.5px;color:var(--t3);}
+.heatmap-legend .legend-item{display:flex;align-items:center;gap:6px;font-weight:600;}
+.heatmap-legend .legend-swatch{width:10px;height:10px;border-radius:3px;flex:0 0 10px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.08);}
+.heatmap-legend .legend-scale{display:flex;align-items:center;gap:3px;margin-left:auto;font-size:11px;}
+.heatmap-legend .scale-cell{width:11px;height:11px;border-radius:3px;}
+.heatmap-legend .legend-pb{display:flex;align-items:center;gap:6px;font-weight:700;color:var(--gold);}
+.heatmap-legend .legend-pb-ring{width:12px;height:12px;border-radius:3px;border:2px solid var(--gold);box-shadow:0 0 8px color-mix(in srgb, var(--gold) 55%, transparent);}
+.heatmap-tooltip{position:fixed;top:0;left:0;pointer-events:none;background:var(--popover-bg);border:1px solid var(--hairline-strong);border-radius:12px;padding:10px 14px;font-size:12px;color:var(--t1);-webkit-backdrop-filter:blur(20px) saturate(160%);backdrop-filter:blur(20px) saturate(160%);box-shadow:0 16px 40px rgba(0,0,0,.42);opacity:0;transform:translateY(4px) scale(.97);transition:opacity .18s var(--ease), transform .18s var(--ease);z-index:9999;min-width:180px;max-width:300px;will-change:transform, opacity;}
+.heatmap-tooltip.on{opacity:1;transform:translateY(0) scale(1);}
 #view-detail,#view-today{padding:0;}
 .detail-header{display:flex;align-items:center;gap:var(--s4);padding:var(--s2) 0 var(--s4);flex-wrap:wrap;}
 .detail-header .grow{flex:1;min-width:0;}
-
 .detail-stage{position:relative;height:clamp(640px, calc(100vh - 190px), 920px);
   display:flex;align-items:center;justify-content:center;overflow:hidden;user-select:none;cursor:grab;padding:0;perspective:2400px;}
 .detail-stage:active{cursor:grabbing;}
 .detail-stage.no-cards{cursor:default;}
-
-.detail-card{position:absolute;top:50%;left:50%;border-radius:var(--r-2xl);overflow:hidden;
-  transform-origin:center center;will-change:transform, opacity;
+.detail-card{position:absolute;top:50%;left:50%;border-radius:var(--r-2xl);overflow:hidden;transform-origin:center center;will-change:transform, opacity;
   transition:transform .62s cubic-bezier(.22,1,.36,1), opacity .5s var(--ease),box-shadow .4s var(--ease), border-color .4s var(--ease);
-  background-color:var(--glass-base);
-  background-image:linear-gradient(155deg,var(--glass-tint) 0%,rgba(255,255,255,0) 58%);
+  background-color:var(--glass-base);background-image:linear-gradient(155deg,var(--glass-tint) 0%,rgba(255,255,255,0) 58%);
   -webkit-backdrop-filter:blur(var(--glass-blur)) saturate(var(--glass-sat)) brightness(var(--glass-bright));
   backdrop-filter:blur(var(--glass-blur)) saturate(var(--glass-sat)) brightness(var(--glass-bright));
-  border:1px solid var(--glass-border);
-  box-shadow:0 24px 60px rgba(0,0,0,.55),0 1px 0 rgba(255,255,255,.05),inset 0 1px 0 var(--glass-inner);}
+  border:1px solid var(--glass-border);box-shadow:0 24px 60px rgba(0,0,0,var(--glass-shadow-a)),0 1px 0 var(--glass-inner),inset 0 1px 0 var(--glass-inner);}
 .detail-card.dragging{transition:none !important;}
-.detail-card.focused{border-color:rgba(90,169,255,.38);
-  box-shadow:0 32px 80px rgba(0,0,0,.65),0 0 0 1px rgba(90,169,255,.12),0 1px 0 rgba(255,255,255,.06),inset 0 1px 0 var(--glass-inner);}
+.detail-card.focused{border-color:color-mix(in srgb, var(--blue) 40%, transparent);
+  box-shadow:0 32px 80px rgba(0,0,0,var(--glass-shadow-a)),0 0 0 1px color-mix(in srgb, var(--blue) 14%, transparent),inset 0 1px 0 var(--glass-inner);}
 .detail-card .dc-scroll{height:100%;overflow-y:auto;overflow-x:hidden;display:flex;flex-direction:column;}
-
-.dc-head{display:flex;align-items:center;justify-content:space-between;padding:var(--s5) var(--s5) var(--s4);border-bottom:1px solid rgba(255,255,255,.06);flex-shrink:0;}
+.dc-head{display:flex;align-items:center;justify-content:space-between;padding:var(--s5) var(--s5) var(--s4);border-bottom:1px solid var(--hairline);flex-shrink:0;}
 .dc-title{display:flex;align-items:center;gap:10px;font-size:19px;font-weight:700;letter-spacing:-.3px;}
 .dc-title .ic{font-size:22px;}
 .dc-title .arrow{color:var(--t3);font-size:15px;font-weight:400;margin-left:2px;}
-.dc-period{font-size:11px;font-weight:700;color:var(--t3);letter-spacing:.5px;text-transform:uppercase;
-  padding:4px 10px;border-radius:20px;background:rgba(255,255,255,.06);}
-.dc-period.highlight{color:var(--blue);background:rgba(10,132,255,.14);}
-
-.dc-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--s2) var(--s4);padding:var(--s4) var(--s5);border-bottom:1px solid rgba(255,255,255,.06);flex-shrink:0;}
+.dc-period{font-size:11px;font-weight:700;color:var(--t3);letter-spacing:.5px;text-transform:uppercase;padding:4px 10px;border-radius:20px;background:var(--surface-b);}
+.dc-period.highlight{color:var(--blue);background:color-mix(in srgb, var(--blue) 16%, transparent);}
+.dc-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--s2) var(--s4);padding:var(--s4) var(--s5);border-bottom:1px solid var(--hairline);flex-shrink:0;}
 .dc-metric{display:flex;flex-direction:column;gap:2px;min-width:0;}
 .dc-metric .l{font-size:10.5px;color:var(--t3);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .dc-metric .v{font-size:19px;font-weight:800;letter-spacing:-.6px;line-height:1.1;font-variant-numeric:tabular-nums;white-space:nowrap;}
@@ -318,27 +447,18 @@ body.has-custom-bg::before{opacity:.25;}
 .dc-metric .d{font-size:10px;font-weight:700;color:var(--green);display:flex;align-items:center;gap:3px;line-height:1.2;}
 .dc-metric .d.down{color:var(--red);}
 .dc-metric .d.flat{color:var(--t3);}
-
 .dc-tabs{display:flex;gap:4px;padding:var(--s4) var(--s5) var(--s2);flex-wrap:wrap;flex-shrink:0;position:relative;isolation:isolate;}
-.dc-tab{padding:5px 12px;border-radius:9px;font-size:12px;font-weight:600;color:var(--t3);
-  cursor:pointer;transition:color .22s var(--ease);position:relative;z-index:1;background:transparent !important;}
+.dc-tab{padding:5px 12px;border-radius:9px;font-size:12px;font-weight:600;color:var(--t3);cursor:pointer;transition:color .22s var(--ease);position:relative;z-index:1;background:transparent !important;}
 .dc-tab:hover{color:var(--t2);}
 .dc-tab.active{color:var(--blue);}
-.dc-tabs .liquid-indicator{position:absolute;top:0;left:0;border-radius:9px;background:rgba(10,132,255,.12);pointer-events:none;z-index:0;
+.dc-tabs .liquid-indicator{position:absolute;top:0;left:0;border-radius:9px;background:color-mix(in srgb, var(--blue) 14%, transparent);pointer-events:none;z-index:0;
   transition:transform .42s cubic-bezier(.34,1.42,.64,1),width .42s cubic-bezier(.34,1.42,.64,1),height .42s cubic-bezier(.34,1.42,.64,1);}
-
 .dc-chart{height:150px;margin:0 var(--s5);position:relative;flex-shrink:0;}
 .dc-chart canvas{width:100%;height:100%;display:block;}
-.dc-hint{position:absolute;pointer-events:none;background:rgba(20,22,34,.94);
-  border:1px solid rgba(255,255,255,.14);border-radius:9px;padding:5px 9px;
-  font-size:11px;font-weight:600;color:#fff;white-space:nowrap;opacity:0;transition:opacity .15s;
-  transform:translate(-50%, -120%);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);}
+.dc-hint{position:absolute;pointer-events:none;background:var(--popover-bg);border:1px solid var(--hairline-strong);border-radius:9px;padding:5px 9px;font-size:11px;font-weight:600;color:var(--t1);white-space:nowrap;opacity:0;transition:opacity .15s;transform:translate(-50%, -120%);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);}
 .dc-hint.on{opacity:1;}
-
-.dc-section-title{padding:var(--s5) var(--s5) var(--s3);font-size:11px;font-weight:700;color:var(--t3);
-  letter-spacing:.8px;text-transform:uppercase;display:flex;align-items:center;gap:8px;flex-shrink:0;}
+.dc-section-title{padding:var(--s5) var(--s5) var(--s3);font-size:11px;font-weight:700;color:var(--t3);letter-spacing:.8px;text-transform:uppercase;display:flex;align-items:center;gap:8px;flex-shrink:0;}
 .dc-section-title::before{content:'';width:3px;height:10px;background:var(--blue);border-radius:2px;}
-
 .dc-distribution{display:grid;grid-template-columns:170px minmax(0, 1fr);gap:var(--s5);padding:0 var(--s5) var(--s4);align-items:center;flex-shrink:0;}
 .dc-donut-wrap{position:relative;width:170px;height:170px;}
 .dc-donut-wrap canvas{width:170px;height:170px;display:block;}
@@ -350,18 +470,16 @@ body.has-custom-bg::before{opacity:.25;}
 .dc-legend-dot{width:10px;height:10px;border-radius:3px;flex:0 0 10px;}
 .dc-legend-item > .dc-legend-label{min-width:72px;display:inline-block;}
 .dc-legend-val{font-weight:700;color:var(--t1);font-variant-numeric:tabular-nums;min-width:38px;text-align:right;}
-
 .dc-weekdays{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;padding:0 var(--s5) var(--s4);flex-shrink:0;}
 .dc-weekday{display:flex;flex-direction:column;align-items:center;gap:4px;}
-.dc-weekday .wc-bar{width:100%;height:52px;border-radius:6px;background:rgba(255,255,255,.05);position:relative;overflow:hidden;display:flex;align-items:flex-end;}
+.dc-weekday .wc-bar{width:100%;height:52px;border-radius:6px;background:var(--surface-b);position:relative;overflow:hidden;display:flex;align-items:flex-end;}
 .dc-weekday .wc-fill{width:100%;border-radius:6px 6px 4px 4px;transition:height .8s var(--spring);}
 .dc-weekday .wc-label{font-size:10px;color:var(--t3);font-weight:600;}
 .dc-weekday .wc-val{font-size:9.5px;color:var(--t4);font-weight:600;font-variant-numeric:tabular-nums;}
 .dc-weekday.today .wc-label{color:var(--blue);}
-
 .dc-activity-list{padding:0 var(--s5) var(--s5);}
 .dc-act-item{display:grid;grid-template-columns:36px 1fr auto auto;gap:var(--s3);align-items:center;padding:9px 10px;border-radius:var(--r-sm);cursor:pointer;transition:background .18s var(--ease);}
-.dc-act-item:hover{background:rgba(255,255,255,.05);}
+.dc-act-item:hover{background:var(--surface-b);}
 .dc-act-ico{width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:15px;flex:0 0 32px;}
 .dc-act-info{min-width:0;}
 .dc-act-name{font-size:13px;font-weight:650;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
@@ -369,174 +487,186 @@ body.has-custom-bg::before{opacity:.25;}
 .dc-act-stat{text-align:right;display:flex;flex-direction:column;gap:1px;}
 .dc-act-stat .v{font-size:13px;font-weight:700;font-variant-numeric:tabular-nums;}
 .dc-act-stat .l{font-size:9.5px;color:var(--t3);}
-
-.dc-dots{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);display:flex;gap:6px;padding:6px 12px;border-radius:20px;
-  background:rgba(20,22,34,.8);border:1px solid rgba(255,255,255,.1);
-  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);z-index:300;}
-.dc-dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.22);cursor:pointer;transition:all .25s var(--ease);}
+.dc-dots{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);display:flex;gap:6px;padding:6px 12px;border-radius:20px;background:var(--popover-bg);border:1px solid var(--hairline);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);z-index:300;}
+.dc-dot{width:6px;height:6px;border-radius:50%;background:var(--surface-d);cursor:pointer;transition:all .25s var(--ease);}
 .dc-dot.active{background:var(--blue);width:18px;border-radius:3px;box-shadow:0 0 10px var(--blue);}
-
-.dc-drag-hint{position:absolute;top:14px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--t3);font-weight:600;letter-spacing:.4px;
-  display:flex;align-items:center;gap:6px;padding:5px 12px;border-radius:16px;
-  background:rgba(20,22,34,.6);border:1px solid rgba(255,255,255,.06);
-  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
-  z-index:250;opacity:0;transition:opacity .4s var(--ease);pointer-events:none;}
+.dc-drag-hint{position:absolute;top:14px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--t3);font-weight:600;letter-spacing:.4px;display:flex;align-items:center;gap:6px;padding:5px 12px;border-radius:16px;background:var(--popover-bg);border:1px solid var(--hairline);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);z-index:250;opacity:0;transition:opacity .4s var(--ease);pointer-events:none;}
 .detail-stage:hover .dc-drag-hint{opacity:.7;}
-
-/* ============ 当日详情三页卡片 ============ */
-.today-card{
-  position:absolute;top:50%;left:50%;
-  width:min(920px, calc(100vw - 100px));
-  height:clamp(600px, calc(100vh - 200px), 860px);
-  border-radius:var(--r-2xl);overflow:hidden;
-  display:flex;flex-direction:column;
-  transform-origin:center center;will-change:transform, opacity;
+.today-card{position:absolute;top:50%;left:50%;width:min(920px, calc(100vw - 100px));height:clamp(600px, calc(100vh - 200px), 860px);border-radius:var(--r-2xl);overflow:hidden;display:flex;flex-direction:column;transform-origin:center center;will-change:transform, opacity;
   transition:transform .62s cubic-bezier(.22,1,.36,1), opacity .5s var(--ease), box-shadow .4s var(--ease), border-color .4s var(--ease);
-  background-color:var(--glass-base);
-  background-image:linear-gradient(155deg,var(--glass-tint) 0%,rgba(255,255,255,0) 58%);
+  background-color:var(--glass-base);background-image:linear-gradient(155deg,var(--glass-tint) 0%,rgba(255,255,255,0) 58%);
   -webkit-backdrop-filter:blur(var(--glass-blur)) saturate(var(--glass-sat)) brightness(var(--glass-bright));
   backdrop-filter:blur(var(--glass-blur)) saturate(var(--glass-sat)) brightness(var(--glass-bright));
-  border:1px solid var(--glass-border);
-  box-shadow:0 24px 60px rgba(0,0,0,.55),0 1px 0 rgba(255,255,255,.05),inset 0 1px 0 var(--glass-inner);
-}
+  border:1px solid var(--glass-border);box-shadow:0 24px 60px rgba(0,0,0,var(--glass-shadow-a)),0 1px 0 var(--glass-inner),inset 0 1px 0 var(--glass-inner);}
 .today-card.dragging{transition:none !important;}
-.today-card.focused{border-color:rgba(90,169,255,.38);
-  box-shadow:0 32px 80px rgba(0,0,0,.65),0 0 0 1px rgba(90,169,255,.12),0 1px 0 rgba(255,255,255,.06),inset 0 1px 0 var(--glass-inner);}
-
-.today-card-head{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:var(--s4) var(--s5);
-  border-bottom:1px solid rgba(255,255,255,.06);
-  flex-shrink:0;
-}
-.today-card-title{display:flex;align-items:center;gap:12px;}
+.today-card.focused{border-color:color-mix(in srgb, var(--blue) 40%, transparent);box-shadow:0 32px 80px rgba(0,0,0,var(--glass-shadow-a)),0 0 0 1px color-mix(in srgb, var(--blue) 14%, transparent),inset 0 1px 0 var(--glass-inner);}
+.today-card-head{display:flex;align-items:center;justify-content:space-between;padding:var(--s4) var(--s5);border-bottom:1px solid var(--hairline);flex-shrink:0;}
+.today-card-title{display:flex;align-items:center;gap:12px;min-width:0;}
 .today-card-title .ic{font-size:24px;}
-.today-card-title .name{font-size:16px;font-weight:700;letter-spacing:-.2px;}
+.today-card-title .name{font-size:16px;font-weight:700;letter-spacing:-.2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .today-card-title .meta{font-size:11.5px;color:var(--t3);margin-top:2px;}
-
-/* 第一页：轨迹 + 指标 */
-.today-track-body{
-  flex:1;min-height:0;
-  display:flex;flex-direction:column;
-  gap:var(--s4);
-  padding:var(--s4) var(--s5) var(--s5);
-  overflow-y:auto;
-}
-.today-track-metrics{
-  display:grid;grid-template-columns:repeat(auto-fit, minmax(120px, 1fr));
-  gap:var(--s3);flex-shrink:0;
-}
-.today-track-metric{
-  padding:var(--s3) var(--s4);
-  border-radius:var(--r-md);
-  background:rgba(255,255,255,.04);
-  border:1px solid rgba(255,255,255,.06);
-}
+.today-track-body{flex:1;min-height:0;display:flex;flex-direction:column;gap:var(--s4);padding:var(--s4) var(--s5) var(--s5);overflow-y:auto;}
+.today-track-metrics{display:grid;grid-template-columns:repeat(auto-fit, minmax(120px, 1fr));gap:var(--s3);flex-shrink:0;}
+.today-track-metric{padding:var(--s3) var(--s4);border-radius:var(--r-md);background:var(--surface-a);border:1px solid var(--hairline);}
 .today-track-metric .l{font-size:11px;color:var(--t3);font-weight:600;letter-spacing:.2px;}
 .today-track-metric .v{font-size:22px;font-weight:800;letter-spacing:-.6px;margin-top:4px;font-variant-numeric:tabular-nums;line-height:1.15;}
 .today-track-metric .v .u{font-size:11px;color:var(--t3);font-weight:600;margin-left:4px;}
-
-.today-track-canvas{
-  flex:1;min-height:300px;
-  border-radius:var(--r-md);
-  background:rgba(255,255,255,.02);
-  border:1px solid rgba(255,255,255,.06);
-  position:relative;overflow:hidden;
-}
+.today-track-canvas{flex:1;min-height:300px;border-radius:var(--r-md);background:var(--surface-a);border:1px solid var(--hairline);position:relative;overflow:hidden;}
 .today-track-canvas canvas{width:100%;height:100%;display:block;}
-
-/* 第二页：图表 */
-.today-charts-body{
-  flex:1;min-height:0;
-  display:flex;flex-direction:column;
-  gap:var(--s3);
-  padding:var(--s3) var(--s5) var(--s5);
-  overflow-y:auto;
-}
-.today-chart-block{
-  border-radius:var(--r-md);
-  background:rgba(255,255,255,.03);
-  border:1px solid rgba(255,255,255,.05);
-  padding:var(--s3) var(--s3) var(--s2);
-  flex-shrink:0;
-}
-.today-chart-head{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:0 var(--s2) var(--s2);
-}
-.today-chart-title{
-  display:flex;align-items:center;gap:6px;
-  font-size:12.5px;font-weight:700;letter-spacing:-.1px;
-  flex:1;min-width:0;
-}
+.today-charts-body{flex:1;min-height:0;display:flex;flex-direction:column;gap:var(--s3);padding:var(--s3) var(--s5) var(--s5);overflow-y:auto;}
+.today-chart-block{border-radius:var(--r-md);background:var(--surface-a);border:1px solid var(--hairline);padding:var(--s3) var(--s3) var(--s2);flex-shrink:0;}
+.today-chart-head{display:flex;align-items:center;justify-content:space-between;padding:0 var(--s2) var(--s2);}
+.today-chart-title{display:flex;align-items:center;gap:6px;font-size:12.5px;font-weight:700;letter-spacing:-.1px;flex:1;min-width:0;}
 .today-chart-title .dot{width:8px;height:8px;border-radius:50%;flex:0 0 8px;}
 .today-chart-title .hint{font-size:10.5px;color:var(--t4);font-weight:600;margin-left:auto;}
 .today-chart-canvas-wrap{position:relative;height:140px;}
 .today-chart-canvas-wrap canvas{width:100%;height:100%;display:block;cursor:crosshair;}
-
-/* 第三页：心率区间 + 统计 */
-.today-summary-body{
-  flex:1;min-height:0;
-  display:flex;flex-direction:column;
-  gap:var(--s4);
-  padding:var(--s4) var(--s5) var(--s5);
-  overflow-y:auto;
-}
-.today-summary-block{
-  border-radius:var(--r-md);
-  background:rgba(255,255,255,.03);
-  border:1px solid rgba(255,255,255,.05);
-  padding:var(--s4);
-  flex-shrink:0;
-}
-.today-summary-title{
-  display:flex;align-items:center;gap:8px;
-  font-size:13px;font-weight:700;color:var(--t2);
-  margin-bottom:var(--s3);
-}
+.today-summary-body{flex:1;min-height:0;display:flex;flex-direction:column;gap:var(--s4);padding:var(--s4) var(--s5) var(--s5);overflow-y:auto;}
+.today-summary-block{border-radius:var(--r-md);background:var(--surface-a);border:1px solid var(--hairline);padding:var(--s4);flex-shrink:0;}
+.today-summary-title{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:var(--t2);margin-bottom:var(--s3);}
 .today-summary-title .dot{width:8px;height:8px;border-radius:50%;flex:0 0 8px;}
-
-.today-zones-bar{
-  display:flex;height:16px;border-radius:8px;overflow:hidden;gap:2px;
-  margin-bottom:var(--s4);
-}
-.today-zones-legend{
-  display:flex;flex-wrap:wrap;
-  gap:var(--s3) var(--s5);
-}
-.today-zone-item{
-  display:flex;align-items:center;gap:8px;
-  font-size:12.5px;font-weight:600;
-}
+.today-zones-bar{display:flex;height:16px;border-radius:8px;overflow:hidden;gap:2px;margin-bottom:var(--s4);}
+.today-zones-legend{display:flex;flex-wrap:wrap;gap:var(--s3) var(--s5);}
+.today-zone-item{display:flex;align-items:center;gap:8px;font-size:12.5px;font-weight:600;}
 .today-zone-item .dot{width:10px;height:10px;border-radius:3px;flex:0 0 10px;}
 .today-zone-item .l{color:var(--t2);}
 .today-zone-item .v{color:var(--t1);font-weight:800;font-variant-numeric:tabular-nums;}
-
-.today-stats-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));
-  gap:var(--s2) var(--s5);
-}
-.today-stat{
-  display:flex;align-items:baseline;justify-content:space-between;
-  padding:10px 0;
-  border-bottom:1px solid rgba(255,255,255,.045);
-}
+.today-stats-grid{display:grid;grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));gap:var(--s2) var(--s5);}
+.today-stat{display:flex;align-items:baseline;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--hairline);}
 .today-stat .k{font-size:12.5px;color:var(--t3);font-weight:500;}
 .today-stat .v{font-size:14px;color:var(--t1);font-weight:700;letter-spacing:-.2px;font-variant-numeric:tabular-nums;}
+.garmin-input{flex:1;padding:8px 12px;border-radius:10px;border:1px solid var(--hairline-strong);background:var(--surface-b);color:var(--t1);font-size:13px;outline:none;font-family:var(--font);}
+.garmin-input:focus{border-color:var(--blue);background:var(--surface-c);}
+.garmin-security-banner{background:color-mix(in srgb, var(--blue) 10%, transparent);border:1px solid color-mix(in srgb, var(--blue) 24%, transparent);border-radius:var(--r-md);padding:var(--s3) var(--s4);margin-top:var(--s3);font-size:12.5px;line-height:1.65;color:var(--t2);}
+.garmin-security-banner b{color:var(--blue);}
+.garmin-pwd-row{display:none;margin-top:var(--s4);padding:var(--s3) var(--s4);background:var(--surface-a);border:1px solid var(--hairline-strong);border-radius:var(--r-md);}
+.garmin-pwd-row.show{display:block;animation:viewIn .3s var(--ease);}
+.garmin-pwd-row .row-line{display:flex;align-items:center;gap:var(--s3);flex-wrap:wrap;}
+.garmin-pwd-row .row-line .lbl{font-size:13px;font-weight:700;color:var(--t2);white-space:nowrap;}
+.garmin-pwd-row .row-line .garmin-input{min-width:200px;}
+.garmin-pwd-row .hint{margin-top:6px;font-size:11.5px;color:var(--t3);line-height:1.55;}
+.app-loading{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:99999;transition:opacity .4s var(--ease);}
+.app-loading.hide{opacity:0;pointer-events:none;}
+.app-loading .al-inner{text-align:center;display:flex;flex-direction:column;align-items:center;gap:14px;}
+.app-loading .al-logo{width:56px;height:56px;border-radius:16px;background:linear-gradient(135deg,#0A84FF,#BF5AF2);
+  display:flex;align-items:center;justify-content:center;font-weight:800;font-size:26px;color:#fff;
+  box-shadow:0 10px 30px rgba(10,132,255,.4);animation:pulse 1.6s ease-in-out infinite;}
+@keyframes pulse{0%,100%{transform:scale(1);opacity:1;}50%{transform:scale(1.06);opacity:.86;}}
+.app-loading .al-name{font-size:20px;font-weight:800;letter-spacing:-.4px;}
+.app-loading .al-status{font-size:12.5px;color:var(--t3);}
+
+.pb-section{margin-bottom:var(--s5);}
+.pb-section-head{display:flex;align-items:center;gap:8px;margin-bottom:var(--s3);font-size:14px;font-weight:700;}
+.pb-section-icon{font-size:18px;}
+.pb-grid{display:grid;grid-template-columns:repeat(auto-fill, minmax(140px, 1fr));gap:var(--s3);}
+.pb-tile{
+  padding:var(--s3) var(--s4);
+  border-radius:var(--r-md);
+  background:linear-gradient(145deg,color-mix(in srgb, var(--gold) 8%, transparent),var(--surface-a));
+  border:1px solid color-mix(in srgb, var(--gold) 24%, var(--hairline));
+  cursor:pointer;transition:all .25s var(--ease);
+  position:relative;overflow:hidden;
+}
+.pb-tile:hover{transform:translateY(-2px);border-color:var(--gold);box-shadow:0 6px 20px color-mix(in srgb, var(--gold) 20%, transparent);}
+.pb-tile::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:.7;}
+.pb-tile-label{font-size:11px;color:var(--t3);font-weight:600;margin-bottom:5px;}
+.pb-tile-value{font-size:19px;font-weight:800;letter-spacing:-.5px;color:var(--gold);line-height:1.15;font-variant-numeric:tabular-nums;}
+.pb-tile-date{font-size:10.5px;color:var(--t3);margin-top:4px;font-variant-numeric:tabular-nums;}
+.pb-tile-trophy{opacity:.65;}
+.pb-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:12px;font-size:11px;font-weight:700;
+  background:color-mix(in srgb, var(--gold) 16%, transparent);color:var(--gold);
+  border:1px solid color-mix(in srgb, var(--gold) 30%, transparent);}
+
+/* ============ 分段 PB 网格（数据分析页） ============ */
+.seg-pb-grid{display:grid;gap:var(--s3);}
+.seg-pb-grid.run  { grid-template-columns:repeat(5, 1fr); }
+.seg-pb-grid.cycle { grid-template-columns:repeat(6, 1fr); }
+.seg-pb-grid.swim  { grid-template-columns:repeat(4, 1fr); }
+.seg-pb-grid.hike  { grid-template-columns:repeat(6, 1fr); }
+
+.seg-pb-card{
+  padding:14px 16px;border-radius:var(--r-md);
+  background:linear-gradient(145deg,
+    color-mix(in srgb, var(--gold) 10%, transparent),
+    color-mix(in srgb, var(--gold) 2%, transparent));
+  border:1px solid color-mix(in srgb, var(--gold) 28%, var(--hairline));
+  cursor:pointer;transition:all .25s var(--ease);
+  position:relative;overflow:hidden;min-width:0;
+}
+.seg-pb-card:hover{
+  transform:translateY(-2px);
+  border-color:var(--gold);
+  box-shadow:0 8px 24px color-mix(in srgb, var(--gold) 18%, transparent);
+}
+.seg-pb-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg, transparent, var(--gold), transparent);
+  opacity:.8;
+}
+.seg-pb-card.empty{
+  background:var(--surface-a);
+  border-color:var(--hairline);
+  cursor:default;
+  opacity:.6;
+}
+.seg-pb-card.empty:hover{transform:none;box-shadow:none;}
+.seg-pb-card.empty::before{display:none;}
+.seg-pb-card-label{
+  font-size:11px;font-weight:700;color:var(--gold);
+  letter-spacing:.6px;margin-bottom:6px;
+  display:flex;align-items:center;gap:4px;
+}
+.seg-pb-card.empty .seg-pb-card-label{color:var(--t4);}
+.seg-pb-card-value{
+  font-size:22px;font-weight:800;letter-spacing:-1px;
+  color:var(--gold);line-height:1.1;
+  font-variant-numeric:tabular-nums;
+  margin-bottom:6px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.seg-pb-card.empty .seg-pb-card-value{color:var(--t4);font-weight:600;}
+.seg-pb-card-meta{
+  display:flex;flex-direction:column;gap:2px;
+  font-size:10.5px;color:var(--t3);line-height:1.4;min-width:0;
+}
+.seg-pb-card-meta .d{font-weight:600;color:var(--t2);}
+.seg-pb-card-meta .n{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 
 @media (max-width:1100px){
+  .seg-pb-grid.run, .seg-pb-grid.cycle, .seg-pb-grid.hike { grid-template-columns:repeat(3, 1fr); }
+  .seg-pb-grid.swim { grid-template-columns:repeat(2, 1fr); }
   .today-card{width:calc(100vw - 40px);}
   .today-track-metrics{grid-template-columns:repeat(3,1fr);}
+  .control{min-width:200px;}
 }
 @media (max-width:820px){
+  .grid{grid-template-columns:repeat(2,1fr);}
+  .col-2{grid-column:span 2;}
+  .col-4{grid-column:span 2;}
   .today-track-metrics{grid-template-columns:repeat(2,1fr);}
   .today-chart-canvas-wrap{height:120px;}
   .today-track-metric .v{font-size:18px;}
+  .setting{flex-direction:column;align-items:flex-start;gap:var(--s3);}
+  .control{min-width:100%;width:100%;}
+  .main{padding:var(--s4);}
+  .heatmap-legend .legend-scale{margin-left:0;}
+  .pb-grid{grid-template-columns:repeat(2,1fr);}
+  .seg-pb-grid.run, .seg-pb-grid.cycle, .seg-pb-grid.hike { grid-template-columns:repeat(2, 1fr); }
+  .seg-pb-grid.swim { grid-template-columns:repeat(2, 1fr); }
+  .seg-pb-card-value { font-size:18px; }
 }
 </style>
 </head>
 <body>
+
+<div class="app-loading" id="appLoading">
+  <div class="al-inner">
+    <div class="al-logo">P</div>
+    <div class="al-name">PROATHLETE</div>
+    <div class="al-status" id="appLoadingStatus">正在加载数据...</div>
+  </div>
+</div>
 
 <div class="app-bg" id="appBg"></div>
 
@@ -686,6 +816,21 @@ body.has-custom-bg::before{opacity:.25;}
           <div class="kpi-sm" id="kHikeTotal">—<span class="unit">km</span></div>
           <div class="sub" id="kHikeTotalSub">累计徒步距离</div>
         </div>
+
+        <div class="card glass heatmap-card" id="heatmapCard">
+          <div class="card-head">
+            <span class="card-label">
+              <span class="dot" style="background:var(--blue)"></span>
+              年度运动热力图
+              <span style="font-size:11px;color:var(--t3);font-weight:500;margin-left:6px;">最近 365 天</span>
+            </span>
+            <span class="tag gray" id="heatmapSummary">—</span>
+          </div>
+          <div class="heatmap-wrap" id="heatmapWrap">
+            <canvas id="heatmapCanvas"></canvas>
+          </div>
+          <div class="heatmap-legend" id="heatmapLegend"></div>
+        </div>
       </div>
     </section>
 
@@ -731,6 +876,30 @@ body.has-custom-bg::before{opacity:.25;}
           <div class="chart-box" style="height:250px;"><canvas id="chWeekly"></canvas></div>
         </div>
       </div>
+
+      <!-- 现有 PB 区块 -->
+      <div style="margin-top:var(--s6);">
+        <div class="card-head" style="margin-bottom:var(--s4);">
+          <span class="card-label">
+            <span style="font-size:16px;">🏆</span>
+            个人最佳纪录
+            <span class="tag gold" style="font-size:10px;padding:2px 8px;">全部时间</span>
+          </span>
+        </div>
+        <div id="pbContainer"></div>
+      </div>
+
+      <!-- 新增：分段最佳时间 -->
+      <div style="margin-top:var(--s6);">
+        <div class="card-head" style="margin-bottom:var(--s4);">
+          <span class="card-label">
+            <span style="font-size:16px;">⏱️</span>
+            分段最佳时间
+            <span class="tag gold" style="font-size:10px;padding:2px 8px;">全部时间</span>
+          </span>
+        </div>
+        <div id="segPBContainer"></div>
+      </div>
     </section>
 
     <section class="view" id="view-import">
@@ -748,7 +917,7 @@ body.has-custom-bg::before{opacity:.25;}
           <div style="display:flex;align-items:center;justify-content:space-between;gap:var(--s4);flex-wrap:wrap;">
             <div>
               <div class="setting-label" id="garminDesc">首次使用请先配置账号</div>
-              <div class="setting-desc" id="garminDescSub">点击「配置账号」填写 Garmin 邮箱和密码，之后每次同步只拉新数据</div>
+              <div class="setting-desc" id="garminDescSub">点击「配置账号」填写 Garmin 邮箱和后端地址，密码每次同步时手动输入</div>
             </div>
             <div style="display:flex;gap:var(--s2);flex-shrink:0;flex-wrap:wrap;">
               <button class="btn btn-ghost btn-sm" id="btnGarminTest">🔌 测试连接</button>
@@ -756,36 +925,55 @@ body.has-custom-bg::before{opacity:.25;}
               <button class="btn btn-primary btn-sm" id="btnGarminSync" disabled>🔄 同步新活动</button>
             </div>
           </div>
+
+          <div id="garminPasswordRow" class="garmin-pwd-row">
+            <div class="row-line">
+              <span class="lbl">🔑 Garmin 密码</span>
+              <input type="password" id="garminSyncPassword" class="garmin-input"
+                     placeholder="每次同步前手动输入 · 不会被保存"
+                     autocomplete="new-password" spellcheck="false" autocapitalize="off" autocorrect="off">
+              <span class="tag green" style="font-size:10px;flex:0 0 auto;">🛡️ 仅内存</span>
+            </div>
+            <div class="hint">
+              出于安全考虑，本应用<b>不会保存 Garmin 密码</b>。密码仅保存在当前页面的内存中，同步完成后立即清除。
+            </div>
+          </div>
+
           <div id="garminProgress" style="display:none;margin-top:var(--s4);">
             <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--t3);margin-bottom:6px;">
               <span id="garminProgressText">准备中...</span>
               <span id="garminProgressCount">0 / 0</span>
             </div>
-            <div style="height:7px;border-radius:4px;background:rgba(255,255,255,.1);overflow:hidden;"><div id="garminProgressBar" style="height:100%;width:0%;background:var(--blue);border-radius:4px;transition:width .3s var(--ease);"></div></div>
+            <div style="height:7px;border-radius:4px;background:var(--surface-d);overflow:hidden;"><div id="garminProgressBar" style="height:100%;width:0%;background:var(--blue);border-radius:4px;transition:width .3s var(--ease);"></div></div>
           </div>
           <div id="garminResults" style="display:none;margin-top:var(--s4);"></div>
+          <div class="setting-desc" style="margin-top:var(--s4);padding-top:var(--s3);border-top:1px solid var(--hairline);line-height:1.7;">
+            💡 纯前端页面无法直连 Garmin Connect，需要在本机运行 <b>garmin_server.py</b> 作为代理服务。<br>
+            先执行：<code style="font-family:var(--mono);color:var(--blue);">pip install --upgrade "garminconnect>=0.3.4" curl_cffi ua-generator flask flask-cors</code>，然后 <code style="font-family:var(--mono);color:var(--blue);">python garmin_server.py</code>。
+          </div>
         </div>
         <div id="garminConfig" style="display:none;">
           <div class="setting">
-            <div><div class="setting-label">Garmin 邮箱</div><div class="setting-desc">Garmin Connect 登录账号</div></div>
+            <div><div class="setting-label">Garmin 邮箱</div><div class="setting-desc">Garmin Connect 中国区登录账号</div></div>
             <div class="control" style="min-width:280px;">
-              <input type="email" id="garminEmail" placeholder="you@example.com"
-                style="flex:1;padding:8px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.06);color:var(--t1);font-size:13px;outline:none;">
-            </div>
-          </div>
-          <div class="setting">
-            <div><div class="setting-label">密码</div><div class="setting-desc">仅发送到本机 localhost，不经过任何第三方</div></div>
-            <div class="control" style="min-width:280px;">
-              <input type="password" id="garminPassword" placeholder="••••••••"
-                style="flex:1;padding:8px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.06);color:var(--t1);font-size:13px;outline:none;">
+              <input type="email" id="garminEmail" class="garmin-input" placeholder="you@example.com" autocomplete="username">
             </div>
           </div>
           <div class="setting">
             <div><div class="setting-label">后端地址</div><div class="setting-desc">运行 garmin_server.py 的地址</div></div>
             <div class="control" style="min-width:280px;">
-              <input type="text" id="garminBackend" value="http://localhost:5000"
-                style="flex:1;padding:8px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.06);color:var(--t1);font-size:13px;outline:none;">
+              <input type="text" id="garminBackend" value="http://localhost:5000" class="garmin-input">
             </div>
+          </div>
+          <div class="setting">
+            <div><div class="setting-label">首次拉取天数</div><div class="setting-desc">未同步过时，向前追溯的活动天数</div></div>
+            <div class="control" style="min-width:280px;">
+              <input type="range" class="slider" id="garminDays" min="7" max="365" step="1" value="30">
+              <span class="slider-val" id="garminDaysVal">30 天</span>
+            </div>
+          </div>
+          <div class="garmin-security-banner">
+            🛡️ <b>密码安全说明</b>：本应用<b>不会保存</b> Garmin 密码到浏览器存储。配置面板只保存邮箱、后端地址和拉取天数。每次同步前，请在主界面密码框中手动输入密码，同步完成后立即清除。
           </div>
           <div style="display:flex;gap:var(--s2);margin-top:var(--s3);">
             <button class="btn btn-primary btn-sm" id="btnGarminSave">保存配置</button>
@@ -820,6 +1008,11 @@ body.has-custom-bg::before{opacity:.25;}
       </div>
 
       <div class="group">
+        <div class="group-title">🎨 主题风格</div>
+        <div class="theme-grid" id="themeGrid"></div>
+      </div>
+
+      <div class="group">
         <div class="group-title">🖼️ 页面背景</div>
         <div class="setting">
           <div>
@@ -836,7 +1029,7 @@ body.has-custom-bg::before{opacity:.25;}
       </div>
 
       <div class="group">
-        <div class="group-title">🎨 界面外观 · 液态玻璃</div>
+        <div class="group-title">💎 液态玻璃</div>
         <div class="setting">
           <div><div class="setting-label">玻璃透明度</div><div class="setting-desc">0 = 完全不透明　·　100 = 完全透明</div></div>
           <div class="control">
@@ -894,6 +1087,12 @@ body.has-custom-bg::before{opacity:.25;}
             <div class="tab" data-unit="mi">英里</div>
           </div>
         </div>
+        <div class="setting">
+          <div><div class="setting-label">存储后端</div><div class="setting-desc" id="storageInfo">正在检测...</div></div>
+          <div class="control" style="min-width:auto;">
+            <button class="btn btn-ghost btn-sm" id="btnStorageInfo">🔍 查看详情</button>
+          </div>
+        </div>
         <div style="margin-top:var(--s5);display:flex;gap:var(--s3);flex-wrap:wrap;">
           <button class="btn btn-ghost" id="btnDemoSettings">✨ 载入演示数据</button>
           <button class="btn btn-ghost" id="btnClearIcons">🗂️ 清除所有图标</button>
@@ -940,50 +1139,52 @@ body.has-custom-bg::before{opacity:.25;}
 <div class="modal" id="activityModal">
   <div class="modal-box glass">
     <div class="modal-head">
-      <div>
+      <div style="min-width:0;">
         <div class="header-title" id="aTitle" style="font-size:22px;">—</div>
         <div class="header-sub" id="aSub">—</div>
+        <div id="aPBBadges" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;"></div>
       </div>
       <button class="btn btn-ghost btn-icon" id="aClose">✕</button>
     </div>
     <div class="metric-grid" id="aMetrics"></div>
-    <div style="border-radius:var(--r-md);background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);padding:var(--s3) var(--s4);" id="aTrackSection">
+    <div style="border-radius:var(--r-md);background:var(--surface-a);border:1px solid var(--hairline);padding:var(--s3) var(--s4);" id="aTrackSection">
       <div style="font-size:12.5px;font-weight:700;color:var(--t2);margin-bottom:var(--s3);">🛰️ 轨迹</div>
       <div class="chart-box" style="height:240px;" id="aTrackChartBox"><canvas id="aTrack"></canvas></div>
       <img id="aTrackImg" alt="运动轨迹" style="display:none;width:100%;border-radius:12px;background:rgba(0,0,0,.25);">
     </div>
-    <div style="border-radius:var(--r-md);background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);padding:var(--s3) var(--s4);" id="aEleSection">
+    <div style="border-radius:var(--r-md);background:var(--surface-a);border:1px solid var(--hairline);padding:var(--s3) var(--s4);" id="aEleSection">
       <div style="font-size:12.5px;font-weight:700;color:var(--t2);margin-bottom:var(--s3);">⛰️ 海拔</div>
       <div class="chart-box" style="height:100px;"><canvas id="aEle"></canvas></div>
     </div>
-    <div style="border-radius:var(--r-md);background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);padding:var(--s3) var(--s4);" id="aPaceSection">
+    <div style="border-radius:var(--r-md);background:var(--surface-a);border:1px solid var(--hairline);padding:var(--s3) var(--s4);" id="aPaceSection">
       <div style="font-size:12.5px;font-weight:700;color:var(--t2);margin-bottom:var(--s3);">⏱️ <span id="aPaceLabel">配速</span></div>
       <div class="chart-box" style="height:100px;"><canvas id="aPace"></canvas></div>
     </div>
-    <div style="border-radius:var(--r-md);background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);padding:var(--s3) var(--s4);" id="aHRSection">
+    <div style="border-radius:var(--r-md);background:var(--surface-a);border:1px solid var(--hairline);padding:var(--s3) var(--s4);" id="aHRSection">
       <div style="font-size:12.5px;font-weight:700;color:var(--t2);margin-bottom:var(--s3);">❤️ 心率</div>
       <div class="chart-box" style="height:100px;"><canvas id="aHR"></canvas></div>
     </div>
-    <div style="border-radius:var(--r-md);background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);padding:var(--s3) var(--s4);" id="aCadSection" style="display:none;">
+    <div style="border-radius:var(--r-md);background:var(--surface-a);border:1px solid var(--hairline);padding:var(--s3) var(--s4);display:none;" id="aCadSection">
       <div style="font-size:12.5px;font-weight:700;color:var(--t2);margin-bottom:var(--s3);">👟 步频</div>
       <div class="chart-box" style="height:100px;"><canvas id="aCad"></canvas></div>
     </div>
-    <div style="border-radius:var(--r-md);background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);padding:var(--s3) var(--s4);" id="aPowerSection" style="display:none;">
+    <div style="border-radius:var(--r-md);background:var(--surface-a);border:1px solid var(--hairline);padding:var(--s3) var(--s4);display:none;" id="aPowerSection">
       <div style="font-size:12.5px;font-weight:700;color:var(--t2);margin-bottom:var(--s3);">⚡ 功率</div>
       <div class="chart-box" style="height:100px;"><canvas id="aPower"></canvas></div>
     </div>
-    <div style="border-radius:var(--r-md);background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);padding:var(--s3) var(--s4);">
+    <div style="border-radius:var(--r-md);background:var(--surface-a);border:1px solid var(--hairline);padding:var(--s3) var(--s4);">
       <div style="font-size:12.5px;font-weight:700;color:var(--t2);margin-bottom:var(--s3);">🎯 心率区间</div>
       <div style="display:flex;height:14px;border-radius:7px;overflow:hidden;gap:2px;" id="aZones"></div>
       <div id="aZoneLegend" style="display:flex;flex-wrap:wrap;gap:8px 20px;margin-top:var(--s3);"></div>
     </div>
-    <div style="border-radius:var(--r-md);background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);padding:var(--s3) var(--s4);">
+    <div style="border-radius:var(--r-md);background:var(--surface-a);border:1px solid var(--hairline);padding:var(--s3) var(--s4);">
       <div style="font-size:12.5px;font-weight:700;color:var(--t2);margin-bottom:var(--s3);">📊 统计信息</div>
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:var(--s2) var(--s6);" id="aStats"></div>
     </div>
   </div>
 </div>
 
+<div class="heatmap-tooltip" id="heatmapTooltip"></div>
 <div class="toasts" id="toasts"></div>
 <button class="btn btn-ghost btn-icon fab" id="fabTop">⬆️</button>
 
@@ -994,6 +1195,456 @@ const $ = (s,r=document)=>r.querySelector(s);
 const $$ = (s,r=document)=>Array.from(r.querySelectorAll(s));
 const clamp = (v,a,b)=>Math.min(b,Math.max(a,v));
 const DAY = 86400000;
+
+/* ============================================================
+   IndexedDB 存储层
+   ============================================================ */
+const IDB = {
+  db: null, DB_NAME: 'proathlete_db', DB_VERSION: 1,
+  STORE_ACTIVITIES: 'activities', STORE_KV: 'kv',
+  async open() {
+    if (this.db) return this.db;
+    return new Promise((resolve, reject) => {
+      if (!window.indexedDB) { reject(new Error('当前浏览器不支持 IndexedDB')); return; }
+      const req = indexedDB.open(this.DB_NAME, this.DB_VERSION);
+      req.onupgradeneeded = e => {
+        const db = e.target.result;
+        if (!db.objectStoreNames.contains(this.STORE_ACTIVITIES)) {
+          const store = db.createObjectStore(this.STORE_ACTIVITIES, { keyPath: 'id' });
+          store.createIndex('date', 'date', { unique: false });
+          store.createIndex('type', 'type', { unique: false });
+        }
+        if (!db.objectStoreNames.contains(this.STORE_KV)) db.createObjectStore(this.STORE_KV);
+      };
+      req.onsuccess = e => { this.db = e.target.result; resolve(this.db); };
+      req.onerror = e => reject(e.target.error);
+      req.onblocked = () => reject(new Error('数据库被其他标签页占用'));
+    });
+  },
+  async getAllActivities() {
+    await this.open();
+    return new Promise((resolve, reject) => {
+      const tx = this.db.transaction(this.STORE_ACTIVITIES, 'readonly');
+      const req = tx.objectStore(this.STORE_ACTIVITIES).getAll();
+      req.onsuccess = () => resolve(req.result || []);
+      req.onerror = () => reject(req.error);
+    });
+  },
+  async replaceAllActivities(activities) {
+    await this.open();
+    return new Promise((resolve, reject) => {
+      const tx = this.db.transaction(this.STORE_ACTIVITIES, 'readwrite');
+      const store = tx.objectStore(this.STORE_ACTIVITIES);
+      store.clear();
+      for (const a of activities) { try { store.put(a); } catch(e) {} }
+      tx.oncomplete = () => resolve();
+      tx.onerror = () => reject(tx.error);
+    });
+  },
+  async putActivities(activities) {
+    await this.open();
+    if (!activities || !activities.length) return;
+    return new Promise((resolve, reject) => {
+      const tx = this.db.transaction(this.STORE_ACTIVITIES, 'readwrite');
+      const store = tx.objectStore(this.STORE_ACTIVITIES);
+      for (const a of activities) { try { store.put(a); } catch(e) {} }
+      tx.oncomplete = () => resolve();
+      tx.onerror = () => reject(tx.error);
+    });
+  },
+  async deleteActivity(id) {
+    await this.open();
+    return new Promise((resolve, reject) => {
+      const tx = this.db.transaction(this.STORE_ACTIVITIES, 'readwrite');
+      tx.objectStore(this.STORE_ACTIVITIES).delete(id);
+      tx.oncomplete = () => resolve();
+      tx.onerror = () => reject(tx.error);
+    });
+  },
+  async clearActivities() {
+    await this.open();
+    return new Promise((resolve, reject) => {
+      const tx = this.db.transaction(this.STORE_ACTIVITIES, 'readwrite');
+      tx.objectStore(this.STORE_ACTIVITIES).clear();
+      tx.oncomplete = () => resolve();
+      tx.onerror = () => reject(tx.error);
+    });
+  },
+  async getKV(key) {
+    await this.open();
+    return new Promise((resolve, reject) => {
+      const tx = this.db.transaction(this.STORE_KV, 'readonly');
+      const req = tx.objectStore(this.STORE_KV).get(key);
+      req.onsuccess = () => resolve(req.result);
+      req.onerror = () => reject(req.error);
+    });
+  },
+  async setKV(key, value) {
+    await this.open();
+    return new Promise((resolve, reject) => {
+      const tx = this.db.transaction(this.STORE_KV, 'readwrite');
+      tx.objectStore(this.STORE_KV).put(value, key);
+      tx.oncomplete = () => resolve();
+      tx.onerror = () => reject(tx.error);
+    });
+  },
+  async delKV(key) {
+    await this.open();
+    return new Promise((resolve, reject) => {
+      const tx = this.db.transaction(this.STORE_KV, 'readwrite');
+      tx.objectStore(this.STORE_KV).delete(key);
+      tx.oncomplete = () => resolve();
+      tx.onerror = () => reject(tx.error);
+    });
+  },
+  async clearAll() {
+    await this.open();
+    return new Promise((resolve, reject) => {
+      const tx = this.db.transaction([this.STORE_ACTIVITIES, this.STORE_KV], 'readwrite');
+      tx.objectStore(this.STORE_ACTIVITIES).clear();
+      tx.objectStore(this.STORE_KV).clear();
+      tx.oncomplete = () => resolve();
+      tx.onerror = () => reject(tx.error);
+    });
+  },
+  async estimateUsage() {
+    if (!navigator.storage || !navigator.storage.estimate) return null;
+    try {
+      const est = await navigator.storage.estimate();
+      return { usage: est.usage || 0, quota: est.quota || 0 };
+    } catch(e) { return null; }
+  },
+};
+
+/* ============ localStorage 迁移 ============ */
+const LEGACY_KEY = 'proathlete_v20_';
+const MIGRATION_FLAG = 'proathlete_idb_migrated_v1';
+
+async function migrateFromLocalStorage(setStatus) {
+  if (localStorage.getItem(MIGRATION_FLAG) === 'done') return;
+  try {
+    let migrated = 0;
+    const oldActs = localStorage.getItem(LEGACY_KEY + 'activities');
+    if (oldActs) {
+      try {
+        const list = JSON.parse(oldActs);
+        if (Array.isArray(list) && list.length) {
+          setStatus && setStatus(`正在迁移 ${list.length} 条旧活动...`);
+          await IDB.replaceAllActivities(list);
+          migrated += list.length;
+        }
+      } catch(e) {}
+      localStorage.removeItem(LEGACY_KEY + 'activities');
+    }
+    const oldIcons = localStorage.getItem(LEGACY_KEY + 'icons');
+    if (oldIcons) {
+      try { const icons = JSON.parse(oldIcons); if (icons && typeof icons === 'object') await IDB.setKV('icons', icons); } catch(e) {}
+      localStorage.removeItem(LEGACY_KEY + 'icons');
+    }
+    const oldBg = localStorage.getItem(LEGACY_KEY + 'bg');
+    if (oldBg) { try { await IDB.setKV('bgImage', oldBg); } catch(e) {} localStorage.removeItem(LEGACY_KEY + 'bg'); }
+    localStorage.setItem(MIGRATION_FLAG, 'done');
+    if (migrated > 0) console.log(`[迁移] ${migrated} 条活动 + 图标/背景已迁移到 IndexedDB`);
+  } catch(e) { console.error('[迁移] 失败', e); }
+}
+
+/* ============ 持久化 ============ */
+let _persistTimer = null, _persistPending = false;
+function persistActivities() {
+  if (!State.settings.autoSave) return;
+  _persistPending = true;
+  if (_persistTimer) clearTimeout(_persistTimer);
+  _persistTimer = setTimeout(async () => {
+    _persistTimer = null;
+    if (!_persistPending) return;
+    _persistPending = false;
+    try { await IDB.replaceAllActivities(State.activities); }
+    catch(e) { console.error('[持久化] 活动写入失败', e); toast('数据保存失败：' + (e.message || e), 'error'); }
+  }, 350);
+}
+async function flushPersist() {
+  if (_persistTimer) { clearTimeout(_persistTimer); _persistTimer = null; }
+  if (!_persistPending) return;
+  _persistPending = false;
+  try { await IDB.replaceAllActivities(State.activities); } catch(e) {}
+}
+async function persistIcons() { try { await IDB.setKV('icons', State.iconMap); } catch(e) {} }
+async function persistBg() {
+  try { if (State.bgImage) await IDB.setKV('bgImage', State.bgImage); else await IDB.delKV('bgImage'); } catch(e) {}
+}
+function save(k, v) { try { localStorage.setItem('proathlete_settings_' + k, JSON.stringify(v)); } catch(e) {} }
+function load(k, fb) { try { const r = localStorage.getItem('proathlete_settings_' + k); return r ? JSON.parse(r) : fb; } catch(e) { return fb; } }
+function persistSettings() { save('settings', State.settings); }
+
+document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') flushPersist(); });
+window.addEventListener('pagehide', () => { flushPersist(); });
+
+/* ============================================================
+   PB 定义与分段定义
+   ============================================================ */
+const SEG_TARGETS_BY_TYPE = {
+  run:   { '1km': 1000, '5km': 5000, '10km': 10000, 'half': 21097.5, 'full': 42195 },
+  cycle: { '10km': 10000, '20km': 20000, '40km': 40000, '60km': 60000, '80km': 80000, '100km': 100000 },
+  swim:  { '400m': 400, '800m': 800, '1500m': 1500, '3000m': 3000 },
+  hike:  { '10km': 10000, '20km': 20000, '30km': 30000, '40km': 40000, '50km': 50000, '100km': 100000 },
+};
+
+const SEG_DEFS = {
+  run: {
+    label: '跑步',
+    segments: [
+      { key: '1km',  label: '1km',  dist: 1000 },
+      { key: '5km',  label: '5km',  dist: 5000 },
+      { key: '10km', label: '10km', dist: 10000 },
+      { key: 'half', label: '半马', dist: 21097.5 },
+      { key: 'full', label: '全马', dist: 42195 },
+    ],
+  },
+  cycle: {
+    label: '骑行',
+    segments: [
+      { key: '10km',  label: '10km',  dist: 10000 },
+      { key: '20km',  label: '20km',  dist: 20000 },
+      { key: '40km',  label: '40km',  dist: 40000 },
+      { key: '60km',  label: '60km',  dist: 60000 },
+      { key: '80km',  label: '80km',  dist: 80000 },
+      { key: '100km', label: '100km', dist: 100000 },
+    ],
+  },
+  swim: {
+    label: '游泳',
+    segments: [
+      { key: '400m',  label: '400m',  dist: 400 },
+      { key: '800m',  label: '800m',  dist: 800 },
+      { key: '1500m', label: '1500m', dist: 1500 },
+      { key: '3000m', label: '3000m', dist: 3000 },
+    ],
+  },
+  hike: {
+    label: '徒步',
+    segments: [
+      { key: '10km',  label: '10km',  dist: 10000 },
+      { key: '20km',  label: '20km',  dist: 20000 },
+      { key: '30km',  label: '30km',  dist: 30000 },
+      { key: '40km',  label: '40km',  dist: 40000 },
+      { key: '50km',  label: '50km',  dist: 50000 },
+      { key: '100km', label: '100km', dist: 100000 },
+    ],
+  },
+};
+
+const PB_DEFS = {
+  run: [
+    { key:'longest_dist', label:'最长距离', metric:'distance',  unit:'km',   higher:true,  minVal:1000 },
+    { key:'fastest_pace', label:'最快配速', metric:'pace',      unit:'',     higher:false, minVal:0 },
+    { key:'longest_dur',  label:'最长时长', metric:'duration',  unit:'',     higher:true,  minVal:600 },
+    { key:'max_elev',     label:'最大爬升', metric:'elevation', unit:'m',    higher:true,  minVal:10 },
+    { key:'max_cal',      label:'最大消耗', metric:'calories',  unit:'kcal', higher:true,  minVal:50 },
+  ],
+  cycle: [
+    { key:'longest_dist',  label:'最长距离', metric:'distance',  unit:'km',   higher:true, minVal:1000 },
+    { key:'max_speed',     label:'最快均速', metric:'avgSpeed',  unit:'km/h', higher:true, minVal:1 },
+    { key:'longest_dur',   label:'最长时长', metric:'duration',  unit:'',     higher:true, minVal:600 },
+    { key:'max_elev',      label:'最大爬升', metric:'elevation', unit:'m',    higher:true, minVal:10 },
+    { key:'max_power',     label:'最大功率', metric:'avgPower',  unit:'W',    higher:true, minVal:20 },
+  ],
+  swim: [
+    { key:'longest_dist',  label:'最长距离', metric:'distance',  unit:'m',  higher:true,  minVal:100 },
+    { key:'fastest_pace',  label:'最快配速', metric:'pace100',   unit:'',   higher:false, minVal:0 },
+    { key:'longest_dur',   label:'最长时长', metric:'duration',  unit:'',   higher:true,  minVal:300 },
+  ],
+  walk: [
+    { key:'longest_dist', label:'最长距离', metric:'distance',  unit:'km', higher:true, minVal:500 },
+    { key:'longest_dur',  label:'最长时长', metric:'duration',  unit:'',   higher:true, minVal:600 },
+    { key:'max_steps',    label:'最大步数', metric:'steps',     unit:'步', higher:true, minVal:500 },
+  ],
+  hike: [
+    { key:'longest_dist', label:'最长距离', metric:'distance',  unit:'km', higher:true, minVal:1000 },
+    { key:'max_elev',     label:'最大爬升', metric:'elevation', unit:'m',  higher:true, minVal:50 },
+    { key:'longest_dur',  label:'最长时长', metric:'duration',  unit:'',   higher:true, minVal:900 },
+  ],
+  gym: [
+    { key:'longest_dur', label:'最长时长', metric:'duration', unit:'',     higher:true, minVal:600 },
+    { key:'max_cal',     label:'最大消耗', metric:'calories', unit:'kcal', higher:true, minVal:50 },
+  ],
+};
+
+/* ============================================================
+   分段最佳时间：从单个活动的轨迹点中，求覆盖指定距离的最短耗时
+   算法：双指针 O(n) 滑动窗口 + 边界线性插值
+   ============================================================ */
+function getSegBest(a, segName) {
+  const targets = SEG_TARGETS_BY_TYPE[a.type];
+  if (!targets) return null;
+  const target = targets[segName];
+  if (!target || !(a.distance >= target)) return null;
+  if (!a.points || a.points.length < 5) return null;
+
+  // 1) 提取 (t, d) 序列；过滤非法点，跳过距离回退点，保证 d 单调非递减
+  const pts = [];
+  let lastD = -Infinity;
+  for (const p of a.points) {
+    if (!p || !(p.t > 0) || p.d == null) continue;
+    const t = Number(p.t);
+    const d = Number(p.d);
+    if (!isFinite(t) || !isFinite(d) || t <= 0 || d < 0) continue;
+    if (d < lastD) continue;            // 距离回退 → 丢弃
+    lastD = d;
+    pts.push({ t, d });
+  }
+  if (pts.length < 5) return null;
+
+  const lastDist = pts[pts.length - 1].d;
+  if (lastDist < target) return null;
+
+  // 2) 双指针：对每个左端点 l，找覆盖 target 距离的最早右端点 r
+  let best = Infinity;
+  let r = 1;
+
+  for (let l = 0; l < pts.length - 1; l++) {
+    const targetD = pts[l].d + target;
+    if (targetD > lastDist) break;      // 剩余距离不足，提前结束
+    if (r <= l) r = l + 1;
+
+    while (r < pts.length && pts[r].d < targetD) r++;
+    if (r >= pts.length) break;
+
+    // 3) 在 [r-1, r] 两点间线性插值，找到恰好 target 距离对应的精确时刻
+    const prev = pts[r - 1];
+    const cur  = pts[r];
+    const dd   = cur.d - prev.d;
+    let endT;
+    if (dd > 0) {
+      const frac = clamp((targetD - prev.d) / dd, 0, 1);
+      endT = prev.t + (cur.t - prev.t) * frac;
+    } else {
+      endT = cur.t;
+    }
+
+    const segTime = (endT - pts[l].t) / 1000;   // 秒
+    if (segTime > 0 && segTime < best) best = segTime;
+  }
+
+  return isFinite(best) && best > 0 ? best : null;
+}
+
+function getPBMetric(a, metric) {
+  switch (metric) {
+    case 'distance':  return a.distance > 0 ? a.distance : null;
+    case 'duration':  return a.duration > 0 ? a.duration : null;
+    case 'elevation': return a.elevation > 0 ? a.elevation : null;
+    case 'calories':  return a.calories > 0 ? a.calories : null;
+    case 'avgPower':  return a.avgPower > 0 ? a.avgPower : null;
+    case 'avgSpeed':  return a.avgSpeed > 0 ? a.avgSpeed : null;
+    case 'steps':     return a.distance > 0 ? Math.round(a.distance / 0.7) : null;
+    case 'pace':      return a.distance > 1000 && a.duration > 0 ? a.duration / (a.distance / 1000) : null;
+    case 'pace100':   return a.distance > 100 && a.duration > 0 ? a.duration / (a.distance / 100) : null;
+    default: return null;
+  }
+}
+
+function formatPBValue(v, def) {
+  switch (def.metric) {
+    case 'pace':    return fmtPace(v) + '/km';
+    case 'pace100': return fmtPace(v) + '/100m';
+    case 'duration': return fmtDur(v);
+    case 'avgSpeed': return `${((v * 3600) / 1000).toFixed(1)} km/h`;
+    case 'distance':
+      if (def.unit === 'm') return `${Math.round(v)} m`;
+      return `${(v / 1000).toFixed(2)} km`;
+    default:
+      if (def.unit === 'kcal') return `${Math.round(v)} kcal`;
+      if (def.unit === 'W')   return `${Math.round(v)} W`;
+      if (def.unit === '步')  return `${Math.round(v)} 步`;
+      if (def.unit === 'm')   return `${Math.round(v)} m`;
+      return String(Math.round(v));
+  }
+}
+
+function computeAllPB() {
+  const byType = {};
+  const byDay = new Map();
+  const byActivity = new Map();
+  for (const type of Object.keys(PB_DEFS)) {
+    const list = State.activities.filter(a => a.type === type);
+    if (!list.length) continue;
+    const typePB = {};
+    for (const def of PB_DEFS[type]) {
+      let best = null;
+      for (const a of list) {
+        const v = getPBMetric(a, def.metric);
+        if (v == null || !isFinite(v) || v <= 0) continue;
+        if (def.minVal && v < def.minVal) continue;
+        if (!best) { best = { value: v, activity: a }; continue; }
+        const better = def.higher ? v > best.value : v < best.value;
+        if (better) best = { value: v, activity: a };
+      }
+      if (!best) continue;
+      const dayK = dayKey(new Date(best.activity.date));
+      const record = {
+        value: best.value, activity: best.activity, date: best.activity.date,
+        dayKey: dayK, def, formatted: formatPBValue(best.value, def),
+      };
+      typePB[def.key] = record;
+      if (!byDay.has(dayK)) byDay.set(dayK, []);
+      byDay.get(dayK).push({ type, key: def.key, label: def.label, formatted: record.formatted });
+      const aid = best.activity.id;
+      if (!byActivity.has(aid)) byActivity.set(aid, []);
+      byActivity.get(aid).push({ type, key: def.key, label: def.label, formatted: record.formatted });
+    }
+    byType[type] = typePB;
+  }
+  return { byType, byDay, byActivity };
+}
+
+// 计算所有运动类型的分段 PB（全部时间），带缓存
+function computeAllSegPBs() {
+  if (State.segPBCache) return State.segPBCache;
+
+  const out = {};
+  for (const type of Object.keys(SEG_DEFS)) {
+    const list = State.activities.filter(a => a.type === type);
+    if (!list.length) continue;
+    const segs = SEG_TARGETS_BY_TYPE[type];
+    if (!segs) continue;
+
+    const typeOut = {};
+    for (const [segKey, target] of Object.entries(segs)) {
+      let best = null;
+      for (const a of list) {
+        if (!(a.distance >= target)) continue;
+        const t = getSegBest(a, segKey);
+        if (t == null || !isFinite(t) || t <= 0) continue;
+        if (!best || t < best.value) {
+          best = { value: t, activity: a, date: a.date, segKey, target };
+        }
+      }
+      if (best) typeOut[segKey] = best;
+    }
+    out[type] = typeOut;
+  }
+
+  State.segPBCache = out;
+  return out;
+}
+
+function refreshPBCache() {
+  State.pbCache = computeAllPB();
+  State.segPBCache = null;   // 数据变化时让分段 PB 缓存失效
+}
+
+/* ============ 主题 ============ */
+const THEMES = {
+  default:    { name:'深空',        sub:'默认高对比深色', dots:['#0A84FF','#BF5AF2','#30D158'] },
+  dracula:    { name:'Dracula',     sub:'德古拉 · 紫粉经典', dots:['#bd93f9','#ff79c6','#50fa7b'] },
+  nord:       { name:'Nord',        sub:'北极 · 冷调护眼', dots:['#88c0d0','#81a1c1','#a3be8c'] },
+  mocha:      { name:'Mocha',       sub:'摩卡 · 温暖粉彩', dots:['#cba6f7','#f5c2e7','#fab387'] },
+  latte:      { name:'Latte',       sub:'拿铁 · 明亮浅色', dots:['#1e66f5','#ea76cb','#df8e1d'] },
+  rosepine:   { name:'Rosé Pine',   sub:'玫瑰松 · 浪漫柔和', dots:['#eb6f92','#c4a7e7','#f6c177'] },
+  tokyonight: { name:'Tokyo Night', sub:'东京夜 · 蓝紫霓虹', dots:['#7aa2f7','#bb9af7','#7dcfff'] },
+  gruvbox:    { name:'Gruvbox',     sub:'复古 · 暖调胶片', dots:['#fabd2f','#fe8019','#b8bb26'] },
+  onedark:    { name:'One Dark',    sub:'经典编辑器配色', dots:['#61afef','#c678dd','#98c379'] },
+};
 
 /* ============ 液态指示器 ============ */
 function initLiquidTabs(container, itemSel, activeCls){
@@ -1054,7 +1705,14 @@ function num(n,d){if(!isFinite(n))return '—';d=d||0;return Number(n).toLocaleS
 function haversine(a,b){const R=6371000;const dLat=(b.lat-a.lat)*Math.PI/180,dLon=(b.lon-a.lon)*Math.PI/180;const la1=a.lat*Math.PI/180,la2=b.lat*Math.PI/180;const h=Math.sin(dLat/2)**2+Math.cos(la1)*Math.cos(la2)*Math.sin(dLon/2)**2;return 2*R*Math.asin(Math.min(1,Math.sqrt(h)));}
 function escapeHtml(s){return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 function downsample(arr,maxN){if(arr.length<=maxN)return arr;const step=arr.length/maxN;const out=[];for(let i=0;i<maxN;i++)out.push(arr[Math.floor(i*step)]);const last=arr[arr.length-1];if(out[out.length-1]!==last)out.push(last);return out;}
-function hexA(hex,a){const h=hex.replace('#','');const full=h.length===3?h.split('').map(c=>c+c).join(''):h;const r=parseInt(full.slice(0,2),16),g=parseInt(full.slice(2,4),16),b=parseInt(full.slice(4,6),16);return `rgba(${r},${g},${b},${a})`;}
+function hexA(hex,a){
+  if(!hex) return `rgba(255,255,255,${a})`;
+  const h=hex.replace('#','');
+  const full=h.length===3?h.split('').map(c=>c+c).join(''):h;
+  if(full.length < 6) return `rgba(255,255,255,${a})`;
+  const r=parseInt(full.slice(0,2),16),g=parseInt(full.slice(2,4),16),b=parseInt(full.slice(4,6),16);
+  return `rgba(${r},${g},${b},${a})`;
+}
 function pctChange(cur,prev){if(!prev||prev<=0)return null;return ((cur-prev)/prev)*100;}
 function decodeXmlEntities(s){
   return String(s==null?'':s)
@@ -1063,6 +1721,16 @@ function decodeXmlEntities(s){
     .replace(/&lt;/g,'<').replace(/&gt;/g,'>')
     .replace(/&quot;/g,'"').replace(/&apos;/g,"'")
     .replace(/&amp;/g,'&');
+}
+function cssVar(name,fb){
+  try{ const v=getComputedStyle(document.documentElement).getPropertyValue(name).trim(); return v||fb; }
+  catch(e){ return fb; }
+}
+function fmtBytes(bytes){
+  if(!bytes||bytes<=0) return '0 B';
+  const units=['B','KB','MB','GB'];
+  const i=Math.floor(Math.log(bytes)/Math.log(1024));
+  return (bytes/Math.pow(1024,i)).toFixed(i===0?0:2) + ' ' + units[i];
 }
 
 /* ============ 查重 ============ */
@@ -1099,15 +1767,13 @@ const ZONE_COLORS = ['#64D2FF','#30D158','#FFD60A','#FF9F0A','#FF453A'];
 const ZONE_NAMES  = ['Z1 恢复','Z2 有氧','Z3 节奏','Z4 阈值','Z5 无氧'];
 const WEEKDAY_NAMES = ['一','二','三','四','五','六','日'];
 
-const DEFAULTS = {glassOpacity:45,glassBlur:40,glassSaturation:170,maxHR:189,restHR:50,weight:63.9,unit:'km',autoSave:true};
-const State = {activities:[],settings:Object.assign({},DEFAULTS),view:'dashboard',filter:'all',prevView:'dashboard',iconMap:{},bgImage:null};
-const KEY='proathlete_v17_';
-function save(k,v){try{localStorage.setItem(KEY+k,JSON.stringify(v));}catch(e){toast('存储空间不足','error');}}
-function load(k,fb){try{const r=localStorage.getItem(KEY+k);return r?JSON.parse(r):fb;}catch(e){return fb;}}
-function persistActivities(){if(!State.settings.autoSave)return;const slim=State.activities.map(a=>Object.assign({},a,{points:a.points&&a.points.length>800?downsample(a.points,800):(a.points||[])}));save('activities',slim);}
-function persistSettings(){save('settings',State.settings);}
-function persistIcons(){try{localStorage.setItem(KEY+'icons', JSON.stringify(State.iconMap));}catch(e){toast('图标存储空间不足','error');}}
-function persistBg(){try{if(State.bgImage)localStorage.setItem(KEY+'bg', State.bgImage);else localStorage.removeItem(KEY+'bg');}catch(e){toast('背景图存储空间不足','error');}}
+const DEFAULTS = {glassOpacity:45,glassBlur:40,glassSaturation:170,maxHR:189,restHR:50,weight:63.9,unit:'km',autoSave:true,theme:'default'};
+const State = {
+  activities:[], settings:Object.assign({},DEFAULTS), view:'dashboard', filter:'all', prevView:'dashboard',
+  iconMap:{}, bgImage:null,
+  pbCache: { byType:{}, byDay:new Map(), byActivity:new Map() },
+  segPBCache: null,
+};
 
 function toast(msg,type){
   type=type||'info';
@@ -1120,20 +1786,531 @@ function toast(msg,type){
   setTimeout(()=>{el.classList.add('out');setTimeout(()=>el.remove(),300);},3400);
 }
 
+/* ============================================================
+   运动热力图
+   ============================================================ */
+const TYPE_HEATMAP_VAR = {
+  run: '--orange', cycle: '--blue', swim: '--teal',
+  gym: '--purple', walk: '--green', hike: '--yellow', other: '--t3',
+};
+
+const HeatmapChart = {
+  canvas: null, ctx: null, dpr: 1, width: 0, height: 0,
+  cells: [], cellSize: 12, gap: 3,
+  padLeft: 30, padTop: 24, padBottom: 26, padRight: 8,
+  hoverCol: -1, hoverRow: -1, isHovering: false,
+  animationId: null, lastTime: 0,
+  activitiesByDay: new Map(), monthLabels: [],
+  pbByDay: new Map(), pbPulseStart: 0, pbPulseActive: false, pulseAnimationId: null,
+
+  init(canvas) {
+    if (!canvas) return;
+    this.canvas = canvas;
+    this.ctx = canvas.getContext('2d');
+    this.buildCells();
+    this.bindEvents();
+    this.rebuildData();
+    this.render();
+  },
+
+  buildCells() {
+    const today = new Date(); today.setHours(0,0,0,0);
+    const dow = (today.getDay() + 6) % 7;
+    const thisMonday = new Date(today);
+    thisMonday.setDate(thisMonday.getDate() - dow);
+    const firstMonday = new Date(thisMonday);
+    firstMonday.setDate(firstMonday.getDate() - 52 * 7);
+    const cells = [];
+    for (let col = 0; col < 53; col++) {
+      for (let row = 0; row < 7; row++) {
+        const date = new Date(firstMonday);
+        date.setDate(date.getDate() + col * 7 + row);
+        const future = date > today;
+        cells.push({ col, row, date, future, lift: 0, targetLift: 0, color: null, baseHex: null, activities: [] });
+      }
+    }
+    this.cells = cells;
+    const monthLabels = [];
+    let lastMonth = -1;
+    for (let col = 0; col < 53; col++) {
+      const cell = cells.find(c => c.col === col && !c.future);
+      if (!cell) continue;
+      const m = cell.date.getMonth();
+      if (m !== lastMonth) { monthLabels.push({ col, label: (m + 1) + '月' }); lastMonth = m; }
+    }
+    this.monthLabels = monthLabels;
+  },
+
+  computeLayout() {
+    const wrap = this.canvas.parentElement;
+    if (!wrap) return;
+    const wrapW = Math.max(200, wrap.clientWidth);
+    const padLeft = 30, padRight = 8, padTop = 24, padBottom = 26;
+    const availW = wrapW - padLeft - padRight;
+    const rawStep = availW / 53;
+    const cellSize = Math.max(8, Math.min(14, rawStep - 3));
+    const gap = Math.max(2, Math.min(4, rawStep - cellSize));
+    this.cellSize = cellSize; this.gap = gap;
+    this.padLeft = padLeft; this.padTop = padTop; this.padRight = padRight; this.padBottom = padBottom;
+    const step = cellSize + gap;
+    const gridW = 53 * step - gap;
+    const gridH = 7 * step - gap;
+    this.width = padLeft + gridW + padRight;
+    this.height = padTop + gridH + padBottom;
+    const dpr = window.devicePixelRatio || 1;
+    this.dpr = dpr;
+    this.canvas.width = Math.round(this.width * dpr);
+    this.canvas.height = Math.round(this.height * dpr);
+    this.canvas.style.width = this.width + 'px';
+    this.canvas.style.height = this.height + 'px';
+    this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  },
+
+  rebuildData() {
+    const map = new Map();
+    for (const a of State.activities) {
+      const key = dayKey(new Date(a.date));
+      if (!map.has(key)) map.set(key, []);
+      map.get(key).push(a);
+    }
+    this.activitiesByDay = map;
+    for (const cell of this.cells) {
+      if (cell.future) continue;
+      const key = dayKey(cell.date);
+      const acts = map.get(key) || [];
+      cell.activities = acts;
+      const info = this.computeColor(acts);
+      cell.color = info.color;
+      cell.baseHex = info.hex;
+    }
+  },
+
+  setPBDays(pbByDay) {
+    this.pbByDay = pbByDay || new Map();
+    this.pbPulseActive = this.pbByDay.size > 0;
+    if (this.pbPulseActive) {
+      this.pbPulseStart = performance.now();
+      this.startPulseLoop();
+    } else if (this.pulseAnimationId) {
+      cancelAnimationFrame(this.pulseAnimationId);
+      this.pulseAnimationId = null;
+    }
+    this.draw();
+  },
+
+  startPulseLoop() {
+    if (this.pulseAnimationId) return;
+    const tick = (now) => {
+      if (!this.pbPulseActive) { this.pulseAnimationId = null; return; }
+      if (document.visibilityState === 'visible') this.draw();
+      this.pulseAnimationId = requestAnimationFrame(tick);
+    };
+    this.pulseAnimationId = requestAnimationFrame(tick);
+  },
+
+  getTypeHex(type) {
+    const varName = TYPE_HEATMAP_VAR[type] || '--blue';
+    const v = cssVar(varName, '');
+    if (v && /^#/.test(v)) return v;
+    return TYPE_META[type]?.color || TYPE_META.other.color;
+  },
+  getGoldHex() { return cssVar('--gold', '#FFD700'); },
+  getEmptyColor() {
+    const isLight = State.settings.theme === 'latte';
+    return isLight ? 'rgba(76,79,105,.09)' : 'rgba(255,255,255,.045)';
+  },
+  computeColor(activities) {
+    if (!activities || activities.length === 0) return { color: this.getEmptyColor(), hex: null };
+    const typeDur = {};
+    let totalDur = 0;
+    for (const a of activities) {
+      typeDur[a.type] = (typeDur[a.type] || 0) + (a.duration || 0);
+      totalDur += a.duration || 0;
+    }
+    let dominant = 'other', maxDur = 0;
+    for (const [t, d] of Object.entries(typeDur)) { if (d > maxDur) { maxDur = d; dominant = t; } }
+    const hex = this.getTypeHex(dominant);
+    const minutes = totalDur / 60;
+    let alpha;
+    if (minutes < 20) alpha = 0.35;
+    else if (minutes < 45) alpha = 0.55;
+    else if (minutes < 75) alpha = 0.72;
+    else if (minutes < 120) alpha = 0.88;
+    else alpha = 1.0;
+    return { color: hexA(hex, alpha), hex };
+  },
+
+  bindEvents() {
+    if (!this.canvas) return;
+    this.canvas.addEventListener('mousemove', e => this.onMouseMove(e));
+    this.canvas.addEventListener('mouseleave', () => this.onMouseLeave());
+    this.canvas.addEventListener('touchstart', e => {
+      if (e.touches.length) { const t = e.touches[0]; this.onMouseMove({ clientX: t.clientX, clientY: t.clientY }); }
+    }, { passive: true });
+    this.canvas.addEventListener('touchmove', e => {
+      if (e.touches.length) { const t = e.touches[0]; this.onMouseMove({ clientX: t.clientX, clientY: t.clientY }); }
+    }, { passive: true });
+    this.canvas.addEventListener('touchend', () => this.onMouseLeave());
+  },
+  hitTest(clientX, clientY) {
+    if (!this.canvas) return null;
+    const rect = this.canvas.getBoundingClientRect();
+    const x = clientX - rect.left;
+    const y = clientY - rect.top;
+    const step = this.cellSize + this.gap;
+    const col = Math.floor((x - this.padLeft) / step);
+    const row = Math.floor((y - this.padTop) / step);
+    if (col < 0 || col >= 53 || row < 0 || row >= 7) return null;
+    const cell = this.cells.find(c => c.col === col && c.row === row);
+    if (!cell || cell.future) return null;
+    return cell;
+  },
+  onMouseMove(e) {
+    const cell = this.hitTest(e.clientX, e.clientY);
+    if (cell) {
+      if (this.hoverCol !== cell.col || this.hoverRow !== cell.row) {
+        this.hoverCol = cell.col; this.hoverRow = cell.row; this.isHovering = true;
+      }
+      this.canvas.style.cursor = 'pointer';
+      this.showTooltip(e.clientX, e.clientY, cell);
+    } else {
+      this.isHovering = false; this.hoverCol = -1; this.hoverRow = -1;
+      this.canvas.style.cursor = 'default';
+      this.hideTooltip();
+    }
+    this.updateTargets();
+    this.startLoop();
+  },
+  onMouseLeave() {
+    this.isHovering = false; this.hoverCol = -1; this.hoverRow = -1;
+    if (this.canvas) this.canvas.style.cursor = 'default';
+    this.hideTooltip();
+    this.updateTargets();
+    this.startLoop();
+  },
+  updateTargets() {
+    if (!this.isHovering) { for (const cell of this.cells) cell.targetLift = 0; return; }
+    const radius = 4.5, r2 = radius * radius;
+    for (const cell of this.cells) {
+      if (cell.future) { cell.targetLift = 0; continue; }
+      const dx = cell.col - this.hoverCol;
+      const dy = cell.row - this.hoverRow;
+      const d2 = dx * dx + dy * dy;
+      if (d2 > r2) { cell.targetLift = 0; }
+      else {
+        const d = Math.sqrt(d2);
+        let t = 1 - d / radius;
+        t = t * t * (3 - 2 * t);
+        cell.targetLift = t;
+      }
+    }
+  },
+  startLoop() {
+    if (this.animationId) return;
+    this.lastTime = 0;
+    this.animationId = requestAnimationFrame((t) => this.loop(t));
+  },
+  loop(now) {
+    const dt = Math.min(0.05, (now - (this.lastTime || now)) / 1000);
+    this.lastTime = now;
+    const k = 1 - Math.exp(-16 * dt);
+    let active = 0;
+    for (const cell of this.cells) {
+      const diff = cell.targetLift - cell.lift;
+      if (Math.abs(diff) > 0.002) { cell.lift += diff * k; active++; }
+      else { cell.lift = cell.targetLift; }
+    }
+    this.draw();
+    if (active > 0) this.animationId = requestAnimationFrame((t) => this.loop(t));
+    else this.animationId = null;
+  },
+  roundRect(ctx, x, y, w, h, r) {
+    ctx.beginPath();
+    if (ctx.roundRect) ctx.roundRect(x, y, w, h, r);
+    else {
+      ctx.moveTo(x + r, y);
+      ctx.arcTo(x + w, y, x + w, y + h, r);
+      ctx.arcTo(x + w, y + h, x, y + h, r);
+      ctx.arcTo(x, y + h, x, y, r);
+      ctx.arcTo(x, y, x + w, y, r);
+      ctx.closePath();
+    }
+  },
+  drawStar(ctx, x, y, r, alpha) {
+    ctx.save();
+    ctx.fillStyle = hexA(this.getGoldHex(), alpha);
+    ctx.shadowColor = hexA(this.getGoldHex(), 0.85 * alpha);
+    ctx.shadowBlur = 6;
+    ctx.beginPath();
+    for (let i = 0; i < 5; i++) {
+      const outerAngle = -Math.PI / 2 + i * 2 * Math.PI / 5;
+      const innerAngle = outerAngle + Math.PI / 5;
+      const ox = x + Math.cos(outerAngle) * r;
+      const oy = y + Math.sin(outerAngle) * r;
+      const ix = x + Math.cos(innerAngle) * r * 0.42;
+      const iy = y + Math.sin(innerAngle) * r * 0.42;
+      if (i === 0) ctx.moveTo(ox, oy); else ctx.lineTo(ox, oy);
+      ctx.lineTo(ix, iy);
+    }
+    ctx.closePath();
+    ctx.fill();
+    ctx.restore();
+  },
+  draw() {
+    const ctx = this.ctx;
+    if (!ctx) return;
+    const { width, height, cellSize, gap, padLeft, padTop } = this;
+    ctx.clearRect(0, 0, width, height);
+    const step = cellSize + gap;
+    for (const cell of this.cells) {
+      if (cell.future) continue;
+      if (cell.lift > 0.01) continue;
+      const x = padLeft + cell.col * step;
+      const y = padTop + cell.row * step;
+      ctx.fillStyle = cell.color || this.getEmptyColor();
+      this.roundRect(ctx, x, y, cellSize, cellSize, 3);
+      ctx.fill();
+    }
+    ctx.fillStyle = dimColor();
+    ctx.font = '10px -apple-system,"PingFang SC",sans-serif';
+    ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic';
+    for (const m of this.monthLabels) {
+      const x = padLeft + m.col * step;
+      ctx.fillText(m.label, x, padTop - 8);
+    }
+    const weekdayLabels = ['一', '', '三', '', '五', '', '日'];
+    ctx.fillStyle = dimColor();
+    ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
+    for (let row = 0; row < 7; row++) {
+      if (!weekdayLabels[row]) continue;
+      const y = padTop + row * step + cellSize / 2;
+      ctx.fillText(weekdayLabels[row], padLeft - 6, y);
+    }
+    const lifted = this.cells.filter(c => !c.future && c.lift > 0.01);
+    lifted.sort((a, b) => a.lift - b.lift);
+    const goldHex = this.getGoldHex();
+    const pulseT = this.pbPulseActive ? (performance.now() - this.pbPulseStart) / 1000 : 0;
+    const pulse = 0.55 + 0.45 * Math.sin(pulseT * Math.PI * 2 / 2.4);
+
+    for (const cell of lifted) {
+      const lift = cell.lift;
+      const x = padLeft + cell.col * step;
+      const y = padTop + cell.row * step;
+      const size = cellSize * (1 + lift * 0.5);
+      const offsetY = -lift * 9;
+      const cx = x + cellSize / 2;
+      const cy = y + cellSize / 2 + offsetY;
+      const dx = cx - size / 2;
+      const dy = cy - size / 2;
+      const radius = 3 * (1 + lift * 0.5);
+      ctx.save();
+      if (lift > 0.15 && cell.baseHex) {
+        ctx.shadowColor = hexA(cell.baseHex, 0.55 * lift);
+        ctx.shadowBlur = 18 * lift;
+        ctx.shadowOffsetY = -3 * lift;
+      }
+      ctx.fillStyle = cell.color || this.getEmptyColor();
+      this.roundRect(ctx, dx, dy, size, size, radius);
+      ctx.fill();
+      if (lift > 0.25) {
+        const grad = ctx.createLinearGradient(dx, dy, dx, dy + size);
+        grad.addColorStop(0, `rgba(255,255,255,${0.28 * lift})`);
+        grad.addColorStop(0.6, 'rgba(255,255,255,0)');
+        ctx.fillStyle = grad;
+        this.roundRect(ctx, dx, dy, size, size, radius);
+        ctx.fill();
+      }
+      ctx.restore();
+
+      const pbInfo = this.pbByDay.get(dayKey(cell.date));
+      if (pbInfo && pbInfo.length) {
+        ctx.save();
+        ctx.strokeStyle = hexA(goldHex, pulse * lift);
+        ctx.lineWidth = 2;
+        ctx.shadowColor = hexA(goldHex, 0.7 * pulse * lift);
+        ctx.shadowBlur = 10;
+        const ringSize = size + 4;
+        this.roundRect(ctx, cx - ringSize/2, cy - ringSize/2, ringSize, ringSize, radius + 2);
+        ctx.stroke();
+        ctx.restore();
+        const starR = Math.max(3, size * 0.28);
+        const starX = dx + size - starR * 0.9;
+        const starY = dy + starR * 0.9 + offsetY * 0.3;
+        this.drawStar(ctx, starX, starY, starR, pulse * Math.max(0.7, lift));
+        if (this.hoverCol === cell.col && this.hoverRow === cell.row) {
+          ctx.save();
+          ctx.strokeStyle = hexA(goldHex, 0.35 + 0.3 * pulse);
+          ctx.lineWidth = 1.5;
+          ctx.setLineDash([4, 4]);
+          ctx.beginPath();
+          ctx.arc(cx, cy, size * 1.2, 0, Math.PI * 2);
+          ctx.stroke();
+          ctx.setLineDash([]);
+          ctx.restore();
+        }
+      }
+    }
+  },
+  showTooltip(clientX, clientY, cell) {
+    const tooltip = document.getElementById('heatmapTooltip');
+    if (!tooltip) return;
+    const weekday = ['日','一','二','三','四','五','六'][cell.date.getDay()];
+    const dateStr = `${cell.date.getFullYear()}年${cell.date.getMonth()+1}月${cell.date.getDate()}日 周${weekday}`;
+    let html = `<div style="font-weight:700;margin-bottom:6px;color:var(--t1);font-size:12.5px;">${dateStr}</div>`;
+    const pbInfo = this.pbByDay.get(dayKey(cell.date));
+    const goldHex = this.getGoldHex();
+    if (!cell.activities.length) {
+      html += `<div style="color:var(--t3);font-size:11.5px;">无运动记录</div>`;
+    } else {
+      const totalSec = cell.activities.reduce((s, a) => s + (a.duration || 0), 0);
+      html += cell.activities.map(a => {
+        const meta = TYPE_META[a.type] || TYPE_META.other;
+        const dist = a.distance > 0 ? `${(a.distance/1000).toFixed(2)} km` : '';
+        const dur = fmtHM(a.duration);
+        return `<div style="display:flex;align-items:center;gap:8px;padding:3px 0;">
+          <span style="width:8px;height:8px;border-radius:2px;background:${meta.color};flex:0 0 8px;"></span>
+          <span style="color:var(--t2);flex:1;font-size:11.5px;">${meta.label}</span>
+          <span style="color:var(--t1);font-weight:600;font-size:11.5px;">${dist || dur}</span>
+        </div>`;
+      }).join('');
+      html += `<div style="margin-top:6px;padding-top:6px;border-top:1px solid var(--hairline);display:flex;justify-content:space-between;font-size:11px;color:var(--t3);">
+        <span>合计</span><span style="color:var(--t1);font-weight:700;">${Math.round(totalSec/60)} 分钟</span>
+      </div>`;
+    }
+    if (pbInfo && pbInfo.length) {
+      html += `<div style="margin-top:8px;padding-top:8px;border-top:1px dashed ${hexA(goldHex, .4)};">`;
+      html += `<div style="font-size:10.5px;color:${goldHex};font-weight:700;margin-bottom:5px;letter-spacing:.4px;">🏆 个人最佳</div>`;
+      for (const pb of pbInfo) {
+        html += `<div style="display:flex;justify-content:space-between;gap:8px;font-size:11px;padding:2px 0;">
+          <span style="color:var(--t2);">${pb.label}</span>
+          <span style="color:${goldHex};font-weight:700;font-variant-numeric:tabular-nums;">${pb.formatted}</span>
+        </div>`;
+      }
+      html += `</div>`;
+    }
+    tooltip.innerHTML = html;
+    tooltip.classList.add('on');
+    const ttRect = tooltip.getBoundingClientRect();
+    let tx = clientX + 16, ty = clientY + 16;
+    if (tx + ttRect.width > window.innerWidth - 12) tx = clientX - ttRect.width - 16;
+    if (ty + ttRect.height > window.innerHeight - 12) ty = clientY - ttRect.height - 16;
+    if (tx < 8) tx = 8;
+    if (ty < 8) ty = 8;
+    tooltip.style.left = tx + 'px';
+    tooltip.style.top = ty + 'px';
+  },
+  hideTooltip() {
+    const tooltip = document.getElementById('heatmapTooltip');
+    if (tooltip) tooltip.classList.remove('on');
+  },
+  render() {
+    if (!this.canvas) return;
+    this.computeLayout();
+    this.rebuildData();
+    this.draw();
+  },
+  refreshData() { this.rebuildData(); this.draw(); },
+};
+
+function renderHeatmapLegend() {
+  const el = document.getElementById('heatmapLegend');
+  if (!el) return;
+  const types = ['run', 'cycle', 'swim', 'gym', 'walk', 'hike'];
+  const items = types.map(t => {
+    const meta = TYPE_META[t];
+    return `<div class="legend-item"><span class="legend-swatch" style="background:${meta.color};"></span><span>${meta.label}</span></div>`;
+  }).join('');
+  const baseColor = TYPE_META.run.color;
+  const scaleAlphas = [0.35, 0.55, 0.72, 0.88, 1.0];
+  const scale = scaleAlphas.map(a => `<span class="scale-cell" style="background:${hexA(baseColor, a)};"></span>`).join('');
+  const goldHex = cssVar('--gold', '#FFD700');
+  const pbLegend = `<div class="legend-pb"><span class="legend-pb-ring" style="border-color:${goldHex};box-shadow:0 0 8px ${hexA(goldHex, .55)};"></span><span>🏆 个人最佳</span></div>`;
+  el.innerHTML = `${items}${pbLegend}<div class="legend-scale"><span>少</span>${scale}<span>多</span></div>`;
+}
+
+function updateHeatmapSummary() {
+  const el = document.getElementById('heatmapSummary');
+  if (!el) return;
+  const today = new Date(); today.setHours(0,0,0,0);
+  const yearAgo = new Date(today); yearAgo.setDate(yearAgo.getDate() - 365);
+  let total = 0;
+  const activeDays = new Set();
+  for (const a of State.activities) {
+    const d = new Date(a.date);
+    if (d >= yearAgo && d <= today) { total++; activeDays.add(dayKey(d)); }
+  }
+  const pbCount = State.pbCache.byDay.size;
+  el.textContent = `${total} 次 · ${activeDays.size} 活跃天 · 🏆 ${pbCount}`;
+}
+
+/* ============ 外观 ============ */
+function applyTheme(name){
+  if(!THEMES[name]) name = 'default';
+  document.documentElement.setAttribute('data-theme', name);
+  State.settings.theme = name;
+  renderThemeGrid();
+  applyGlass();
+  setTimeout(()=>{
+    try{
+      if(State.view==='analysis') { renderAnalysis(); renderPBGrid(); renderAnalysisSegPBs(); }
+      else if(State.view==='detail') layoutDetailCards();
+      else if(State.view==='today') TodayDetail.layoutCards();
+      else if(State.view==='dashboard' && HeatmapChart.canvas){
+        HeatmapChart.refreshData();
+        renderHeatmapLegend();
+      }
+    }catch(e){}
+  },60);
+}
+function renderThemeGrid(){
+  const box = $('#themeGrid');
+  if(!box) return;
+  box.innerHTML = Object.keys(THEMES).map(k=>{
+    const t = THEMES[k];
+    const active = State.settings.theme === k;
+    return `<div class="theme-card${active?' active':''}" data-theme-key="${k}">
+      <div class="tc-top">
+        <div style="min-width:0;">
+          <div class="tc-name">${escapeHtml(t.name)}</div>
+          <div class="tc-sub">${escapeHtml(t.sub)}</div>
+        </div>
+        <div class="tc-check">✓</div>
+      </div>
+      <div class="tc-dots">${t.dots.map(c=>`<span style="background:${c}"></span>`).join('')}</div>
+    </div>`;
+  }).join('');
+  $$('.theme-card', box).forEach(el=>{
+    el.addEventListener('click', ()=>applyTheme(el.dataset.themeKey));
+  });
+}
 function applyGlass(){
-  const s=State.settings, t=clamp(s.glassOpacity,0,100)/100;
-  const root=document.documentElement.style;
-  root.setProperty('--glass-base',`rgba(20,22,34,${(0.92*Math.pow(1-t,2.0)).toFixed(3)})`);
-  root.setProperty('--glass-tint',`rgba(255,255,255,${(0.020+0.105*Math.pow(1-t,1.3)).toFixed(3)})`);
-  root.setProperty('--glass-border',`rgba(255,255,255,${(0.055+0.135*(1-t)).toFixed(3)})`);
-  root.setProperty('--glass-shadow-a',(0.08+0.38*(1-t)).toFixed(3));
-  root.setProperty('--glass-inner',`rgba(255,255,255,${(0.03+0.09*(1-t)).toFixed(3)})`);
-  root.setProperty('--glass-blur',s.glassBlur+'px');
-  root.setProperty('--glass-sat',s.glassSaturation+'%');
+  const s = State.settings;
+  const t = clamp(s.glassOpacity,0,100)/100;
+  const root = document.documentElement;
+  const cs = getComputedStyle(root);
+  const rgb      = (cs.getPropertyValue('--glass-rgb')||'').trim()      || '20,22,34';
+  const ink      = (cs.getPropertyValue('--glass-ink-rgb')||'').trim()  || '255,255,255';
+  const tintRgb  = (cs.getPropertyValue('--glass-tint-rgb')||'').trim() || '255,255,255';
+  const light    = (cs.getPropertyValue('--glass-mode')||'').trim() === 'light';
+  const k = Math.pow(1-t, 2.0);
+  const baseA   = (light ? 0.97 : 0.92) * k;
+  const tintA   = light ? (0.42 + 0.34*k) : (0.02 + 0.105*Math.pow(1-t,1.3));
+  const borderA = light ? (0.06 + 0.10*(1-t)) : (0.055 + 0.135*(1-t));
+  const innerA  = light ? 0.55 : (0.03 + 0.09*(1-t));
+  const shadowA = light ? (0.06 + 0.14*(1-t)) : (0.08 + 0.38*(1-t));
+  const st = root.style;
+  st.setProperty('--glass-base', `rgba(${rgb},${baseA.toFixed(3)})`);
+  st.setProperty('--glass-tint', `rgba(${tintRgb},${tintA.toFixed(3)})`);
+  st.setProperty('--glass-border', `rgba(${ink},${borderA.toFixed(3)})`);
+  st.setProperty('--glass-inner', `rgba(${tintRgb},${innerA.toFixed(3)})`);
+  st.setProperty('--glass-shadow-a', shadowA.toFixed(3));
+  st.setProperty('--glass-blur', s.glassBlur+'px');
+  st.setProperty('--glass-sat', s.glassSaturation+'%');
 }
 function applyCardIcons(){
   $$('.card').forEach(card=>{
     const cardType = card.dataset.card;
+    if (!cardType) return;
     const figWrap = card.querySelector('.card-figure');
     const figMask = card.querySelector('.fig-mask');
     const btn = card.querySelector('.fig-upload');
@@ -1209,7 +2386,10 @@ function prepCanvas(cv){
   ctx.clearRect(0, 0, w, h);
   return { ctx, w, h };
 }
-function emptyText(ctx,w,h,txt){ctx.fillStyle='rgba(255,255,255,.28)';ctx.font='13px -apple-system,"PingFang SC",sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(txt||'暂无数据',w/2,h/2);}
+function gridColor(){ return cssVar('--hairline','rgba(255,255,255,.055)'); }
+function dimColor(){ return cssVar('--t3','rgba(255,255,255,.35)'); }
+function faintColor(){ return cssVar('--t4','rgba(255,255,255,.28)'); }
+function emptyText(ctx,w,h,txt){ctx.fillStyle=faintColor();ctx.font='13px -apple-system,"PingFang SC",sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(txt||'暂无数据',w/2,h/2);}
 
 function drawLine(cv,cfg){
   const {ctx,w,h}=prepCanvas(cv);
@@ -1217,7 +2397,7 @@ function drawLine(cv,cfg){
   if(!series.length){emptyText(ctx,w,h,cfg.empty);return;}
   const padL=cfg.padLeft||8,padR=10,padT=12,padB=cfg.padBottom||20;
   const cw=w-padL-padR,ch=h-padT-padB;
-  ctx.strokeStyle='rgba(255,255,255,.055)';ctx.lineWidth=1;
+  ctx.strokeStyle=gridColor();ctx.lineWidth=1;
   for(let i=0;i<=4;i++){const y=Math.round(padT+ch/4*i)+.5;ctx.beginPath();ctx.moveTo(padL,y);ctx.lineTo(padL+cw,y);ctx.stroke();}
   for(const s of series){
     const data=s.data;
@@ -1249,7 +2429,7 @@ function drawLine(cv,cfg){
     ctx.stroke();ctx.setLineDash([]);
   }
   if(cfg.xLabels&&cfg.xLabels.length){
-    ctx.fillStyle='rgba(255,255,255,.35)';ctx.font='10px -apple-system,"PingFang SC",sans-serif';ctx.textBaseline='top';
+    ctx.fillStyle=dimColor();ctx.font='10px -apple-system,"PingFang SC",sans-serif';ctx.textBaseline='top';
     const n=cfg.xLabels.length;
     for(let i=0;i<n;i++){
       const x=padL+(i/(n-1||1))*cw;
@@ -1264,7 +2444,7 @@ function drawDonut(cv,segments,thickness){
   const cx=w/2,cy=h/2;
   const R=Math.min(w,h)/2-4;
   const lw=thickness||Math.max(12,R*0.36);
-  if(total<=0){ctx.strokeStyle='rgba(255,255,255,.08)';ctx.lineWidth=lw;ctx.beginPath();ctx.arc(cx,cy,R-lw/2,0,Math.PI*2);ctx.stroke();return;}
+  if(total<=0){ctx.strokeStyle=gridColor();ctx.lineWidth=lw;ctx.beginPath();ctx.arc(cx,cy,R-lw/2,0,Math.PI*2);ctx.stroke();return;}
   let a0=-Math.PI/2;
   for(const s of segments){
     if(!s.value)continue;
@@ -1278,7 +2458,7 @@ function drawTrackMini(cv,points,color){
   const {ctx,w,h}=prepCanvas(cv);
   const gps=(points||[]).filter(p=>p.lat!=null&&p.lon!=null&&isFinite(p.lat)&&isFinite(p.lon));
   if(gps.length<2){
-    ctx.fillStyle='rgba(255,255,255,.22)';ctx.font='11px -apple-system,"PingFang SC",sans-serif';
+    ctx.fillStyle=faintColor();ctx.font='11px -apple-system,"PingFang SC",sans-serif';
     ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('无 GPS 轨迹',w/2,h/2);return;
   }
   let minLat=Infinity,maxLat=-Infinity,minLon=Infinity,maxLon=-Infinity;
@@ -1313,7 +2493,7 @@ function drawTrackMini(cv,points,color){
   ctx.fillStyle='#FF453A';ctx.beginPath();ctx.arc(ex,ey,6,0,Math.PI*2);ctx.fill();
   ctx.fillStyle='rgba(255,255,255,.9)';ctx.beginPath();ctx.arc(ex,ey,2.5,0,Math.PI*2);ctx.fill();
   ctx.font='11px -apple-system,"PingFang SC",sans-serif';
-  ctx.fillStyle='rgba(255,255,255,.7)';
+  ctx.fillStyle=dimColor();
   ctx.textAlign='center';
   ctx.textBaseline='bottom';
   ctx.fillText('起点',sx,sy-10);
@@ -1321,57 +2501,48 @@ function drawTrackMini(cv,points,color){
   ctx.fillText('终点',ex,ey+10);
 }
 
-/* 带坐标轴的图表（用于对比页） */
 function drawAxisChart(cv, cfg){
   const {ctx,w,h} = prepCanvas(cv);
   const data = cfg.data || [];
   if(!data.length){ emptyText(ctx,w,h,'暂无数据'); return; }
-
   const padL = 44, padR = 70, padT = 20, padB = 26;
   const cw = w - padL - padR, ch = h - padT - padB;
-
   let mn = cfg.minV != null ? cfg.minV : Math.min.apply(null, data);
   let mx = cfg.maxV != null ? cfg.maxV : Math.max.apply(null, data);
   const range = (mx - mn) || 1;
-
   ctx.font = '10px -apple-system,"PingFang SC",sans-serif';
   ctx.textBaseline = 'middle';
   for (let i = 0; i <= 4; i++){
     const v = mn + (mx - mn) * (1 - i/4);
     const y = Math.round(padT + (ch/4)*i) + .5;
-    ctx.strokeStyle = 'rgba(255,255,255,.05)';
+    ctx.strokeStyle = gridColor();
     ctx.lineWidth = 1;
     ctx.beginPath(); ctx.moveTo(padL, y); ctx.lineTo(padL + cw, y); ctx.stroke();
-    ctx.fillStyle = 'rgba(255,255,255,.42)';
+    ctx.fillStyle = dimColor();
     ctx.textAlign = 'right';
     const txt = Math.abs(v) >= 100 ? v.toFixed(0) : v.toFixed(1);
     ctx.fillText(txt, padL - 6, y);
   }
-
   if (cfg.baselineZero && mn < 0 && mx > 0){
     const y0 = padT + ch - ((0 - mn) / range) * ch;
-    ctx.strokeStyle = 'rgba(255,255,255,.25)';
+    ctx.strokeStyle = cssVar('--t4','rgba(255,255,255,.25)');
     ctx.setLineDash([3, 4]);
     ctx.beginPath(); ctx.moveTo(padL, y0); ctx.lineTo(padL + cw, y0); ctx.stroke();
     ctx.setLineDash([]);
   }
-
   if (cfg.xLabels && cfg.xLabels.length){
-    ctx.fillStyle = 'rgba(255,255,255,.42)';
-    ctx.textBaseline = 'top';
-    ctx.textAlign = 'center';
+    ctx.fillStyle = dimColor();
+    ctx.textBaseline = 'top'; ctx.textAlign = 'center';
     const n = cfg.xLabels.length;
     for (let i = 0; i < n; i++){
       const x = padL + (i / (n-1 || 1)) * cw;
       ctx.fillText(cfg.xLabels[i], x, padT + ch + 6);
     }
   }
-
   const pts = data.map((v, i) => [
     padL + (i / (data.length - 1 || 1)) * cw,
     padT + ch - clamp((v - mn) / range, 0, 1) * ch,
   ]);
-
   const g = ctx.createLinearGradient(0, padT, 0, padT + ch);
   g.addColorStop(0, hexA(cfg.color, .35));
   g.addColorStop(1, hexA(cfg.color, .04));
@@ -1380,22 +2551,15 @@ function drawAxisChart(cv, cfg){
   ctx.moveTo(pts[0][0], padT + ch);
   for (const p of pts) ctx.lineTo(p[0], p[1]);
   ctx.lineTo(pts[pts.length-1][0], padT + ch);
-  ctx.closePath();
-  ctx.fill();
-
+  ctx.closePath(); ctx.fill();
   ctx.strokeStyle = cfg.color;
-  ctx.lineWidth = 2;
-  ctx.lineJoin = 'round';
-  ctx.lineCap = 'round';
+  ctx.lineWidth = 2; ctx.lineJoin = 'round'; ctx.lineCap = 'round';
   ctx.beginPath();
-  for (let i = 0; i < pts.length; i++){
-    i ? ctx.lineTo(pts[i][0], pts[i][1]) : ctx.moveTo(pts[i][0], pts[i][1]);
-  }
+  for (let i = 0; i < pts.length; i++){ i ? ctx.lineTo(pts[i][0], pts[i][1]) : ctx.moveTo(pts[i][0], pts[i][1]); }
   ctx.stroke();
-
   if (cfg.avg != null && isFinite(cfg.avg)){
     const yAvg = padT + ch - clamp((cfg.avg - mn) / range, 0, 1) * ch;
-    ctx.strokeStyle = 'rgba(255,255,255,.32)';
+    ctx.strokeStyle = cssVar('--t4','rgba(255,255,255,.32)');
     ctx.setLineDash([4, 4]);
     ctx.lineWidth = 1.2;
     ctx.beginPath(); ctx.moveTo(padL, yAvg); ctx.lineTo(padL + cw, yAvg); ctx.stroke();
@@ -1406,35 +2570,29 @@ function drawAxisChart(cv, cfg){
     const th = 18;
     const tx = padL + cw - tw;
     const ty = yAvg - th - 4;
-    ctx.fillStyle = 'rgba(20,22,34,.85)';
-    ctx.strokeStyle = 'rgba(255,255,255,.1)';
+    ctx.fillStyle = cssVar('--popover-bg','rgba(20,22,34,.85)');
+    ctx.strokeStyle = cssVar('--hairline-strong','rgba(255,255,255,.1)');
     ctx.lineWidth = 1;
     ctx.beginPath();
     if (ctx.roundRect) ctx.roundRect(tx, ty, tw, th, 4); else ctx.rect(tx, ty, tw, th);
     ctx.fill(); ctx.stroke();
-    ctx.fillStyle = 'rgba(255,255,255,.75)';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
+    ctx.fillStyle = cssVar('--t2','rgba(255,255,255,.75)');
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
     ctx.fillText(avgTxt, tx + tw/2, ty + th/2);
   }
-
   if (cfg.hoverIndex >= 0 && cfg.hoverIndex < data.length){
     const hx = pts[cfg.hoverIndex][0];
     const hy = pts[cfg.hoverIndex][1];
     const hv = data[cfg.hoverIndex];
-
-    ctx.strokeStyle = 'rgba(255,255,255,.5)';
+    ctx.strokeStyle = cssVar('--t3','rgba(255,255,255,.5)');
     ctx.lineWidth = 1;
     ctx.setLineDash([2, 3]);
     ctx.beginPath(); ctx.moveTo(hx, padT); ctx.lineTo(hx, padT + ch); ctx.stroke();
     ctx.setLineDash([]);
-
     ctx.fillStyle = cfg.color;
     ctx.beginPath(); ctx.arc(hx, hy, 4, 0, Math.PI*2); ctx.fill();
-    ctx.strokeStyle = '#fff';
-    ctx.lineWidth = 1.5;
-    ctx.stroke();
-
+    ctx.strokeStyle = cssVar('--t1','#fff');
+    ctx.lineWidth = 1.5; ctx.stroke();
     const label = `${Math.abs(hv) >= 100 ? Math.round(hv) : hv.toFixed(1)} ${cfg.unit || ''}`;
     ctx.font = '600 11px -apple-system,"PingFang SC",sans-serif';
     const lw = ctx.measureText(label).width + 16;
@@ -1442,19 +2600,15 @@ function drawAxisChart(cv, cfg){
     let lx = hx + 8;
     let ly = Math.max(padT, hy - lh - 6);
     if (lx + lw > padL + cw) lx = hx - lw - 8;
-
-    ctx.fillStyle = 'rgba(20,22,34,.94)';
-    ctx.strokeStyle = 'rgba(255,255,255,.15)';
+    ctx.fillStyle = cssVar('--popover-bg','rgba(20,22,34,.94)');
+    ctx.strokeStyle = cssVar('--hairline-strong','rgba(255,255,255,.15)');
     ctx.lineWidth = 1;
     ctx.beginPath();
     if (ctx.roundRect) ctx.roundRect(lx, ly, lw, lh, 6); else ctx.rect(lx, ly, lw, lh);
     ctx.fill(); ctx.stroke();
-
-    ctx.fillStyle = '#fff';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
+    ctx.fillStyle = cssVar('--t1','#fff');
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
     ctx.fillText(label, lx + lw/2, ly + lh/2);
-
     if (cfg.timeLabels && cfg.timeLabels[cfg.hoverIndex]){
       const timeTxt = cfg.timeLabels[cfg.hoverIndex];
       ctx.font = '600 11px -apple-system,"PingFang SC",sans-serif';
@@ -1463,20 +2617,19 @@ function drawAxisChart(cv, cfg){
       let tX = hx - tW/2;
       if (tX < padL) tX = padL;
       if (tX + tW > padL + cw) tX = padL + cw - tW;
-      ctx.fillStyle = 'rgba(20,22,34,.94)';
-      ctx.strokeStyle = 'rgba(255,255,255,.15)';
+      ctx.fillStyle = cssVar('--popover-bg','rgba(20,22,34,.94)');
+      ctx.strokeStyle = cssVar('--hairline-strong','rgba(255,255,255,.15)');
       ctx.beginPath();
       if (ctx.roundRect) ctx.roundRect(tX, padT - 22, tW, tH, 5); else ctx.rect(tX, padT - 22, tW, tH);
       ctx.fill(); ctx.stroke();
-      ctx.fillStyle = '#fff';
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
+      ctx.fillStyle = cssVar('--t1','#fff');
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
       ctx.fillText(timeTxt, tX + tW/2, padT - 22 + tH/2);
     }
   }
 }
 
-/* ============ ZIP 通用读取（同时支持 XLSX） ============ */
+/* ============ ZIP / XLSX ============ */
 async function readZipAllEntries(buffer){
   const dv=new DataView(buffer);
   const len=buffer.byteLength;
@@ -1527,7 +2680,7 @@ async function readZip(buffer){
   return all.filter(e=>/\.(gpx|tcx|fit)$/i.test(e.name));
 }
 
-/* ============ FIT / GPX / TCX 解析 ============ */
+/* ============ FIT / GPX / TCX ============ */
 const GARMIN_EPOCH_MS=631065600000;
 function readFieldValue(dv,offset,field,le){
   const {size,baseType}=field;
@@ -1618,20 +2771,16 @@ function fitRecordsToActivity(records,filename){
   const sessions=records.filter(r=>r.globalMsgNum===18);
   const recs=records.filter(r=>r.globalMsgNum===20);
   if(!recs.length&&!sessions.length)throw new Error('FIT 文件中无运动数据');
-
   const session=sessions[0]?sessions[0].values:{};
   const fileId=fileIds[0]?fileIds[0].values:{};
   const sport=session[5]!=null?session[5]:0;
   const subSport=session[6]!=null?session[6]:0;
   const type=FIT_SPORT_MAP[sport]||'other';
-
   let startTime=null;
   if(session[2]!=null)startTime=new Date(session[2]*1000+GARMIN_EPOCH_MS);
   else if(fileId[4]!=null)startTime=new Date(fileId[4]*1000+GARMIN_EPOCH_MS);
   else if(recs.length&&recs[0].values[253]!=null)startTime=new Date(recs[0].values[253]*1000+GARMIN_EPOCH_MS);
   else startTime=new Date();
-
-  // ====== 关键修正：即使没有 record（轨迹点）也可以构造成活动 ======
   const points=[];
   for(const r of recs){
     const v=r.values;
@@ -1647,7 +2796,6 @@ function fitRecordsToActivity(records,filename){
     let d=v[5]!=null?v[5]/100:null;
     points.push({lat,lon,t:ts,ele,hr:v[3]!=null?v[3]:null,cad:v[4]!=null?v[4]:null,sp,d,temp:v[13]!=null?v[13]:null,power:v[7]!=null?v[7]:null});
   }
-
   const duration=session[8]!=null?session[8]/1000:(session[7]!=null?session[7]/1000:0);
   const distance=session[9]!=null?session[9]/100:(points.length&&points[points.length-1].d?points[points.length-1].d:0);
   const calories=session[11]!=null?session[11]:0;
@@ -1662,7 +2810,6 @@ function fitRecordsToActivity(records,filename){
   const avgCad=session[13]!=null?session[13]:null;
   const avgTemp=session[132]!=null?session[132]:null;
   const startTimeStr=startTime.toISOString();
-
   const gpsCount=points.filter(p=>p.lat!=null&&p.lon!=null).length;
   let indoor;
   if(points.length===0){
@@ -1671,17 +2818,13 @@ function fitRecordsToActivity(records,filename){
     const hasGPS=gpsCount>points.length*0.3;
     indoor=(!hasGPS)||[5,6,58].indexOf(subSport)>=0;
   }
-
   const rawName = fileId[8] || '';
   let name = (rawName || '').replace(/\.fit$/i,'');
   if(!name) name = filename.replace(/\.fit$/i,'');
   if(!name) name = (TYPE_META[type]||TYPE_META.other).label + ' 活动';
-
   return buildActivity({
-    name, type, indoor, date:startTimeStr,
-    points,
-    presetDuration:duration,
-    presetDistance:distance,
+    name, type, indoor, date:startTimeStr, points,
+    presetDuration:duration, presetDistance:distance,
     calories,avgHR,maxHR,ascent,descent,avgSpeed,maxSpeed,avgPower,maxPower,avgCad,avgTemp,
     source:filename,
   });
@@ -1750,8 +2893,6 @@ function parseTCX(doc,filename){
   const name=filename.replace(/\.tcx$/i,'');
   return buildActivity({name,type:guessType(sport,name),indoor:false,points,source:filename,presetDuration:lapTime,presetDistance:lapDist,presetCalories:lapCal});
 }
-
-/* 当没有轨迹点时，用汇总数据合成时序点（让图表仍可显示） */
 function synthesizePoints(opt){
   const N=120;
   const dur=opt.presetDuration>0?opt.presetDuration:600;
@@ -1762,37 +2903,23 @@ function synthesizePoints(opt){
   const out=[];
   for(let i=0;i<N;i++){
     const p=i/(N-1);
-    out.push({
-      lat:null,lon:null,
-      t:base+dur*1000*p,
-      hr:hr,
-      ele:0,
-      cad:0,
-      sp:dur>0?dist/dur:0,
-      d:dist*p,
-      temp:0,
-      power:0,
-    });
+    out.push({ lat:null,lon:null, t:base+dur*1000*p, hr:hr, ele:0, cad:0, sp:dur>0?dist/dur:0, d:dist*p, temp:0, power:0 });
   }
   return out;
 }
-
 function buildActivity(opt){
   let points=(opt.points||[]).filter(p=>p&&((p.lat!=null&&p.lon!=null)||p.t!=null));
   const hasPreset=(opt.presetDuration>0)||(opt.presetDistance>0);
-
   if(points.length<2){
     if(!hasPreset) throw new Error('有效数据点不足');
     points = synthesizePoints(opt);
   }
-
   const withTime=points.filter(p=>p.t).length;
   if(withTime>points.length*0.5)points.sort((a,b)=>(a.t||0)-(b.t||0));
   const t0=points[0].t,t1=points[points.length-1].t;
   let duration=(t0&&t1&&t1>t0)?(t1-t0)/1000:0;
   if(opt.presetDuration&&opt.presetDuration>0)duration=opt.presetDuration;
   if(!duration||!isFinite(duration))duration=points.length;
-
   let distance=0;
   const gpsCount=points.filter(p=>p.lat!=null).length;
   const hasGPS=gpsCount>points.length*0.7;
@@ -1814,18 +2941,15 @@ function buildActivity(opt){
     for(let i=0;i<points.length;i++){const p=points[i];p._d=(p.t&&t0)?spd*(p.t-t0)/1000:spd*i;}
     distance=points[points.length-1]._d;
   }
-
   let elevGain=0,lastEle=null;
   for(const p of points){
     if(p.ele==null)continue;
     if(lastEle!=null){const d=p.ele-lastEle;if(d>0.8)elevGain+=d;}
     lastEle=p.ele;
   }
-
   const hrs=points.map(p=>p.hr).filter(v=>v&&v>30&&v<250);
   const avgHR=hrs.length?Math.round(hrs.reduce((a,b)=>a+b,0)/hrs.length):(opt.avgHR||null);
   const maxHRv=hrs.length?Math.max.apply(null,hrs):(opt.maxHR||null);
-
   const speeds=[];
   for(let i=1;i<points.length;i++){
     const a=points[i-1],b=points[i];
@@ -1845,7 +2969,6 @@ function buildActivity(opt){
     return out;
   }
   const smoothSpeed=smooth(speeds,4);
-
   const zoneSec=[0,0,0,0,0];
   const maxHRSetting=State.settings.maxHR;
   if(hrs.length>5){
@@ -1858,13 +2981,11 @@ function buildActivity(opt){
       zoneSec[z]+=dt;
     }
   }
-
   let load=0;
   if(avgHR&&duration>0){
     const hrr=clamp((avgHR-State.settings.restHR)/(maxHRSetting-State.settings.restHR),0,1.2);
     load=(duration/60)*hrr*0.64*Math.exp(1.92*hrr);
   }else{load=(duration/60)*3.5;}
-
   let calories=opt.calories||opt.presetCalories||0;
   if(!calories||calories<=0){
     const hours=duration/3600;
@@ -1878,7 +2999,6 @@ function buildActivity(opt){
     else if(opt.type==='hike')met=5;
     calories=Math.round(met*State.settings.weight*hours);
   }
-
   const avgSpeed=opt.avgSpeed!=null?opt.avgSpeed:(distance>0&&duration>0?distance/duration:null);
   const cads=points.map(p=>p.cad).filter(v=>v&&v>30&&v<250);
   const avgCad=cads.length?Math.round(cads.reduce((a,b)=>a+b,0)/cads.length):(opt.avgCad||null);
@@ -1887,12 +3007,10 @@ function buildActivity(opt){
   const powers=points.map(p=>p.power).filter(v=>v&&v>0);
   const avgPower=opt.avgPower!=null?opt.avgPower:(powers.length?Math.round(powers.reduce((a,b)=>a+b,0)/powers.length):null);
   const maxPower=opt.maxPower!=null?opt.maxPower:(powers.length?Math.max.apply(null,powers):null);
-
   const finalPoints=downsample(points.map((p,i)=>({
     d:p._d||0,t:p.t||0,hr:p.hr||0,sp:smoothSpeed[Math.min(i,smoothSpeed.length-1)]||0,
     ele:p.ele!=null?p.ele:0,cad:p.cad||0,temp:p.temp!=null?p.temp:0,power:p.power||0,lat:p.lat,lon:p.lon,
   })),800);
-
   return {
     id:'a'+Date.now().toString(36)+Math.random().toString(36).slice(2,7),
     name:opt.name||'未命名活动',type:opt.type||'other',indoor:!!opt.indoor,
@@ -1908,12 +3026,8 @@ function buildActivity(opt){
   };
 }
 
-/* ============ XLSX 解析 ============ */
-function colLetterToIndex(letters){
-  let n=0;
-  for(let i=0;i<letters.length;i++) n = n*26 + (letters.charCodeAt(i)-64);
-  return n-1;
-}
+/* ============ XLSX ============ */
+function colLetterToIndex(letters){let n=0;for(let i=0;i<letters.length;i++) n = n*26 + (letters.charCodeAt(i)-64);return n-1;}
 function parseSharedStringsXml(xml){
   const out=[];
   const re=/<si\b[^>]*>([\s\S]*?)<\/si>/g;
@@ -1924,7 +3038,6 @@ function parseSharedStringsXml(xml){
     const re2=/<t\b[^>]*>([\s\S]*?)<\/t>/g;
     let m2;
     while((m2=re2.exec(inner))) text += m2[1];
-    // 处理 <t/> 空标签
     if(!text && /<t\s*\/>/.test(inner)) text='';
     out.push(decodeXmlEntities(text));
   }
@@ -2018,7 +3131,6 @@ function xlsxTypeToType(s){
 }
 function xlsxRowsToActivities(rows, filename){
   if(!rows || !rows.length) return [];
-  // 找表头行
   let headerIdx=-1;
   for(let i=0;i<Math.min(rows.length,12);i++){
     const r=rows[i]||[];
@@ -2042,23 +3154,16 @@ function xlsxRowsToActivities(rows, filename){
     else if(/心率记录|心率数组|heart.?rate.?record/i.test(name)) col.hrSeries=i;
     else if(/运动轨迹|轨迹|track|route/i.test(name)) col.track=i;
   });
-
   const acts=[];
   for(let i=headerIdx+1;i<rows.length;i++){
     const row=rows[i]||[];
     if(!row.length) continue;
-    const get=(k)=>{
-      const ci=col[k];
-      if(ci==null) return '';
-      const v=row[ci];
-      return v==null?'':String(v).trim();
-    };
+    const get=(k)=>{const ci=col[k];if(ci==null) return '';const v=row[ci];return v==null?'':String(v).trim();};
     const typeRaw=get('type');
     const distRaw=get('distance');
     const durRaw=get('duration');
     const startRaw=get('start');
     if(!typeRaw && !distRaw && !durRaw && !startRaw) continue;
-
     const type=xlsxTypeToType(typeRaw);
     const distance=parseFloat(distRaw)||0;
     const duration=parseFloat(durRaw)||0;
@@ -2068,48 +3173,29 @@ function xlsxRowsToActivities(rows, filename){
     const startMs=parseXlsxDate(startRaw);
     const trackUrl=get('track');
     const hrSeries=parseHrSeriesStr(get('hrSeries'));
-
     const points=[];
     if(hrSeries && hrSeries.length>1){
       const N=hrSeries.length;
       const base=startMs||Date.now();
       for(let k=0;k<N;k++){
         const p=k/(N-1);
-        points.push({
-          lat:null,lon:null,
-          t:base+duration*1000*p,
-          hr:hrSeries[k],
-          ele:0,cad:0,
-          sp: duration>0? distance/duration : 0,
-          d: distance*p,
-          temp:0,power:0,
-        });
+        points.push({ lat:null,lon:null, t:base+duration*1000*p, hr:hrSeries[k], ele:0,cad:0, sp: duration>0? distance/duration : 0, d: distance*p, temp:0,power:0 });
       }
     }
-
     const meta=TYPE_META[type]||TYPE_META.other;
     const dObj = new Date(startMs||Date.now());
     const nm = `${meta.label} · ${dObj.getMonth()+1}月${dObj.getDate()}日`;
-
     try{
       const a = buildActivity({
-        name: nm,
-        type,
-        indoor: false,
+        name: nm, type, indoor: false,
         date: startMs? new Date(startMs).toISOString() : new Date().toISOString(),
-        points,
-        presetDuration: duration,
-        presetDistance: distance,
-        calories,
-        avgHR: avgHRv,
-        maxHR: maxHRv,
+        points, presetDuration: duration, presetDistance: distance,
+        calories, avgHR: avgHRv, maxHR: maxHRv,
         trackImage: trackUrl && /^https?:/i.test(trackUrl) ? trackUrl : null,
         source: filename,
       });
       acts.push(a);
-    }catch(err){
-      console.warn('XLSX 行解析失败', err);
-    }
+    }catch(err){ console.warn('XLSX 行解析失败', err); }
   }
   return acts;
 }
@@ -2131,7 +3217,6 @@ async function parseXlsxFile(buffer, filename){
       return na-nb;
     });
   if(!sheetEntries.length) throw new Error('XLSX 中未找到工作表');
-
   const acts=[];
   for(const se of sheetEntries){
     try{
@@ -2152,7 +3237,6 @@ async function importFiles(fileList){
   const newActivities=[];
   const dupWithExisting=[];
   const dupInBatch=[];
-
   const pushActivity = (a) => {
     const dupOld = isDuplicate(a, State.activities);
     if(dupOld){ dupWithExisting.push({a, old:dupOld}); return false; }
@@ -2160,7 +3244,6 @@ async function importFiles(fileList){
     if(dupNew){ dupInBatch.push({a, old:dupNew}); return false; }
     newActivities.push(a); ok++; return true;
   };
-
   for(const file of files){
     const ext=(file.name.split('.').pop()||'').toLowerCase();
     try{
@@ -2191,12 +3274,13 @@ async function importFiles(fileList){
       }
     }catch(err){ fail++; errors.push(`${file.name}: ${err.message}`); }
   }
-
   const dupTotal = dupWithExisting.length + dupInBatch.length;
   if(ok > 0){
     State.activities = State.activities.concat(newActivities);
     State.activities.sort((a,b)=>new Date(b.date)-new Date(a.date));
-    persistActivities(); renderAll();
+    try { await IDB.putActivities(newActivities); }
+    catch(e){ console.error('写入失败，回退全量', e); await flushPersist(); persistActivities(); }
+    renderAll();
     let msg = `成功导入 ${ok} 条活动`;
     if(dupTotal > 0) msg += `，跳过 ${dupTotal} 条重复`;
     if(fail > 0) msg += `，${fail} 条失败`;
@@ -2244,7 +3328,7 @@ function parseActivityText(text,filename){
 }
 
 /* ============ 演示数据 ============ */
-function generateDemoData(){
+async function generateDemoData(){
   const now=Date.now();
   const list=[];
   const rand=(a,b)=>a+Math.random()*(b-a);
@@ -2255,11 +3339,11 @@ function generateDemoData(){
     for(let i=0;i<types.length;i++){acc+=weights[i];if(r<=acc)return types[i];}
     return 'run';
   }
-  for(let i=120;i>=0;i--){
+  for(let i=400;i>=0;i--){
     const day=new Date(now-i*DAY);
     day.setHours(7+Math.floor(rand(0,3)),Math.floor(rand(0,60)),0,0);
     const force = (i === 0);
-    if(!force && Math.random()<0.38)continue;
+    if(!force && Math.random()<0.5)continue;
     const type = force ? 'run' : pickType();
     let dist=0,dur=0,avgHR=0,maxHRv=0,elev=0,cadence=null,temp=null;
     let indoor=false;
@@ -2375,7 +3459,8 @@ function generateDemoData(){
     });
   }
   State.activities=list.sort((a,b)=>new Date(b.date)-new Date(a.date));
-  persistActivities();renderAll();
+  await IDB.replaceAllActivities(State.activities);
+  renderAll();
   toast(`已载入 ${list.length} 条演示活动`,'success');
 }
 
@@ -2425,18 +3510,135 @@ function renderDashboard(){
   setKPI('#kWalkOutdoor','#kWalkOutdoorSub',sum(outdoor(walkAll),'distance'),`室外 ${outdoor(walkAll).length} 次`);
   const hikeAll=byType('hike');
   setKPI('#kHikeTotal','#kHikeTotalSub',sum(hikeAll,'distance'),`共 ${hikeAll.length} 次徒步`);
+
+  if (HeatmapChart.canvas) {
+    requestAnimationFrame(() => {
+      HeatmapChart.setPBDays(State.pbCache.byDay);
+      HeatmapChart.refreshData();
+      updateHeatmapSummary();
+    });
+  }
 }
 
-/* ============================================================
-   当日运动详情 —— 三页堆叠卡片
-   ============================================================ */
-const TodayDetail = {
-  activity: null,
-  page: 0,
-  hoverIndex: -1,
-  chartData: null,
-  chartCardEl: null,
+/* ============ PB 网格（数据分析页 - 现有） ============ */
+function renderPBGrid() {
+  const container = document.getElementById('pbContainer');
+  if (!container) return;
+  if (!State.activities.length) {
+    container.innerHTML = `<div class="card glass" style="padding:var(--s5);"><div class="empty"><span class="e-ico">🏆</span><span class="e-t">暂无 PB 数据</span><span class="e-d">导入活动后，系统会自动计算各类型运动的最佳纪录，并在热力图上用金色光环标记。</span></div></div>`;
+    return;
+  }
+  const pb = State.pbCache.byType;
+  const sections = [];
+  const typeOrder = ['run', 'cycle', 'swim', 'walk', 'hike', 'gym'];
+  for (const type of typeOrder) {
+    const typePB = pb[type];
+    if (!typePB || !Object.keys(typePB).length) continue;
+    const meta = TYPE_META[type];
+    const tiles = PB_DEFS[type]
+      .filter(def => typePB[def.key])
+      .map(def => {
+        const rec = typePB[def.key];
+        const d = new Date(rec.activity.date);
+        const dateStr = `${String(d.getMonth()+1).padStart(2,'0')}/${String(d.getDate()).padStart(2,'0')}`;
+        return `
+          <div class="pb-tile" data-id="${rec.activity.id}" title="点击查看详情">
+            <div class="pb-tile-label">${def.label}</div>
+            <div class="pb-tile-value">${rec.formatted}</div>
+            <div class="pb-tile-date">${dateStr} <span class="pb-tile-trophy">🏆</span></div>
+          </div>`;
+      }).join('');
+    sections.push(`
+      <div class="pb-section">
+        <div class="pb-section-head">
+          <span class="pb-section-icon">${meta.icon}</span>
+          <span class="pb-section-name">${meta.label}</span>
+        </div>
+        <div class="pb-grid">${tiles}</div>
+      </div>`);
+  }
+  container.innerHTML = sections.length
+    ? sections.join('')
+    : `<div class="card glass" style="padding:var(--s5);"><div class="empty"><span class="e-ico">🏆</span><span class="e-t">暂无 PB 数据</span></div></div>`;
+  container.querySelectorAll('.pb-tile').forEach(el => {
+    el.addEventListener('click', () => openActivityDetail(el.dataset.id));
+  });
+}
 
+/* ============ 分段 PB 网格（数据分析页 - 新增） ============ */
+function renderAnalysisSegPBs() {
+  const container = document.getElementById('segPBContainer');
+  if (!container) return;
+  if (!State.activities.length) {
+    container.innerHTML = `<div class="card glass" style="padding:var(--s5);"><div class="empty"><span class="e-ico">⏱️</span><span class="e-t">暂无分段数据</span><span class="e-d">导入活动后，系统会自动计算各运动类型的分段最佳时间。</span></div></div>`;
+    return;
+  }
+  const allSeg = computeAllSegPBs();
+  const mi = State.settings.unit === 'mi';
+  const dd = mi ? 1609.344 : 1000;
+  const du = mi ? 'mi' : 'km';
+  const sections = [];
+  const typeOrder = ['run', 'cycle', 'swim', 'hike'];
+  for (const type of typeOrder) {
+    const segDef = SEG_DEFS[type];
+    if (!segDef) continue;
+    const typeData = allSeg[type] || {};
+    const meta = TYPE_META[type];
+    const gridClass = `seg-pb-grid ${type}`;
+    const cards = segDef.segments.map(seg => {
+      const pb = typeData[seg.key];
+      if (!pb) {
+        return `<div class="seg-pb-card empty">
+          <div class="seg-pb-card-label">${seg.label}</div>
+          <div class="seg-pb-card-value">—</div>
+          <div class="seg-pb-card-meta"><span class="n">暂无记录</span></div>
+        </div>`;
+      }
+      const d = new Date(pb.activity.date);
+      const dateStr = `${d.getMonth()+1}月${d.getDate()}日`;
+      let dist = '';
+      if (pb.activity.distance > 0) {
+        if (pb.activity.type === 'swim') dist = `${Math.round(pb.activity.distance)} m`;
+        else dist = `${(pb.activity.distance/dd).toFixed(2)} ${du}`;
+      }
+      // 该分段平均配速（按目标距离计算）
+      let paceStr = '';
+      if (pb.target > 0 && pb.value > 0) {
+        const segKm = pb.target / 1000;
+        const paceSec = pb.value / segKm;
+        paceStr = `均速 ${fmtPace(paceSec)}/${du}`;
+      }
+      return `<div class="seg-pb-card" data-id="${pb.activity.id}" title="点击查看详情">
+        <div class="seg-pb-card-label">🏆 ${seg.label}</div>
+        <div class="seg-pb-card-value">${fmtDur(pb.value)}</div>
+        <div class="seg-pb-card-meta">
+          <span class="d">${dateStr}</span>
+          <span class="n">${escapeHtml(pb.activity.name)}</span>
+          ${paceStr ? `<span class="n">${paceStr}</span>` : (dist ? `<span class="n">${dist}</span>` : '')}
+        </div>
+      </div>`;
+    }).join('');
+    sections.push(`
+      <div class="pb-section">
+        <div class="pb-section-head">
+          <span class="pb-section-icon">${meta.icon}</span>
+          <span class="pb-section-name">${meta.label} · 分段最佳时间</span>
+        </div>
+        <div class="${gridClass}">${cards}</div>
+      </div>
+    `);
+  }
+  container.innerHTML = sections.length
+    ? sections.join('')
+    : `<div class="card glass" style="padding:var(--s5);"><div class="empty"><span class="e-ico">⏱️</span><span class="e-t">暂无分段数据</span></div></div>`;
+  container.querySelectorAll('.seg-pb-card[data-id]').forEach(el => {
+    el.addEventListener('click', () => openActivityDetail(el.dataset.id));
+  });
+}
+
+/* ============ 当日详情 ============ */
+const TodayDetail = {
+  activity: null, page: 0, hoverIndex: -1, chartData: null, chartCardEl: null,
   open(cardType){
     let type = 'run';
     if(cardType === 'cycle-today') type = 'cycle';
@@ -2455,20 +3657,17 @@ const TodayDetail = {
     switchView('today');
     requestAnimationFrame(() => this.renderStage());
   },
-
   prepareChartData(activity){
     const pts = activity.points || [];
     const step = Math.max(1, Math.floor(pts.length / 240));
     const sampled = [];
     for(let i = 0; i < pts.length; i += step) sampled.push(pts[i]);
     if(sampled.length && sampled[sampled.length-1] !== pts[pts.length-1]) sampled.push(pts[pts.length-1]);
-
     const t0 = sampled[0]?.t || 0;
     const t1 = sampled[sampled.length-1]?.t || 0;
     const dur = Math.max(1, (t1 - t0) / 1000);
     const xLabels = [0, 0.25, 0.5, 0.75, 1].map(p => fmtDurShort(dur * p));
     const timeLabels = sampled.map(p => fmtDurShort((p.t - t0) / 1000));
-
     const hrValues = sampled.map(p => p.hr || 0);
     const maxHRSet = State.settings.maxHR || 189;
     let bb = 0;
@@ -2486,15 +3685,8 @@ const TodayDetail = {
     });
     const cadValues = sampled.map(p => p.cad || 0);
     const powerValues = sampled.map(p => p.power || 0);
-    const voValues = sampled.map((p, i) =>
-      7.0 + Math.sin(i / 20) * 0.4 + (Math.random() - 0.5) * 0.15
-    );
-
-    const avg = arr => {
-      const valid = arr.filter(v => v > 0);
-      return valid.length ? valid.reduce((a,b)=>a+b,0)/valid.length : 0;
-    };
-
+    const voValues = sampled.map((p, i) => 7.0 + Math.sin(i / 20) * 0.4 + (Math.random() - 0.5) * 0.15);
+    const avg = arr => { const valid = arr.filter(v => v > 0); return valid.length ? valid.reduce((a,b)=>a+b,0)/valid.length : 0; };
     return {
       xLabels, timeLabels,
       charts: [
@@ -2507,12 +3699,10 @@ const TodayDetail = {
       ],
     };
   },
-
   renderStage(){
     const stage = $('#todayStage');
     stage.innerHTML = '';
     if(!this.activity) return;
-
     const trackCard = this.buildTrackCard();
     const chartsCard = this.buildChartsCard();
     const summaryCard = this.buildSummaryCard();
@@ -2520,25 +3710,19 @@ const TodayDetail = {
     stage.appendChild(chartsCard);
     stage.appendChild(summaryCard);
     this.chartCardEl = chartsCard;
-
     const dots = document.createElement('div');
     dots.className = 'dc-dots';
     [0,1,2].forEach(i => {
       const d = document.createElement('div');
       d.className = 'dc-dot' + (i === this.page ? ' active' : '');
-      d.addEventListener('click', e => {
-        e.stopPropagation();
-        this.page = i; this.layoutCards(); this.updateTabs();
-      });
+      d.addEventListener('click', e => { e.stopPropagation(); this.page = i; this.layoutCards(); this.updateTabs(); });
       dots.appendChild(d);
     });
     stage.appendChild(dots);
-
     this.layoutCards();
     this.updateTabs();
     this.initDrag();
   },
-
   buildTrackCard(){
     const a = this.activity;
     const meta = TYPE_META[a.type] || TYPE_META.other;
@@ -2546,15 +3730,13 @@ const TodayDetail = {
     const dd = mi ? 1609.344 : 1000;
     const du = mi ? 'mi' : 'km';
     const isRun = a.type === 'run' || a.type === 'walk' || a.type === 'hike';
-
     const card = document.createElement('div');
-    card.className = 'today-card';
-    card.dataset.page = '0';
+    card.className = 'today-card'; card.dataset.page = '0';
     card.innerHTML = `
       <div class="today-card-head">
         <div class="today-card-title">
           <span class="ic">${meta.icon}</span>
-          <div>
+          <div style="min-width:0;">
             <div class="name">${escapeHtml(a.name)}</div>
             <div class="meta">${meta.label} · ${fmtDate(a.date)} · 来源 ${escapeHtml(a.source || '未知')}</div>
           </div>
@@ -2571,24 +3753,20 @@ const TodayDetail = {
           <div class="today-track-metric"><div class="l">平均心率</div><div class="v">${a.avgHR || '—'}<span class="u">${a.avgHR?'bpm':''}</span></div></div>
           <div class="today-track-metric"><div class="l">最大心率</div><div class="v">${a.maxHR || '—'}<span class="u">${a.maxHR?'bpm':''}</span></div></div>
         </div>
-        <div class="today-track-canvas">
-          <canvas id="todayTrackCanvas"></canvas>
-        </div>
+        <div class="today-track-canvas"><canvas id="todayTrackCanvas"></canvas></div>
       </div>
     `;
     return card;
   },
-
   buildChartsCard(){
     const data = this.chartData;
     const card = document.createElement('div');
-    card.className = 'today-card';
-    card.dataset.page = '1';
+    card.className = 'today-card'; card.dataset.page = '1';
     card.innerHTML = `
       <div class="today-card-head">
         <div class="today-card-title">
           <span class="ic">📊</span>
-          <div>
+          <div style="min-width:0;">
             <div class="name">坐标系对比</div>
             <div class="meta">鼠标悬停任意图表，所有图表会在同一时刻同步显示</div>
           </div>
@@ -2605,26 +3783,21 @@ const TodayDetail = {
                 <span class="hint">${c.unit || ''}</span>
               </div>
             </div>
-            <div class="today-chart-canvas-wrap">
-              <canvas data-today-chart="${c.id}"></canvas>
-            </div>
+            <div class="today-chart-canvas-wrap"><canvas data-today-chart="${c.id}"></canvas></div>
           </div>
         `).join('')}
       </div>
     `;
     return card;
   },
-
   buildSummaryCard(){
     const a = this.activity;
     const mi = State.settings.unit === 'mi';
     const dd = mi ? 1609.344 : 1000;
     const du = mi ? 'mi' : 'km';
     const isRun = a.type === 'run' || a.type === 'walk' || a.type === 'hike';
-
     const zones = a.zones || [0,0,0,0,0];
     const zTotal = zones.reduce((x,y) => x+y, 0) || 1;
-
     const stats = [
       { k: '距离', v: a.distance > 0 ? `${num(a.distance/dd, 2)} ${du}` : '—' },
       { k: '时长', v: fmtDur(a.duration) },
@@ -2641,15 +3814,13 @@ const TodayDetail = {
       { k: '训练负荷', v: num(a.load) },
       { k: '数据来源', v: a.source || '—' },
     ];
-
     const card = document.createElement('div');
-    card.className = 'today-card';
-    card.dataset.page = '2';
+    card.className = 'today-card'; card.dataset.page = '2';
     card.innerHTML = `
       <div class="today-card-head">
         <div class="today-card-title">
           <span class="ic">📋</span>
-          <div>
+          <div style="min-width:0;">
             <div class="name">区间与统计</div>
             <div class="meta">心率区间分布与完整数据</div>
           </div>
@@ -2658,13 +3829,8 @@ const TodayDetail = {
       </div>
       <div class="today-summary-body">
         <div class="today-summary-block">
-          <div class="today-summary-title">
-            <span class="dot" style="background:var(--pink)"></span>
-            心率区间
-          </div>
-          <div class="today-zones-bar">
-            ${zones.map((v, i) => `<div style="flex:${Math.max(v/zTotal, 0.001)};background:${ZONE_COLORS[i]};border-radius:3px;"></div>`).join('')}
-          </div>
+          <div class="today-summary-title"><span class="dot" style="background:var(--pink)"></span>心率区间</div>
+          <div class="today-zones-bar">${zones.map((v, i) => `<div style="flex:${Math.max(v/zTotal, 0.001)};background:${ZONE_COLORS[i]};border-radius:3px;"></div>`).join('')}</div>
           <div class="today-zones-legend">
             ${zones.map((v, i) => `
               <div class="today-zone-item">
@@ -2675,26 +3841,16 @@ const TodayDetail = {
             `).join('')}
           </div>
         </div>
-
         <div class="today-summary-block">
-          <div class="today-summary-title">
-            <span class="dot" style="background:var(--blue)"></span>
-            统计信息
-          </div>
+          <div class="today-summary-title"><span class="dot" style="background:var(--blue)"></span>统计信息</div>
           <div class="today-stats-grid">
-            ${stats.map(s => `
-              <div class="today-stat">
-                <span class="k">${s.k}</span>
-                <span class="v">${s.v}</span>
-              </div>
-            `).join('')}
+            ${stats.map(s => `<div class="today-stat"><span class="k">${s.k}</span><span class="v">${s.v}</span></div>`).join('')}
           </div>
         </div>
       </div>
     `;
     return card;
   },
-
   layoutCards(){
     const stage = $('#todayStage');
     if(!stage) return;
@@ -2705,46 +3861,36 @@ const TodayDetail = {
     const cardW = Math.min(920, cardH * 1.4);
     const sideOffset = cardW * 0.55;
     const sideScale = 0.78;
-
     cards.forEach((card, i) => {
       const offset = i - cur;
       const abs = Math.abs(offset);
       card.style.width = cardW + 'px';
       card.style.height = cardH + 'px';
-
       if(abs > 2){
         card.style.opacity = '0';
         card.style.pointerEvents = 'none';
         card.style.transform = `translate(-50%, -50%) translateX(${Math.sign(offset)*sideOffset*2.2}px) scale(0.55)`;
         return;
       }
-
       if(offset === 0){
         card.style.transform = `translate(-50%, -50%) translateX(0) scale(1)`;
-        card.style.opacity = '1';
-        card.style.zIndex = 100;
-        card.style.pointerEvents = 'auto';
+        card.style.opacity = '1'; card.style.zIndex = 100; card.style.pointerEvents = 'auto';
         card.classList.add('focused');
       } else {
         const x = Math.sign(offset) * sideOffset;
         card.style.transform = `translate(-50%, -50%) translateX(${x}px) scale(${sideScale})`;
         card.style.opacity = abs === 1 ? '0.9' : '0.55';
-        card.style.zIndex = 100 - abs;
-        card.style.pointerEvents = 'auto';
+        card.style.zIndex = 100 - abs; card.style.pointerEvents = 'auto';
         card.classList.remove('focused');
       }
     });
-
     const dots = stage.querySelectorAll('.dc-dot');
     dots.forEach((d, i) => d.classList.toggle('active', i === cur));
-
-    // 延迟一帧绘制当前页内容
     requestAnimationFrame(() => {
       if(cur === 0) this.drawTrack();
       else if(cur === 1) this.drawAllCharts();
     });
   },
-
   drawTrack(){
     const cv = $('#todayTrackCanvas');
     if(!cv) return;
@@ -2752,7 +3898,6 @@ const TodayDetail = {
     const meta = TYPE_META[a.type] || TYPE_META.other;
     drawTrackMini(cv, a.points, meta.color);
   },
-
   drawAllCharts(){
     if(!this.chartCardEl) return;
     const data = this.chartData;
@@ -2763,34 +3908,22 @@ const TodayDetail = {
     });
     this.bindChartHover();
   },
-
   drawOneChart(cv, chartConf, data){
     const values = chartConf.values;
     let mn = Infinity, mx = -Infinity;
-    for(const v of values){
-      if(v < mn) mn = v;
-      if(v > mx) mx = v;
-    }
+    for(const v of values){ if(v < mn) mn = v; if(v > mx) mx = v; }
     if(!isFinite(mn)) mn = 0;
     if(!isFinite(mx)) mx = 1;
     const padY = (mx - mn) * 0.15 || 1;
     mn -= padY; mx += padY;
     if(chartConf.baselineZero){ mn = Math.min(mn, -1); mx = Math.max(mx, 1); }
-
     drawAxisChart(cv, {
-      data: values,
-      color: chartConf.color,
-      minV: mn,
-      maxV: mx,
-      xLabels: data.xLabels,
-      timeLabels: data.timeLabels,
-      avg: chartConf.avg,
-      unit: chartConf.unit,
-      hoverIndex: this.hoverIndex,
-      baselineZero: chartConf.baselineZero,
+      data: values, color: chartConf.color, minV: mn, maxV: mx,
+      xLabels: data.xLabels, timeLabels: data.timeLabels,
+      avg: chartConf.avg, unit: chartConf.unit,
+      hoverIndex: this.hoverIndex, baselineZero: chartConf.baselineZero,
     });
   },
-
   bindChartHover(){
     if(!this.chartCardEl) return;
     const data = this.chartData;
@@ -2805,40 +3938,25 @@ const TodayDetail = {
         const cw = rect.width - padL - padR;
         if(x < padL || x > padL + cw) return;
         const idx = clamp(Math.round((x - padL) / cw * (data.charts[0].values.length - 1)), 0, data.charts[0].values.length - 1);
-        if(idx !== this.hoverIndex){
-          this.hoverIndex = idx;
-          this.drawAllCharts();
-        }
+        if(idx !== this.hoverIndex){ this.hoverIndex = idx; this.drawAllCharts(); }
       });
-      cv.addEventListener('mouseleave', () => {
-        this.hoverIndex = -1;
-        this.drawAllCharts();
-      });
+      cv.addEventListener('mouseleave', () => { this.hoverIndex = -1; this.drawAllCharts(); });
     });
   },
-
   updateTabs(){
-    $$('#todayPageTabs .tab').forEach(t => {
-      t.classList.toggle('active', Number(t.dataset.page) === this.page);
-    });
+    $$('#todayPageTabs .tab').forEach(t => t.classList.toggle('active', Number(t.dataset.page) === this.page));
   },
-
   goPage(delta){
     const ni = clamp(this.page + delta, 0, 2);
     if(ni === this.page) return;
-    this.page = ni;
-    this.layoutCards();
-    this.updateTabs();
+    this.page = ni; this.layoutCards(); this.updateTabs();
   },
-
   dragState: {active:false, startX:0, dx:0, clickCandidate:false, targetPage:-1},
-
   initDrag(){
     const stage = $('#todayStage');
     if(!stage || stage.dataset.dragBound === '1') return;
     stage.dataset.dragBound = '1';
     const ds = this.dragState;
-
     stage.addEventListener('mousedown', e => {
       if(e.target.closest('button, .tab, .dc-dot, .dc-act-item, input, select, textarea, canvas')) return;
       ds.active = true; ds.clickCandidate = true;
@@ -2858,21 +3976,17 @@ const TodayDetail = {
       ds.active = false;
       $$('.today-card').forEach(c => c.classList.remove('dragging'));
       if(ds.clickCandidate && ds.targetPage >= 0 && ds.targetPage !== this.page){
-        this.page = ds.targetPage;
-        this.layoutCards(); this.updateTabs();
+        this.page = ds.targetPage; this.layoutCards(); this.updateTabs();
       } else if(!ds.clickCandidate){
         const stageW = stage.clientWidth;
         const threshold = Math.min(200, stageW * 0.12);
         if(ds.dx < -threshold && this.page < 2) this.page++;
         else if(ds.dx > threshold && this.page > 0) this.page--;
         this.layoutCards(); this.updateTabs();
-      } else {
-        this.layoutCards();
-      }
+      } else { this.layoutCards(); }
       ds.dx = 0; ds.targetPage = -1; ds.clickCandidate = false;
     });
   },
-
   applyDragTransform(dx){
     const stage = $('#todayStage');
     if(!stage) return;
@@ -2884,7 +3998,6 @@ const TodayDetail = {
     const sideOffset = cardW * 0.55;
     const sideScale = 0.78;
     const damped = dx * 0.9;
-
     cards.forEach((card, i) => {
       const offset = i - cur;
       const abs = Math.abs(offset);
@@ -2903,7 +4016,13 @@ const TodayDetail = {
 };
 
 /* ============ 详情视图（周期卡片） ============ */
-const Detail = {cardType:null,category:'all',filterKey:'all',activities:[],cards:[],index:0,periods:['week','month','year','all'],activeChartTab:{}};
+const Detail = {
+  cardType:null, category:'all', filterKey:'all',
+  activities:[], cards:[], index:0,
+  periods:['week','month','year','all'],
+  activeChartTab:{},
+};
+
 function filterActivitiesForCard(cardType){
   const all=State.activities;
   const t=(a,type)=>a.type===type;
@@ -3105,15 +4224,19 @@ function buildDistribution(category,stats){
 }
 function openDetail(cardType){
   const info=filterActivitiesForCard(cardType);
-  Detail.cardType=cardType;Detail.category=info.category;Detail.filterKey=info.filterKey;
+  Detail.cardType=cardType;
+  Detail.category=info.category;
+  Detail.filterKey=info.filterKey;
   Detail.activities=info.list;
   Detail.cards=Detail.periods.map(period=>{
     const stats=buildPeriodStats(info.list,period,info.category);
     const buckets=buildChartBuckets(info.list,period);
     return {period,stats,buckets};
   });
-  Detail.activeChartTab={};Detail.index=0;
-  $('#detailTitle').textContent=info.title;$('#detailSub').textContent=info.sub;
+  Detail.activeChartTab={};
+  Detail.index=0;
+  $('#detailTitle').textContent=info.title;
+  $('#detailSub').textContent=info.sub;
   State.prevView=State.view;
   switchView('detail');
   requestAnimationFrame(()=>renderDetailStage());
@@ -3134,6 +4257,7 @@ function fmtDateRange(period){
 }
 function renderDetailStage(){
   const stage=$('#detailStage');
+  if(!stage)return;
   stage.innerHTML='';
   stage.classList.toggle('no-cards',Detail.cards.length===0);
   if(!Detail.cards.length){
@@ -3226,11 +4350,7 @@ function buildDetailCardEl(cardData,index){
   card.innerHTML=`
     <div class="dc-scroll">
       <div class="dc-head">
-        <div class="dc-title">
-          <span class="ic">${meta.icon}</span>
-          <span>${meta.label}</span>
-          <span class="arrow">›</span>
-        </div>
+        <div class="dc-title"><span class="ic">${meta.icon}</span><span>${meta.label}</span><span class="arrow">›</span></div>
         <div class="dc-period ${index===Detail.index?'highlight':''}">${PERIOD_LABELS[period]}</div>
       </div>
       <div class="dc-metrics">${metricsHTML}</div>
@@ -3319,7 +4439,7 @@ function renderCardChart(cardIndex,cardData,tabKey){
     const {ctx,w,h}=prepCanvas(cv);
     const padL=28,padR=10,padT=12,padB=22;
     const cw=w-padL-padR,ch=h-padT-padB;
-    ctx.strokeStyle='rgba(255,255,255,.055)';ctx.lineWidth=1;
+    ctx.strokeStyle=gridColor();ctx.lineWidth=1;
     for(let i=0;i<=3;i++){const y=Math.round(padT+ch/3*i)+.5;ctx.beginPath();ctx.moveTo(padL,y);ctx.lineTo(padL+cw,y);ctx.stroke();}
     const maxV=Math.max.apply(null,values.concat([0.0001]));
     const step=cw/values.length;
@@ -3338,7 +4458,7 @@ function renderCardChart(cardIndex,cardData,tabKey){
       ctx.lineTo(x+bw-r,y);ctx.quadraticCurveTo(x+bw,y,x+bw,y+r);
       ctx.lineTo(x+bw,padT+ch);ctx.closePath();ctx.fill();
     }
-    ctx.fillStyle='rgba(255,255,255,.35)';ctx.font='10px -apple-system,"PingFang SC",sans-serif';
+    ctx.fillStyle=dimColor();ctx.font='10px -apple-system,"PingFang SC",sans-serif';
     ctx.textAlign='center';ctx.textBaseline='top';
     for(let i=0;i<labels.length;i++)ctx.fillText(labels[i],padL+step*i+step/2,h-padB+5);
   }
@@ -3423,7 +4543,7 @@ function layoutDetailCards(){
     }
   }
 }
-function applyDragTransform(dx){
+function applyDetailDragTransform(dx){
   const stage=$('#detailStage');
   if(!stage)return;
   const cards=Array.from(stage.querySelectorAll('.detail-card'));
@@ -3466,7 +4586,7 @@ function initDetailDrag(){
     dragState.dx=e.clientX-dragState.startX;
     dragState.dy=e.clientY-dragState.startY;
     if(Math.abs(dragState.dx)>5||Math.abs(dragState.dy)>5)dragState.clickCandidate=false;
-    if(Math.abs(dragState.dx)>6)applyDragTransform(dragState.dx);
+    if(Math.abs(dragState.dx)>6)applyDetailDragTransform(dragState.dx);
   });
   document.addEventListener('mouseup',()=>{
     if(!dragState.active)return;
@@ -3506,6 +4626,10 @@ function renderActivities(){
     const meta=TYPE_META[a.type]||TYPE_META.other;
     const isRun=a.type==='run'||a.type==='walk'||a.type==='hike';
     const pace=a.distance>0&&a.duration>0?(isRun?fmtPace(a.duration/(a.distance/dd)):`${((a.distance/dd)/(a.duration/3600)).toFixed(1)}`):'—';
+    const pbs = State.pbCache.byActivity.get(a.id);
+    const trophyCell = pbs
+      ? `<div class="r-cell" style="align-items:center;"><span class="r-trophy" title="${pbs.map(p=>p.label).join('、')}">🏆</span></div>`
+      : `<div class="r-cell"></div>`;
     return `<div class="row row-activities" data-id="${a.id}">
       <div class="r-ico ${a.type}">${meta.icon}</div>
       <div>
@@ -3515,6 +4639,7 @@ function renderActivities(){
       <div class="r-cell"><span class="v">${a.distance>0?num(a.distance/dd,2):'—'}</span><span class="l">${du}</span></div>
       <div class="r-cell"><span class="v">${fmtHM(a.duration)}</span><span class="l">时长</span></div>
       <div class="r-cell"><span class="v">${pace}</span><span class="l">${isRun?'配速':'速度'}</span></div>
+      ${trophyCell}
     </div>`;
   }).join('');
   $$('.row',box).forEach(el=>{el.addEventListener('click',()=>openActivityDetail(el.dataset.id));});
@@ -3530,6 +4655,13 @@ function openActivityDetail(id){
   const du=mi?'mi':'km';
   $('#aTitle').textContent=a.name;
   $('#aSub').textContent=`${meta.label}${a.indoor?' · 室内':''} · ${fmtDate(a.date)} · 来源 ${a.source||'未知'}`;
+  const pbs = State.pbCache.byActivity.get(a.id) || [];
+  const pbBox = $('#aPBBadges');
+  if (pbs.length) {
+    pbBox.innerHTML = pbs.map(p => `<span class="pb-badge">🏆 ${p.label} · ${p.formatted}</span>`).join('');
+  } else {
+    pbBox.innerHTML = '';
+  }
   const isRun=a.type==='run'||a.type==='walk'||a.type==='hike';
   const metrics=[
     {l:'距离',v:a.distance>0?num(a.distance/dd,2):'—',u:a.distance>0?du:''},
@@ -3567,7 +4699,7 @@ function openActivityDetail(id){
     {k:'数据来源',v:a.source||'—'},
   ];
   $('#aStats').innerHTML=stats.map(s=>`
-    <div style="display:flex;justify-content:space-between;align-items:baseline;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.045);">
+    <div style="display:flex;justify-content:space-between;align-items:baseline;padding:7px 0;border-bottom:1px solid var(--hairline);">
       <span style="font-size:12.5px;color:var(--t3);font-weight:500;">${s.k}</span>
       <span style="font-size:14px;font-weight:700;letter-spacing:-.2px;font-variant-numeric:tabular-nums;">${s.v}</span>
     </div>`).join('');
@@ -3647,7 +4779,7 @@ function renderAnalysis(){
   const {ctx:ctx2,w:w2,h:h2}=prepCanvas(cv2);
   const padL=30,padR=10,padT=12,padB=22;
   const cw=w2-padL-padR,ch=h2-padT-padB;
-  ctx2.strokeStyle='rgba(255,255,255,.055)';ctx2.lineWidth=1;
+  ctx2.strokeStyle=gridColor();ctx2.lineWidth=1;
   for(let i=0;i<=3;i++){const y=Math.round(padT+ch/3*i)+.5;ctx2.beginPath();ctx2.moveTo(padL,y);ctx2.lineTo(padL+cw,y);ctx2.stroke();}
   const maxV=Math.max.apply(null,weekly.map(w=>w.km).concat([0.001]));
   const step=cw/weekly.length;
@@ -3665,7 +4797,7 @@ function renderAnalysis(){
     ctx2.lineTo(x+bw-r,y);ctx2.quadraticCurveTo(x+bw,y,x+bw,y+r);
     ctx2.lineTo(x+bw,padT+ch);ctx2.closePath();ctx2.fill();
   });
-  ctx2.fillStyle='rgba(255,255,255,.35)';ctx2.font='10px -apple-system,"PingFang SC",sans-serif';
+  ctx2.fillStyle=dimColor();ctx2.font='10px -apple-system,"PingFang SC",sans-serif';
   ctx2.textAlign='center';ctx2.textBaseline='top';
   weekly.forEach((d,i)=>ctx2.fillText(d.label,padL+step*i+step/2,h2-padB+5));
 }
@@ -3718,10 +4850,12 @@ function renderImported(){
   }).join('');
   $$('.row',box).forEach(el=>{el.addEventListener('click',e=>{if(e.target.dataset.del)return;openActivityDetail(el.dataset.id);});});
   $$('[data-del]',box).forEach(btn=>{
-    btn.addEventListener('click',e=>{
+    btn.addEventListener('click', async e=>{
       e.stopPropagation();
-      State.activities=State.activities.filter(a=>a.id!==btn.dataset.del);
-      persistActivities();renderAll();toast('已删除','success');
+      const id = btn.dataset.del;
+      State.activities=State.activities.filter(a=>a.id!==id);
+      try { await IDB.deleteActivity(id); } catch(err){}
+      renderAll();toast('已删除','success');
     });
   });
 }
@@ -3734,6 +4868,19 @@ function renderSettings(){
   $('#sldRestHR').value=s.restHR;$('#valRestHR').textContent=s.restHR;
   $('#sldWeight').value=s.weight;$('#valWeight').textContent=s.weight.toFixed(1);
   $$('#unitTabs .tab').forEach(t=>t.classList.toggle('active',t.dataset.unit===s.unit));
+  renderThemeGrid();
+  updateStorageInfo();
+}
+async function updateStorageInfo(){
+  const el = $('#storageInfo');
+  if(!el) return;
+  const est = await IDB.estimateUsage();
+  const count = State.activities.length;
+  if(est){
+    el.textContent = `IndexedDB · ${count} 条活动 · 已用 ${fmtBytes(est.usage)} / 配额 ${fmtBytes(est.quota)}`;
+  } else {
+    el.textContent = `IndexedDB · ${count} 条活动`;
+  }
 }
 function bindSettings(){
   $('#sldOpacity').addEventListener('input',e=>{State.settings.glassOpacity=Number(e.target.value);$('#valOpacity').textContent=e.target.value+'%';applyGlass();});
@@ -3757,38 +4904,51 @@ function bindSettings(){
       toast(`距离单位已切换为${t.dataset.unit==='mi'?'英里':'公里'}`,'info');
     });
   });
+  $('#btnStorageInfo').addEventListener('click', async () => {
+    const est = await IDB.estimateUsage();
+    if(est){
+      toast(`已用 ${fmtBytes(est.usage)} · 浏览器配额 ${fmtBytes(est.quota)}`, 'info');
+    } else {
+      toast('当前浏览器不支持存储配额查询', 'info');
+    }
+  });
   $('#btnUploadBg').addEventListener('click', () => $('#bgInput').click());
   $('#bgInput').addEventListener('change', async e => {
     const file = e.target.files[0];
     if(!file) return;
     try {
       const dataURL = await compressImage(file, 1920, 'image/jpeg', 0.78);
-      State.bgImage = dataURL; applyBackground(); persistBg();
+      State.bgImage = dataURL; applyBackground(); await persistBg();
       toast('背景图已更新', 'success');
     } catch(err){ toast('背景图处理失败：' + err.message, 'error'); }
     e.target.value = '';
   });
-  $('#btnResetBg').addEventListener('click', () => {
+  $('#btnResetBg').addEventListener('click', async () => {
     if(!State.bgImage){ toast('当前未使用自定义背景', 'info'); return; }
-    State.bgImage = null; applyBackground(); persistBg();
+    State.bgImage = null; applyBackground(); await persistBg();
     toast('已恢复默认背景', 'success');
   });
-  $('#btnDemoSettings').addEventListener('click', generateDemoData);
-  $('#btnClearIcons').addEventListener('click', () => {
+  $('#btnDemoSettings').addEventListener('click', async () => { await generateDemoData(); updateStorageInfo(); });
+  $('#btnClearIcons').addEventListener('click', async () => {
     if(!Object.keys(State.iconMap).length){ toast('当前没有自定义图标', 'info'); return; }
     if(!confirm('确定清除所有卡片的自定义图标吗？')) return;
-    State.iconMap = {}; persistIcons(); applyCardIcons();
+    State.iconMap = {}; await persistIcons(); applyCardIcons();
     toast('已清除所有图标', 'success');
   });
-  $('#btnClearAll').addEventListener('click',()=>{
-    if(!confirm('确定要清除所有活动数据、图标与设置吗？'))return;
-    State.activities=[];State.iconMap={};State.bgImage=null;State.settings=Object.assign({},DEFAULTS);
-    try{Object.keys(localStorage).filter(k=>k.startsWith(KEY)).forEach(k=>localStorage.removeItem(k));}catch(e){}
+  $('#btnClearAll').addEventListener('click', async () => {
+    if(!confirm('确定要清除所有活动数据、图标与设置吗？')) return;
+    State.activities=[];State.iconMap={};State.bgImage=null;
+    State.settings=Object.assign({},DEFAULTS,{theme:State.settings.theme});
+    try {
+      await IDB.clearAll();
+      Object.keys(localStorage).filter(k=>k.startsWith('proathlete_settings_')).forEach(k=>localStorage.removeItem(k));
+    } catch(e){}
     applyGlass();applyCardIcons();applyBackground();renderSettings();renderAll();
+    updateStorageInfo();
     toast('已清除所有数据','success');
   });
 }
-function recalcAll(){
+async function recalcAll(){
   const s=State.settings;
   for(const a of State.activities){
     const zones=[0,0,0,0,0];
@@ -3810,25 +4970,43 @@ function recalcAll(){
       a.load=Math.round((a.duration/60)*hrr*0.64*Math.exp(1.92*hrr));
     }
   }
-  persistActivities();renderAll();
+  await IDB.replaceAllActivities(State.activities);
+  renderAll();
 }
 
 /* ============ Garmin 同步 ============ */
 const GarminSync = {
-  config: null, syncing: false,
+  config: null, sessionPassword: '', syncing: false,
   KEY_CFG: 'proathlete_garmin_cfg', KEY_LAST: 'proathlete_garmin_last',
-  load(){ try { this.config = JSON.parse(localStorage.getItem(this.KEY_CFG) || 'null'); } catch(e){ this.config = null; } },
-  save(cfg){ this.config = cfg; localStorage.setItem(this.KEY_CFG, JSON.stringify(cfg)); },
+  load(){
+    try { this.config = JSON.parse(localStorage.getItem(this.KEY_CFG) || 'null'); } catch(e){ this.config = null; }
+    if (this.config && this.config.password) {
+      const safe = { email: this.config.email || '', backend: this.config.backend || 'http://localhost:5000', days_back: this.config.days_back || 30 };
+      this.config = safe;
+      try { localStorage.setItem(this.KEY_CFG, JSON.stringify(safe)); } catch(e){}
+    }
+  },
+  save(cfg){
+    const safeCfg = { email: cfg.email || '', backend: cfg.backend || 'http://localhost:5000', days_back: cfg.days_back || 30 };
+    this.config = safeCfg;
+    try { localStorage.setItem(this.KEY_CFG, JSON.stringify(safeCfg)); } catch(e){}
+  },
   lastSync(){ return localStorage.getItem(this.KEY_LAST) || ''; },
-  setLastSync(d){ localStorage.setItem(this.KEY_LAST, d); },
-  setStatus(text, cls){ const el = $('#garminStatus'); if(!el) return; el.textContent = text; el.className = 'tag ' + (cls || 'gray'); },
+  setLastSync(d){ try{ localStorage.setItem(this.KEY_LAST, d); }catch(e){} },
+  setStatus(text, cls){
+    const el = $('#garminStatus');
+    if(!el) return;
+    el.textContent = text; el.className = 'tag ' + (cls || 'gray');
+  },
   showProgress(show){ const el = $('#garminProgress'); if(el) el.style.display = show ? 'block' : 'none'; },
   updateProgress(text, cur, total){
-    const t=$('#garminProgressText'), c=$('#garminProgressCount'), b=$('#garminProgressBar');
+    const t = $('#garminProgressText'), c = $('#garminProgressCount'), b = $('#garminProgressBar');
     if(t) t.textContent = text;
     if(c) c.textContent = `${cur} / ${total}`;
     if(b) b.style.width = total > 0 ? `${Math.round(cur/total*100)}%` : '0%';
   },
+  getPasswordFromInput(){ const el = $('#garminSyncPassword'); return el ? el.value : ''; },
+  clearPassword(){ this.sessionPassword = ''; const el = $('#garminSyncPassword'); if(el) el.value = ''; },
   async testConnection(){
     if(!this.config || !this.config.backend){ toast('请先在「配置账号」中填写后端地址', 'warn'); this.toggleConfig(true); return; }
     const backend = (this.config.backend || 'http://localhost:5000').replace(/\/$/, '');
@@ -3841,7 +5019,7 @@ const GarminSync = {
       if(!r.ok) throw new Error(`HTTP ${r.status}`);
       const data = await r.json();
       if(data.status === 'ok'){
-        toast(`后端连接正常 · 响应 ${dt}ms`, 'success');
+        toast(`后端连接正常 · 响应 ${dt}ms · garminconnect ${data.garminconnect_version || ''}`, 'success');
         this.setStatus('后端已连接', 'green');
       } else { throw new Error('响应格式异常'); }
     } catch(err){
@@ -3855,30 +5033,40 @@ const GarminSync = {
   },
   async startSync(){
     if(this.syncing) return;
-    if(!this.config || !this.config.email){ toast('请先配置 Garmin 账号', 'warn'); this.toggleConfig(true); return; }
+    if(!this.config || !this.config.email){ toast('请先配置 Garmin 邮箱', 'warn'); this.toggleConfig(true); return; }
+    const password = this.getPasswordFromInput();
+    if (!password) {
+      toast('请输入 Garmin 密码（每次同步需手动输入，不会被保存）', 'warn');
+      const row = $('#garminPasswordRow'); if (row) row.classList.add('show');
+      const input = $('#garminSyncPassword'); if (input) setTimeout(()=>input.focus(), 50);
+      return;
+    }
+    this.sessionPassword = password;
     this.syncing = true;
     const btn = $('#btnGarminSync');
-    btn.disabled = true; btn.textContent = '同步中...';
+    if(btn){ btn.disabled = true; btn.textContent = '同步中...'; }
     this.setStatus('同步中', 'blue');
     this.showProgress(true);
-    $('#garminResults').style.display = 'none';
+    const resultBox = $('#garminResults'); if(resultBox) resultBox.style.display = 'none';
     this.updateProgress('正在连接...', 0, 0);
     const backend = (this.config.backend || 'http://localhost:5000').replace(/\/$/, '');
     const lastSync = this.lastSync();
+    const daysBack = this.config.days_back || 30;
     try {
       const r1 = await fetch(`${backend}/api/garmin/sync`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: this.config.email, password: this.config.password, last_sync: lastSync, days_back: lastSync ? 0 : 30 }),
+        body: JSON.stringify({ email: this.config.email, password: password, last_sync: lastSync, days_back: lastSync ? 0 : daysBack }),
       });
       if(!r1.ok){ const errText = await r1.text().catch(()=> ''); throw new Error(`后端返回 ${r1.status}${errText?': '+errText.slice(0,200):''}`); }
       const d1 = await r1.json();
       if(d1.error) throw new Error(d1.error);
       const taskId = d1.task_id;
       this.updateProgress('任务已创建，等待下载...', 0, 0);
-      const start = Date.now(); let finished = false, result = null;
+      const start = Date.now();
+      let finished = false, result = null;
       while(!finished){
-        if(Date.now() - start > 10 * 60 * 1000) throw new Error('同步超时');
+        if(Date.now() - start > 20 * 60 * 1000) throw new Error('同步超时（超过 20 分钟）');
         await new Promise(r => setTimeout(r, 1500));
         const r2 = await fetch(`${backend}/api/garmin/sync/${taskId}`);
         if(!r2.ok) throw new Error('查询进度失败');
@@ -3913,63 +5101,85 @@ const GarminSync = {
       toast(`同步失败：${msg}`, 'error');
     } finally {
       this.syncing = false;
-      btn.disabled = false; btn.textContent = '🔄 同步新活动';
+      this.clearPassword();
+      if(btn){ btn.disabled = false; btn.textContent = '🔄 同步新活动'; }
       setTimeout(() => this.showProgress(false), 2500);
     }
   },
   showResult(files){
     const box = $('#garminResults');
+    if(!box) return;
     box.style.display = 'block';
     box.innerHTML = `
       <div style="font-size:12px;font-weight:700;color:var(--t2);margin-bottom:var(--s3);">✅ 本次拉取 ${files.length} 条活动（重复的已自动跳过）</div>
       <div class="list" style="max-height:200px;overflow-y:auto;">
-        ${files.map(f => `<div class="row row-mini" style="padding:6px 10px;"><div class="r-ico run" style="background:rgba(10,132,255,.18);width:28px;height:28px;font-size:14px;">📄</div><div><div class="r-name" style="font-size:12px;">${escapeHtml(f.name)}</div></div></div>`).join('')}
+        ${files.map(f => `<div class="row row-mini" style="padding:6px 10px;grid-template-columns:34px 1fr;"><div class="r-ico" style="background:var(--surface-c);width:28px;height:28px;font-size:14px;flex:0 0 28px;">📄</div><div><div class="r-name" style="font-size:12px;">${escapeHtml(f.name)}</div></div></div>`).join('')}
       </div>`;
   },
   updateDesc(){
     const last = this.lastSync();
     const d = $('#garminDesc'), s = $('#garminDescSub');
+    const pwdRow = $('#garminPasswordRow'), pwdInput = $('#garminSyncPassword'), btnSync = $('#btnGarminSync');
     if(this.config && this.config.email){
       if(d) d.textContent = `已配置：${this.config.email}`;
-      if(s) s.textContent = last ? `上次同步：${last} · 点击「同步新活动」拉取更新` : '尚未同步过，首次将拉取最近 30 天';
+      if(s) s.textContent = last ? `上次同步：${last} · 输入密码后点击「同步新活动」` : '尚未同步过 · 输入密码后点击「同步新活动」';
       this.setStatus('已配置', 'green');
-      $('#btnGarminSync').disabled = false;
+      if(btnSync) btnSync.disabled = false;
+      if(pwdRow) pwdRow.classList.add('show');
+      if(pwdInput && !pwdInput.value){ pwdInput.placeholder = '每次同步前手动输入 · 不会被保存'; }
     } else {
       if(d) d.textContent = '首次使用请先配置账号';
-      if(s) s.textContent = '点击「配置账号」填写 Garmin 邮箱和密码';
+      if(s) s.textContent = '点击「配置账号」填写 Garmin 邮箱和后端地址';
       this.setStatus('未配置', 'gray');
-      $('#btnGarminSync').disabled = true;
+      if(btnSync) btnSync.disabled = true;
+      if(pwdRow) pwdRow.classList.remove('show');
     }
   },
   toggleConfig(show){
-    $('#garminMain').style.display = show ? 'none' : 'block';
-    $('#garminConfig').style.display = show ? 'block' : 'none';
-    if(show && this.config){
-      $('#garminEmail').value = this.config.email || '';
-      $('#garminPassword').value = this.config.password || '';
-      $('#garminBackend').value = this.config.backend || 'http://localhost:5000';
+    const main = $('#garminMain'), cfg = $('#garminConfig');
+    if(main) main.style.display = show ? 'none' : 'block';
+    if(cfg) cfg.style.display = show ? 'block' : 'none';
+    if(show){
+      if(this.config){
+        const e = $('#garminEmail'); if(e) e.value = this.config.email || '';
+        const b = $('#garminBackend'); if(b) b.value = this.config.backend || 'http://localhost:5000';
+        const dd = this.config.days_back || 30;
+        const dEl = $('#garminDays'); if(dEl) dEl.value = dd;
+        const dVal = $('#garminDaysVal'); if(dVal) dVal.textContent = dd + ' 天';
+      } else {
+        const e = $('#garminEmail'); if(e) e.value = '';
+        const b = $('#garminBackend'); if(b) b.value = 'http://localhost:5000';
+        const dEl = $('#garminDays'); if(dEl) dEl.value = 30;
+        const dVal = $('#garminDaysVal'); if(dVal) dVal.textContent = '30 天';
+      }
     }
   },
   init(){
     this.load(); this.updateDesc();
-    $('#btnGarminTest').addEventListener('click', () => this.testConnection());
-    $('#btnGarminConfig').addEventListener('click', () => this.toggleConfig(true));
-    $('#btnGarminCancel').addEventListener('click', () => this.toggleConfig(false));
-    $('#btnGarminSync').addEventListener('click', () => this.startSync());
-    $('#btnGarminSave').addEventListener('click', () => {
-      const email = $('#garminEmail').value.trim();
-      const password = $('#garminPassword').value;
-      const backend = $('#garminBackend').value.trim() || 'http://localhost:5000';
-      if(!email || !password){ toast('请填写邮箱和密码', 'warn'); return; }
-      this.save({ email, password, backend });
+    const tBtn = $('#btnGarminTest'); if(tBtn) tBtn.addEventListener('click', () => this.testConnection());
+    const cBtn = $('#btnGarminConfig'); if(cBtn) cBtn.addEventListener('click', () => this.toggleConfig(true));
+    const cancelBtn = $('#btnGarminCancel'); if(cancelBtn) cancelBtn.addEventListener('click', () => this.toggleConfig(false));
+    const sBtn = $('#btnGarminSync'); if(sBtn) sBtn.addEventListener('click', () => this.startSync());
+    const daysSlider = $('#garminDays');
+    if(daysSlider) daysSlider.addEventListener('input', e => { const v = $('#garminDaysVal'); if(v) v.textContent = e.target.value + ' 天'; });
+    const saveBtn = $('#btnGarminSave');
+    if(saveBtn) saveBtn.addEventListener('click', () => {
+      const email = ($('#garminEmail')?.value || '').trim();
+      const backend = ($('#garminBackend')?.value || '').trim() || 'http://localhost:5000';
+      const days_back = Number($('#garminDays')?.value) || 30;
+      if(!email){ toast('请填写 Garmin 邮箱', 'warn'); return; }
+      this.save({ email, backend, days_back });
       this.toggleConfig(false); this.updateDesc();
-      toast('配置已保存，可以测试连接或直接同步', 'success');
+      toast('配置已保存。密码不会被保存，请在同步前手动输入。', 'success');
+      setTimeout(()=>{ const p = $('#garminSyncPassword'); if(p) p.focus(); }, 120);
     });
-    $('#btnGarminReset').addEventListener('click', () => {
-      if(!confirm('清除 Garmin 配置？')) return;
-      localStorage.removeItem(this.KEY_CFG); localStorage.removeItem(this.KEY_LAST);
-      this.config = null;
-      $('#garminEmail').value = ''; $('#garminPassword').value = '';
+    const resetBtn = $('#btnGarminReset');
+    if(resetBtn) resetBtn.addEventListener('click', () => {
+      if(!confirm('清除 Garmin 配置？密码本来就没有保存。')) return;
+      try{ localStorage.removeItem(this.KEY_CFG); localStorage.removeItem(this.KEY_LAST); }catch(e){}
+      this.config = null; this.sessionPassword = '';
+      const e = $('#garminEmail'); if(e) e.value = '';
+      const p = $('#garminSyncPassword'); if(p) p.value = '';
       this.toggleConfig(false); this.updateDesc();
       toast('已清除配置', 'success');
     });
@@ -4007,12 +5217,13 @@ function switchView(name){
 function renderView(name){
   if(name==='dashboard')renderDashboard();
   else if(name==='activities')renderActivities();
-  else if(name==='analysis')renderAnalysis();
+  else if(name==='analysis'){ renderAnalysis(); renderPBGrid(); renderAnalysisSegPBs(); }
   else if(name==='import')renderImported();
   else if(name==='settings')renderSettings();
   else if(name==='detail')renderDetailStage();
 }
 function renderAll(){
+  refreshPBCache();
   if(State.view==='detail'){
     const info=filterActivitiesForCard(Detail.cardType);
     Detail.activities=info.list;
@@ -4029,21 +5240,59 @@ function renderAll(){
   }
   $('#navCount').textContent=State.activities.length;
   $('#actCount').textContent=State.activities.length;
+  if (HeatmapChart.canvas) HeatmapChart.setPBDays(State.pbCache.byDay);
 }
 
 /* ============ 初始化 ============ */
-function init(){
-  const savedSettings=load('settings',null);
-  if(savedSettings)Object.assign(State.settings,savedSettings);
-  const savedActs=load('activities',[]);
-  if(Array.isArray(savedActs))State.activities=savedActs;
-  State.activities.sort((a,b)=>new Date(b.date)-new Date(a.date));
+function setLoadingStatus(text){
+  const el = document.getElementById('appLoadingStatus');
+  if(el) el.textContent = text;
+}
+function hideLoading(){
+  const el = document.getElementById('appLoading');
+  if(!el) return;
+  el.classList.add('hide');
+  setTimeout(()=>{ el.style.display = 'none'; }, 500);
+}
 
-  try { const raw = localStorage.getItem(KEY+'icons'); if(raw) State.iconMap = JSON.parse(raw) || {}; } catch(e){ State.iconMap = {}; }
-  try { const raw = localStorage.getItem(KEY+'bg'); if(raw) State.bgImage = raw; } catch(e){ State.bgImage = null; }
+async function init(){
+  setLoadingStatus('正在初始化数据库...');
+  try { await IDB.open(); }
+  catch(e) {
+    console.error('IndexedDB 打开失败', e);
+    setLoadingStatus('数据库初始化失败：' + e.message);
+    toast('无法打开本地数据库：' + e.message, 'error');
+  }
 
+  await migrateFromLocalStorage(setLoadingStatus);
+
+  const savedSettings = load('settings', null);
+  if (savedSettings) Object.assign(State.settings, savedSettings);
+
+  setLoadingStatus('正在读取活动数据...');
+  try { State.activities = await IDB.getAllActivities(); }
+  catch(e) { State.activities = []; }
+  State.activities.sort((a,b) => new Date(b.date) - new Date(a.date));
+
+  try {
+    const icons = await IDB.getKV('icons');
+    State.iconMap = icons && typeof icons === 'object' ? icons : {};
+  } catch(e) { State.iconMap = {}; }
+  try {
+    const bg = await IDB.getKV('bgImage');
+    State.bgImage = bg || null;
+  } catch(e) { State.bgImage = null; }
+
+  document.documentElement.setAttribute('data-theme', THEMES[State.settings.theme] ? State.settings.theme : 'default');
   applyGlass(); applyCardIcons(); applyBackground();
   renderSettings(); bindSettings(); initAllLiquid();
+
+  const heatmapCanvas = document.getElementById('heatmapCanvas');
+  if (heatmapCanvas) {
+    HeatmapChart.init(heatmapCanvas);
+    renderHeatmapLegend();
+    updateHeatmapSummary();
+  }
 
   const appRoot=$('#appRoot'), sidebar=$('#sidebar');
   let sbTimer=null;
@@ -4075,7 +5324,7 @@ function init(){
       e.stopPropagation();
       const cardType = btn.dataset.card;
       if(State.iconMap[cardType]){
-        delete State.iconMap[cardType]; persistIcons(); applyCardIcons();
+        delete State.iconMap[cardType]; persistIcons().then(()=>applyCardIcons());
         toast('已移除图标', 'success'); return;
       }
       const input = document.createElement('input');
@@ -4086,7 +5335,7 @@ function init(){
         try {
           const dataURL = await compressImage(file, 512, 'image/png');
           State.iconMap[cardType] = dataURL;
-          persistIcons(); applyCardIcons();
+          await persistIcons(); applyCardIcons();
           toast('图标已更新', 'success');
         } catch(err){ toast('图标处理失败：' + err.message, 'error'); }
       });
@@ -4099,11 +5348,7 @@ function init(){
   $$('#todayPageTabs .tab').forEach(t => {
     t.addEventListener('click', () => {
       const p = Number(t.dataset.page);
-      if(p !== TodayDetail.page){
-        TodayDetail.page = p;
-        TodayDetail.layoutCards();
-        TodayDetail.updateTabs();
-      }
+      if(p !== TodayDetail.page){ TodayDetail.page = p; TodayDetail.layoutCards(); TodayDetail.updateTabs(); }
     });
   });
   $$('#detailPeriodTabs .tab').forEach(t=>{
@@ -4130,8 +5375,8 @@ function init(){
 
   $('#btnQuickImport').addEventListener('click',()=>switchView('import'));
   $('#btnGoImport').addEventListener('click',()=>switchView('import'));
-  $('#btnDemoTop').addEventListener('click',generateDemoData);
-  $('#btnDemoSide').addEventListener('click',generateDemoData);
+  $('#btnDemoTop').addEventListener('click', async () => { await generateDemoData(); updateStorageInfo(); });
+  $('#btnDemoSide').addEventListener('click', async () => { await generateDemoData(); updateStorageInfo(); });
 
   $$('#actTabs .tab').forEach(t=>{
     t.addEventListener('click',()=>{
@@ -4145,11 +5390,13 @@ function init(){
     if(!State.activities.length){toast('暂无可导出的数据','warn');return;}
     const mi=State.settings.unit==='mi';
     const dd=mi?1609.344:1000;
-    const rows=[['日期','名称','类型','室内','距离','单位','时长(秒)','平均心率','最大心率','爬升(m)','卡路里','训练负荷','来源']];
+    const rows=[['日期','名称','类型','室内','距离','单位','时长(秒)','平均心率','最大心率','爬升(m)','卡路里','训练负荷','来源','PB']];
     State.activities.forEach(a=>{
+      const pbs = State.pbCache.byActivity.get(a.id);
+      const pbStr = pbs ? pbs.map(p=>p.label).join('|') : '';
       rows.push([fmtDate(a.date),a.name,(TYPE_META[a.type]||TYPE_META.other).label,a.indoor?'是':'否',
         a.distance>0?(a.distance/dd).toFixed(3):'',mi?'mi':'km',
-        a.duration,a.avgHR||'',a.maxHR||'',a.elevation||0,a.calories||0,a.load||0,a.source||'']);
+        a.duration,a.avgHR||'',a.maxHR||'',a.elevation||0,a.calories||0,a.load||0,a.source||'',pbStr]);
     });
     const csv='\uFEFF'+rows.map(r=>r.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(',')).join('\n');
     const blob=new Blob([csv],{type:'text/csv;charset=utf-8'});
@@ -4159,10 +5406,13 @@ function init(){
     URL.revokeObjectURL(url);toast('CSV 已导出','success');
   });
 
-  $('#btnClearImports').addEventListener('click',()=>{
+  $('#btnClearImports').addEventListener('click', async () => {
     if(!State.activities.length){toast('暂无数据','warn');return;}
     if(!confirm('确定清空全部活动数据？'))return;
-    State.activities=[];persistActivities();renderAll();toast('已清空全部活动','success');
+    State.activities=[];
+    try { await IDB.clearActivities(); } catch(e){}
+    renderAll(); updateStorageInfo();
+    toast('已清空全部活动','success');
   });
 
   $('#aClose').addEventListener('click',closeActivityModal);
@@ -4194,18 +5444,26 @@ function init(){
       $$('.tabs').forEach(t=>{if(t._liquidRefresh)t._liquidRefresh();});
       const nav=$('#mainNav');
       if(nav&&nav._liquidRefresh)nav._liquidRefresh();
+      if(State.view==='dashboard' && HeatmapChart.canvas){ HeatmapChart.render(); }
     },180);
   });
 
   GarminSync.init();
 
+  setLoadingStatus('正在渲染界面...');
   switchView('dashboard');
   renderAll();
+  updateStorageInfo();
+
+  requestAnimationFrame(() => {
+    setTimeout(() => hideLoading(), 200);
+  });
 
   if(!State.activities.length){
     setTimeout(()=>toast('提示：点击「演示数据」可立即体验完整分析功能','info'),900);
   }
 }
+
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);
 else init();
 })();
