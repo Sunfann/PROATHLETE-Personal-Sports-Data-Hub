@@ -1,11 +1,13 @@
+````markdown
 # PROATHLETE · 个人多生态运动数据中枢
 
-> 一个纯前端 + 本地代理后端的个人运动数据看板。支持 Garmin 中国区一键同步，多主题液态玻璃 UI，FIT / GPX / TCX / XLSX 多格式导入，以及完整的运动科学分析。
+> 一个纯前端 + 本地代理后端的个人运动数据看板。支持 Garmin 中国区一键同步，多主题液态玻璃 UI，FIT / GPX / TCX / XLSX / CSV 多格式导入，以及完整的运动科学分析。
 
-[https://img.shields.io/badge/status-active-brightgreen](https://img.shields.io/badge/status-active-brightgreen)
-[https://img.shields.io/badge/license-MIT-blue](https://img.shields.io/badge/license-MIT-blue)
-[https://img.shields.io/badge/python-3.9%252B-blue](https://img.shields.io/badge/python-3.9%252B-blue)
-[https://img.shields.io/badge/storage-IndexedDB-orange](https://img.shields.io/badge/storage-IndexedDB-orange)
+![status](https://img.shields.io/badge/status-active-brightgreen)
+![license](https://img.shields.io/badge/license-MIT-blue)
+![python](https://img.shields.io/badge/python-3.9%2B-blue)
+![storage](https://img.shields.io/badge/storage-IndexedDB-orange)
+![icons](https://img.shields.io/badge/icons-inline%20SVG-purple)
 
 ---
 
@@ -13,7 +15,7 @@
 
 PROATHLETE 是一个自托管的运动数据中枢，包含：
 
-- **前端**：单文件 `index.html`，纯静态，无需构建。液态玻璃设计，9 款精美主题，支持拖拽导入、数据可视化、ACWR 分析、心率区间、分段 PB、年度热力图等。
+- **前端**：单文件 `index.html`，纯静态，无需构建。液态玻璃设计，9 款精美主题，全站线性 SVG 图标，支持拖拽导入、数据可视化、ACWR 分析、心率区间、心率漂移、分段 PB、年度热力图等。
 - **后端**：`garmin_server.py`，一个本地 Flask 服务，作为 Garmin Connect 的代理，解决纯前端无法直连 Garmin 的问题。特别适配 **Garmin 中国区（[garmin.cn](https://garmin.cn)）** 账号。
 
 整个项目无需数据库服务器，**数据保存在浏览器 IndexedDB**，后端仅负责同步中转，不存储任何账号信息。
@@ -30,6 +32,7 @@ PROATHLETE 是一个自托管的运动数据中枢，包含：
 - **液态玻璃 UI**：可调节**透明度**、**模糊强度**、**饱和度**，类似 Apple 的毛玻璃质感。
 - **自定义背景图**：上传任意图片作为最底层背景，自动压缩并叠加遮罩保证可读性。
 - **卡片自定义图标**：每张功能卡片支持上传 PNG/SVG 图标（自动压缩到 512px 内），通过 CSS Mask 渲染为主题色。
+- **全站线性 SVG 图标**：所有导航、按钮、标签页、表头、状态提示均使用统一风格的 Lucide 风格描边 SVG 图标（24×24 viewBox、1.7px 描边、圆角端点），描边走 `currentColor`，自动跟随主题、hover、active 变色。**全站零 Emoji**。
 - **响应式布局**：侧边栏在鼠标悬停时展开，移动端自动折叠为汉堡菜单。
 
 #### 📊 数据总览
@@ -38,7 +41,7 @@ PROATHLETE 是一个自托管的运动数据中枢，包含：
 - **跑步统计**：当日 / 总累计 / 室外 / 室内 分列显示。
 - **骑行统计**：当日 / 总累计 / 室外 / 室内 分列显示。
 - **步行与徒步**：当日步行 / 总步行 / 室外步行 / 徒步累计。
-- **年度热力图**：GitHub 风格 53×7 网格，按运动类型着色，按当日总时长分 5 档强度；**打破个人纪录的日期带金色脉冲光环 + 星标**。
+- **年度热力图**：GitHub 风格 53×7 网格，按运动类型着色（跟随主题 CSS 变量），按当日总时长分 5 档强度；**打破个人纪录的日期带金色脉冲光环 + 星标**。
 
 #### 📈 周期详情
 
@@ -55,26 +58,46 @@ PROATHLETE 是一个自托管的运动数据中枢，包含：
   - 游泳：400m / 800m / 1500m / 3000m
   - 徒步：10 / 20 / 30 / 40 / 50 / 100 km
 - 分段卡片附**该段均速**（如 `5km → 21:35 · 均速 4:19/km`）。
-- 命中 PB 的活动在列表中以 🏆 标记，单次详情弹窗中显示全部命中徽章。
+- 命中 PB 的活动在列表中以 🏆 SVG 图标标记，单次详情弹窗中显示全部命中徽章。
 
 #### 🗺️ 轨迹与图表
 
 - 单次活动详情弹窗显示：GPS 轨迹（带起终点标记）、海拔、配速/速度、心率、步频、功率曲线、心率区间分布、完整统计信息。
 - 轨迹图为活动点云自动缩放 + 保持宽高比绘制。
 
+#### ❤️ 运动科学指标
+
+**真实派生指标**（从轨迹点计算，具备生理学意义）：
+
+- **心率漂移 (HR Drift)**：`(后半段 HR/Speed − 前半段 HR/Speed) / 前半段 HR/Speed × 100%`，运动科学中公认的有氧耐力指标。判读：`< 5%` 优秀，`5–10%` 良好，`> 10%` 提示有氧耐力待提高或疲劳。活动详情与当日详情中均展示，超 ±10% 红色高亮。
+- **心率-速度比**：逐点图表 `HR (bpm) / Speed (m/s)`，反映单位速度下所需心率。该值随时间上升代表有氧效率下降，是心率漂移的时序可视化。
+- **ACWR 急慢性负荷比**：7 天急性负荷 / 28 天慢性负荷，安全区间 0.8–1.3，超出则用红/绿虚线提示。
+- **心率区间分布**：基于最大心率百分比划分 Z1–Z5，可自定义最大心率。
+
+**Garmin Running Dynamics 活动级字段**（从 Garmin 官方 CSV 读取的真实平均值，非伪造时序）：
+
+- 垂直步幅比 (%)、平均步长 (m)、垂直摆动 (cm)、平均触地时间 (ms)
+
 #### 📁 多格式导入
 
-- 支持 `.fit`（Garmin 二进制，手写解析器）、`.gpx`、`.tcx`、`.zip`（自动解压内部 FIT/GPX/TCX）、`.xlsx`（Keep / 悦跑圈等导出表，手写 XLSX 解析器，无需 SheetJS）。
-- **自动去重**：3 分钟内 + 同类型 + 距离或时长接近的活动会被识别为重复，导入时跳过并提示。
+- **`.fit`**：Garmin 二进制，手写解析器（正确处理压缩时间戳、developer fields、多 local message 定义）。
+- **`.gpx`**：标准 XML 轨迹。
+- **`.tcx`**：Garmin Training Center XML。
+- **`.zip`**：自动解压内部 FIT/GPX/TCX。
+- **`.xlsx`**：Keep / 悦跑圈等导出表，手写 XLSX 解析器（无需 SheetJS）。
+- **`.csv`**：**Garmin 官方导出**，两种格式均支持：
+  - `Activities.csv`：活动汇总表（活动类型、日期、标题、距离、热量、时间、心率、步频、爬升、功率、温度、垂直步幅比等）。
+  - `activity_*.csv`：单次活动的分圈数据，含"摘要信息"行。
+- **自动去重**：按运动类型分层容差（见下文），时间窗 + 距离或时长接近的活动会被识别为重复，导入时跳过并提示。
 - 支持拖拽整个文件夹/多文件、拖拽 ZIP 自动展开。
 
 #### 📤 导出
 
-- 一键导出 CSV（含日期、名称、类型、距离、时长、心率、爬升、卡路里、训练负荷、来源、命中 PB）。
+- 一键导出 CSV（含日期、名称、类型、距离、时长、心率、爬升、卡路里、训练负荷、来源、命中 PB）。使用 UTF-8 BOM + CRLF 换行，Windows Excel 直接双击打开不乱码不串行。
 
 #### ✨ 演示数据
 
-- 内置生成器，400 天随机生成约 200 条多类型活动，含完整轨迹点、心率、步频、功率、温度序列，方便立即体验。
+- 内置生成器，400 天随机生成约 200 条多类型活动，含完整轨迹点、心率、步频、功率、温度序列、Running Dynamics 字段，方便立即体验。
 
 #### ⚙️ 生理阈值与数据设置
 
@@ -104,7 +127,7 @@ PROATHLETE 是一个自托管的运动数据中枢，包含：
 ├── garmin_server.py      # Garmin 同步后端（Flask）
 ├── requirements.txt      # Python 依赖（可选）
 └── README.md
-```
+````
 
 ---
 
@@ -173,6 +196,14 @@ npx serve .
    - **首次拉取天数**：建议 30
 3. 点击「保存配置」，然后「测试连接」。
 4. 连接正常后，**在同步面板手动输入 Garmin 密码**（密码不保存），点击「同步新活动」，等待进度条完成。
+
+### 6. 非 Garmin 用户
+
+无需启动后端，直接在「数据导入」页拖入 FIT / GPX / TCX / XLSX / CSV 文件即可：
+
+- **手环 / 手表用户**：导出 FIT 或 GPX。
+- **Keep / 悦跑圈用户**：导出 XLSX。
+- **Garmin Connect 网页用户**：设置 → 数据管理 → 导出 CSV，可选「活动」汇总或单次活动分圈。
 
 ---
 
@@ -366,7 +397,7 @@ python -m http.server 8080
 
 ### 坑 13：分段 PB 全部显示为空
 
-**现象**：导入活动后，「数据分析 → 分段最佳时间」所有分段（1km、5km、10km…）都显示“暂无记录”。
+**现象**：导入活动后，「数据分析 → 分段最佳时间」所有分段（1km、5km、10km…）都显示"暂无记录"。
 
 **原因**：早期版本的滑动窗口算法存在边界判断缺陷：
 
@@ -429,6 +460,95 @@ if (pts[right].d - pts[left].d >= target) { ... }
 3. 处理**压缩时间戳**（5 位偏移 + 上次时间戳拼合）。
 4. 提取 File ID（0）、Session（18）、Record（20）三类消息。
 5. 坐标按 `180/2^31` 缩放，高度按 `v/5 - 500` 解码。
+6. **正确跳过 Developer Fields**：FIT 协议中，当 Definition Message 设置了 `developer_data_flag` (0x20)，Data Message 内除了普通字段数据外，还会追加 developer field 的原始数据。早期实现只跳过了 definition 里的 3 字节描述，没有在 data message 里跳过对应数据字节，导致指针错位、后续记录解析全乱。修复后从 Definition 保存 `devFields:[{size}]`，Data 时按 size 累加指针。
+
+---
+
+### 坑 17：Garmin 官方 CSV 解析的单位陷阱
+
+**现象**：直接把 `Activities.csv` 拖进来看板，距离显示为 `0.005 km`，时长显示为 `0`，步数变成 `4`。
+
+**原因**：Garmin 官方 CSV 的字段与直觉不符：
+
+- **距离列单位是公里**（`5.01`），而非米。直接 `parseFloat` 后当作米存储会少 1000 倍。
+- **时长列是 `HH:MM:SS` 字符串**（`00:25:57`），`parseFloat` 会截断为 `0`。
+- **步数等大数字带千分位逗号**（`"4,774"`），`parseFloat("4,774")` = `4`。
+- **空值占位符是 `--`**，`parseFloat("--")` = `NaN`。
+- **温度可能是 `'-2`**（带前导单引号），需要清洗引号。
+- **中文活动类型"跑步机"** 应映射为 `run + indoor: true`，而不是 `other`。
+
+**解决**：为 Garmin CSV 专门写了 6 个宽容解析工具函数：
+
+```js
+parseNumLoose(v)      // 去逗号、去引号、处理 --，返回数字或 null
+parseDurationStr(s)   // 支持 HH:MM:SS / MM:SS.s / 纯秒数
+parsePaceStr(s)       // M:SS → 秒
+normalizeGarminType(s)// 中文类型 → {type, indoor}
+parseGarminDate(s)    // "2026-09-15 20:02:20" → ISO
+parseCSV(text)        // 处理引号转义、CRLF/LF、BOM
+```
+
+并对 `Activities.csv`（汇总）与 `activity_*.csv`（分圈）分别实现解析路径，通过表头正则 `detectGarminCSV` 自动识别。
+
+---
+
+### 坑 18：活动去重的容差不能"一刀切"
+
+**现象**：早期统一用"时间差 < 3 分钟 + 距离差 < 500m"判断重复。结果：
+
+- **游泳**：800m 的游泳与 1300m 的游泳被判为重复（500m 差异对游泳来说是一整趟）。
+- **骑行**：100km 骑行的两次记录差 400m（GPS 漂移）被判为不同活动。
+- **力量训练**：没有距离和时长数据时永远不判重。
+
+**解决**：按运动类型分层容差：
+
+```js
+const DUP_TOLERANCE = {
+  run:   { timeMs: 3*60*1000, absDist: 300, relDist: 0.08, absDur: 120, relDur: 0.08 },
+  walk:  { timeMs: 3*60*1000, absDist: 300, relDist: 0.10, absDur: 120, relDur: 0.10 },
+  hike:  { timeMs: 3*60*1000, absDist: 500, relDist: 0.08, absDur: 180, relDur: 0.08 },
+  cycle: { timeMs: 3*60*1000, absDist: 500, relDist: 0.05, absDur: 120, relDur: 0.08 },
+  swim:  { timeMs: 6*60*1000, absDist: 50,  relDist: 0.05, absDur: 120, relDur: 0.08 },
+  gym:   { timeMs: 5*60*1000, absDist: 0,   relDist: 0,    absDur: 300, relDur: 0.15 },
+  other: { timeMs: 3*60*1000, absDist: 500, relDist: 0.10, absDur: 120, relDur: 0.10 },
+};
+```
+
+时间窗、绝对距离容差、相对距离容差、绝对时长容差、相对时长容差五项同时生效。距离或时长任一缺失时，只依赖另一维度；两者都缺失（如力量训练），仅凭类型 + 时间窗判定。
+
+---
+
+### 坑 19：别用随机数伪装运动科学指标
+
+**现象**：早期"当日详情 → 对比"页有一张"体能状况指数"曲线和一张"垂直步幅比"曲线。前者用 `hr > 0.85 ? -0.6 : hr > 0.75 ? -0.2 : ...` 的累积和模仿 Garmin Body Battery，后者直接是 `7.0 + sin(i/20) * 0.4 + Math.random() * 0.15`。用户截图分享后被人发现是假数据。
+
+**原因**：Body Battery 是基于 HRV、睡眠、压力、活动强度的多因子模型，用单变量心率阈值累积根本无法模拟；垂直步幅比是真实 Running Dynamics 字段，不能凭空造时序曲线。
+
+**解决**：
+
+- **删除**这两张伪造曲线。
+- **新增**心率漂移 (HR Drift) —— 真实有生理学意义的派生指标。
+- **新增**心率-速度比 —— 逐点计算 `HR / Speed`，反应有氧效率漂移。
+- **垂直步幅比、平均步长、垂直摆动、平均触地时间**改为**活动级真实平均值**，从 Garmin 官方 CSV 读取（Garmin 手表本身就计算这些字段），作为单一数字展示而非伪造时序曲线。
+
+**教训**：伪科学比没有数据更糟。要么用真实数据，要么坦诚地不展示。
+
+---
+
+### 坑 20：全站 Emoji 图标难以统一风格
+
+**现象**：导航、按钮、标签页混用 Emoji（🏠🏃📊📁⚙️✨），在不同操作系统上渲染差异极大（macOS 是彩色拟物，Windows 是扁平单色，Android 是 Noto 彩色），整体视觉凌乱，且 Emoji 无法跟随主题色变色。
+
+**解决**：全站 Emoji 替换为**内联线性 SVG 图标**：
+
+1. 建立 `ICONS` 注册表（`name → SVG innerHTML`），约 45 个 24×24 viewBox 的 Lucide 风格图标。
+2. 提供 `ic(name, size)` 函数生成 `<svg class="ic-svg" ...>`，`stroke:currentColor` 自动继承颜色。
+3. 静态 HTML 用 `<span data-ic="xxx" data-size="yy"></span>` 占位，`init()` 一开始调用 `materializeIcons()` 批量替换。
+4. 动态 HTML（如列表渲染）直接拼 `ic(name, size)` 字符串。
+5. CSS 定义 `.ic-svg { stroke:currentColor; fill:none; stroke-width:1.7; stroke-linecap:round; stroke-linejoin:round; }`。
+6. 填充点用内联 `style="fill:currentColor;stroke:none"` 覆盖全局 CSS。
+
+**效果**：全站视觉重量一致、颜色随主题/状态自动变化、无外部依赖、无闪烁。
 
 ---
 
@@ -436,6 +556,12 @@ if (pts[right].d - pts[left].d >= target) { ... }
 
 **Q：必须用中国区账号吗？**
 A：当前后端强制 `is_cn=True`，适配 [garmin.cn](https://garmin.cn)。如果你用国际版，可以改为 `is_cn=False`。
+
+**Q：不用 Garmin，能导入什么格式？**
+A：支持 FIT（Garmin 二进制）、GPX（通用轨迹）、TCX（Garmin Training Center）、ZIP（自动解压）、XLSX（Keep / 悦跑圈）、CSV（Garmin 官方导出）。纯前端页面无需后端即可导入。
+
+**Q：Garmin Activities.csv 与单次分圈 CSV 有什么区别？**
+A：`Activities.csv` 是整个账号的活动汇总表，一次可导入几十上百条活动。`activity_*.csv`（如 `activity_639552615.csv`）是单次活动的分圈数据，含"摘要信息"行，用于精细分析。两种都能拖入导入页，代码通过表头自动识别。
 
 **Q：同步的数据存在哪里？**
 A：前端 **IndexedDB**（数据库 `proathlete_db`）。后端不存储。清除浏览器数据会丢失，建议定期导出 CSV。
@@ -460,6 +586,12 @@ A：请先到「设置 → 生理阈值参数」检查最大心率是否配置�
 
 **Q：分段 PB 是怎么算的？**
 A：对每段轨迹（含插值）做 O(n) 滑动窗口，找出覆盖目标距离（如 5km）的耗时最短窗口。允许起点不在轨迹首点，只要连续覆盖目标距离即可。
+
+**Q：心率漂移 (HR Drift) 怎么理解？**
+A：它衡量同样配速下心率随时间上升的程度。`(后半段 HR/Speed − 前半段 HR/Speed) / 前半段 HR/Speed × 100%`。经验判读：`< 5%` 优秀（有氧基础好），`5–10%` 良好，`> 10%` 提示疲劳或需加强有氧耐力。数值为负代表后段效率反而提升（常见于渐进加速的配速跑）。
+
+**Q：为什么有些指标显示"—"？**
+A：Garmin Running Dynamics 字段（垂直步幅比、步长、垂直摆动、触地时间）只有配备相关传感器的 Garmin 设备才能采集，从 FIT 文件导入的活动不包含这些字段，只有从 Garmin 官方 CSV 导入时才会读取。心率漂移需要轨迹含心率与速度数据。
 
 ---
 
@@ -502,6 +634,19 @@ ua-generator>=0.1
 
 ---
 
+## 🧭 版本演进
+
+| 版本 | 主要变化 |
+| --- | --- |
+| v1.x | 初版：单文件看板、基础 PB、周期详情、FIT/GPX/TCX/XLSX 导入、Garmin 中国区同步 |
+| v2.0 | 液态玻璃 UI、9 款主题、IndexedDB 迁移、分段 PB（双指针 + 插值） |
+| v2.1 | **P0 修复**：FIT developer fields 跳过、热力图图例跟随主题、当日详情多活动切换、查重按类型分层、ID 生成稳健化、CSV 导出 CRLF |
+| v2.2 | **P1 修复**：删除伪科学曲线、引入心率漂移 (HR Drift)、心率-速度比、垂直步幅比改为活动级真实值 |
+| v2.3 | **Garmin 官方 CSV 支持**：`Activities.csv` + `activity_*.csv` 分圈文件，宽容数值解析 |
+| v2.4 | **全站线性 SVG 图标**：零 Emoji，45+ 图标，`ic(name, size)` + `materializeIcons()` 系统 |
+
+---
+
 ## 🤝 贡献
 
 欢迎提交 Issue 和 PR。如果你遇到新的坑，也欢迎补充到 README 的踩坑记录中。
@@ -511,3 +656,19 @@ ua-generator>=0.1
 ## 📄 许可
 
 MIT License。仅供个人学习与自用，请遵守 Garmin 服务条款。
+
+```text
+## 本次 README 更新要点
+
+| 区块 | 主要变化 |
+|---|---|
+| **徽章** | 新增 `icons-inline SVG-purple` |
+| **项目简介** | 强调"全站线性 SVG 图标" |
+| **功能特性 · 界面** | 新增「全站线性 SVG 图标」条目，说明 24×24 / 1.7px / `currentColor` 机制 |
+| **功能特性 · 运动科学** | 新增独立小节：心率漂移、心率-速度比、Garmin Running Dynamics 活动级字段 |
+| **功能特性 · 多格式导入** | 新增 `.csv`（Garmin 官方导出，含两种格式说明） |
+| **快速开始** | 新增「6. 非 Garmin 用户」小节 |
+| **踩坑记录** | 新增 4 条：<br>• 坑 17：Garmin 官方 CSV 解析的单位陷阱<br>• 坑 18：活动去重容差不能一刀切<br>• 坑 19：别用随机数伪装运动科学指标<br>• 坑 20：全站 Emoji 图标难以统一风格<br>（原坑 13 分段 PB、坑 14 IndexedDB、坑 15 XLSX、坑 16 FIT 保留，坑 16 补充 developer fields 修复细节） |
+| **FAQ** | 新增 4 条：CSV 格式区别、心率漂移判读、Running Dynamics 字段来源、"为什么有些指标显示 —" |
+| **版本演进** | 新增表格，追溯 v1.x → v2.4 的关键变化 |
+```

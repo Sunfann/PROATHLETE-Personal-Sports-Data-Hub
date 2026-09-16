@@ -166,6 +166,11 @@
 html{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;-webkit-text-size-adjust:100%;background:var(--bg);}
 body{font-family:var(--font);background:var(--bg);color:var(--t1);min-height:100vh;overflow-x:hidden;line-height:1.5;letter-spacing:-.01em;
   transition:background-color .5s var(--ease),color .5s var(--ease);}
+/* === 全站 SVG 图标基础 === */
+.ic-svg{display:inline-block;vertical-align:-0.15em;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0;}
+.ic-slot{display:inline-flex;align-items:center;justify-content:center;line-height:1;}
+.ic-label{display:inline-flex;align-items:center;gap:6px;line-height:1;}
+.ic-label > .ic-slot{gap:0;}
 .app-bg{position:fixed;inset:0;z-index:-3;background-size:cover;background-position:center;background-repeat:no-repeat;opacity:0;transition:opacity .8s var(--ease);pointer-events:none;}
 .app-bg.has-image{opacity:1;}
 .app-bg::after{content:'';position:absolute;inset:0;background:var(--bg-scrim);transition:background .5s var(--ease);}
@@ -223,7 +228,8 @@ body.has-custom-bg::before{opacity:.25;}
 .nav-item.active{color:var(--t1);}
 .nav-item.active::before{content:'';position:absolute;left:-10px;top:50%;transform:translateY(-50%);
   width:3px;height:18px;background:var(--blue);border-radius:0 3px 3px 0;box-shadow:0 0 10px var(--blue);z-index:3;}
-.nav-item .ico{width:22px;height:22px;flex:0 0 22px;display:flex;align-items:center;justify-content:center;font-size:17px;}
+.nav-item .ico{width:22px;height:22px;flex:0 0 22px;display:flex;align-items:center;justify-content:center;color:currentColor;}
+.nav-item .ico svg{width:19px;height:19px;display:block;}
 .nav-item .label{overflow:hidden;white-space:nowrap;opacity:1;transform:translateX(0);
   transition:opacity .25s var(--ease) .12s, transform .35s var(--ease) .12s;}
 .app:not(.sb-expanded) .nav-item .label{opacity:0;transform:translateX(-8px);transition:opacity .12s var(--ease), transform .2s var(--ease);}
@@ -260,6 +266,7 @@ body.has-custom-bg::before{opacity:.25;}
 .card-head{display:flex;align-items:center;justify-content:space-between;gap:var(--s2);position:relative;z-index:2;}
 .card-label{font-size:13px;font-weight:600;color:var(--t2);display:flex;align-items:center;gap:7px;}
 .card-label .dot{width:8px;height:8px;border-radius:3px;flex:0 0 8px;}
+.card-label .ic-svg{color:var(--t3);}
 .card-action{font-size:12px;font-weight:600;color:var(--blue);cursor:pointer;opacity:.9;}
 .kpi{font-size:40px;font-weight:800;letter-spacing:-1.6px;line-height:1.05;position:relative;z-index:2;}
 .kpi .unit{font-size:15px;font-weight:600;color:var(--t2);letter-spacing:0;margin-left:3px;}
@@ -318,6 +325,7 @@ body.has-custom-bg::before{opacity:.25;}
   white-space:nowrap;background:transparent !important;box-shadow:none !important;position:relative;z-index:1;display:inline-flex;align-items:center;gap:6px;}
 .tabs .tab:hover{color:var(--t1);}
 .tabs .tab.active{color:var(--t1);}
+.tabs .tab .ic-svg{opacity:.8;}
 .tabs .liquid-indicator{position:absolute;top:0;left:0;border-radius:11px;background:var(--surface-d);
   box-shadow:0 2px 10px rgba(0,0,0,.22),inset 0 1px 0 var(--glass-inner);pointer-events:none;z-index:0;
   transition:transform .42s cubic-bezier(.34,1.42,.64,1),width .42s cubic-bezier(.34,1.42,.64,1),height .42s cubic-bezier(.34,1.42,.64,1);}
@@ -327,27 +335,30 @@ body.has-custom-bg::before{opacity:.25;}
 .row-activities{grid-template-columns:40px 1fr auto auto auto auto;}
 .row-mini{grid-template-columns:38px 1fr auto;}
 .r-ico{width:38px;height:38px;border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;font-size:18px;flex:0 0 38px;}
-.r-ico.run{background:color-mix(in srgb, var(--orange) 20%, transparent);}
-.r-ico.cycle{background:color-mix(in srgb, var(--blue) 20%, transparent);}
-.r-ico.swim{background:color-mix(in srgb, var(--teal) 20%, transparent);}
-.r-ico.gym{background:color-mix(in srgb, var(--purple) 20%, transparent);}
-.r-ico.walk{background:color-mix(in srgb, var(--green) 20%, transparent);}
-.r-ico.hike{background:color-mix(in srgb, var(--yellow) 20%, transparent);}
-.r-ico.other{background:var(--surface-c);}
+.r-ico.run{background:color-mix(in srgb, var(--orange) 20%, transparent);color:var(--orange);}
+.r-ico.cycle{background:color-mix(in srgb, var(--blue) 20%, transparent);color:var(--blue);}
+.r-ico.swim{background:color-mix(in srgb, var(--teal) 20%, transparent);color:var(--teal);}
+.r-ico.gym{background:color-mix(in srgb, var(--purple) 20%, transparent);color:var(--purple);}
+.r-ico.walk{background:color-mix(in srgb, var(--green) 20%, transparent);color:var(--green);}
+.r-ico.hike{background:color-mix(in srgb, var(--yellow) 20%, transparent);color:var(--yellow);}
+.r-ico.other{background:var(--surface-c);color:var(--t2);}
 .r-name{font-size:14px;font-weight:650;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .r-meta{font-size:11px;color:var(--t3);margin-top:1px;}
 .r-cell{display:flex;flex-direction:column;gap:1px;text-align:right;}
 .r-cell .v{font-size:14px;font-weight:650;}
 .r-cell .l{font-size:10px;color:var(--t3);font-weight:500;}
-.r-trophy{font-size:15px;color:var(--gold);text-shadow:0 0 8px color-mix(in srgb, var(--gold) 60%, transparent);}
+.r-trophy{display:inline-flex;align-items:center;justify-content:center;color:var(--gold);
+  filter:drop-shadow(0 0 6px color-mix(in srgb, var(--gold) 60%, transparent));}
 .drop{border:2px dashed var(--hairline-strong);border-radius:var(--r-2xl);padding:var(--s8) var(--s6);text-align:center;cursor:pointer;position:relative;transition:all .3s var(--ease);}
 .drop:hover,.drop.over{border-color:var(--blue);background:color-mix(in srgb, var(--blue) 8%, transparent);transform:translateY(-2px);}
 .drop input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;}
-.drop-ico{font-size:44px;margin-bottom:var(--s4);display:block;}
+.drop-ico{display:flex;align-items:center;justify-content:center;color:var(--t3);margin-bottom:var(--s4);}
 .drop-title{font-size:17px;font-weight:700;margin-bottom:6px;}
 .drop-desc{font-size:13px;color:var(--t3);}
 .group{margin-bottom:var(--s8);}
-.group-title{font-size:16px;font-weight:700;margin-bottom:var(--s4);padding-bottom:var(--s3);border-bottom:1px solid var(--hairline);}
+.group-title{font-size:16px;font-weight:700;margin-bottom:var(--s4);padding-bottom:var(--s3);border-bottom:1px solid var(--hairline);
+  display:flex;align-items:center;gap:8px;}
+.group-title .ic-svg{color:var(--t3);}
 .setting{display:flex;align-items:center;justify-content:space-between;gap:var(--s5);padding:var(--s4) 0;border-bottom:1px solid var(--hairline);}
 .setting:last-child{border-bottom:none;}
 .setting-label{font-size:14px;font-weight:600;}
@@ -374,11 +385,16 @@ body.has-custom-bg::before{opacity:.25;}
 .theme-card .tc-dots{display:flex;gap:5px;}
 .theme-card .tc-dots span{width:16px;height:16px;border-radius:5px;box-shadow:inset 0 0 0 1px rgba(128,128,128,.18);}
 .theme-card .tc-check{width:18px;height:18px;border-radius:50%;border:1.5px solid var(--hairline-strong);
-  display:flex;align-items:center;justify-content:center;font-size:10px;color:transparent;flex:0 0 18px;transition:all .25s var(--ease);}
+  display:flex;align-items:center;justify-content:center;color:transparent;flex:0 0 18px;transition:all .25s var(--ease);}
 .theme-card.active .tc-check{background:var(--blue);border-color:var(--blue);color:#fff;}
 .toasts{position:fixed;top:var(--s6);right:var(--s6);z-index:9999;display:flex;flex-direction:column;gap:var(--s3);pointer-events:none;}
 .toast{padding:13px 18px;border-radius:var(--r-md);min-width:250px;max-width:380px;display:flex;align-items:center;gap:11px;
   font-size:13.5px;font-weight:600;animation:tIn .4s var(--spring);pointer-events:auto;}
+.toast .toast-ico{display:inline-flex;align-items:center;justify-content:center;color:var(--t2);flex:0 0 auto;}
+.toast.info .toast-ico{color:var(--blue);}
+.toast.success .toast-ico{color:var(--green);}
+.toast.error .toast-ico{color:var(--red);}
+.toast.warn .toast-ico{color:var(--orange);}
 .toast.out{animation:tOut .28s var(--ease) forwards;}
 @keyframes tIn{from{opacity:0;transform:translateX(50px) scale(.94);}to{opacity:1;transform:none;}}
 @keyframes tOut{to{opacity:0;transform:translateX(50px) scale(.94);}}
@@ -394,7 +410,7 @@ body.has-custom-bg::before{opacity:.25;}
 .metric-tile .v{font-size:20px;font-weight:800;letter-spacing:-.5px;font-variant-numeric:tabular-nums;}
 .metric-tile .v .u{font-size:11px;color:var(--t3);font-weight:600;margin-left:3px;}
 .empty{padding:var(--s8) var(--s5);text-align:center;color:var(--t3);display:flex;flex-direction:column;align-items:center;gap:var(--s3);}
-.empty .e-ico{font-size:38px;opacity:.5;}
+.empty .e-ico{display:inline-flex;align-items:center;justify-content:center;color:var(--t3);opacity:.6;}
 .empty .e-t{font-size:15px;font-weight:600;color:var(--t2);}
 .empty .e-d{font-size:12.5px;max-width:340px;line-height:1.65;}
 .chart-box{width:100%;position:relative;}
@@ -435,7 +451,7 @@ body.has-custom-bg::before{opacity:.25;}
 .detail-card .dc-scroll{height:100%;overflow-y:auto;overflow-x:hidden;display:flex;flex-direction:column;}
 .dc-head{display:flex;align-items:center;justify-content:space-between;padding:var(--s5) var(--s5) var(--s4);border-bottom:1px solid var(--hairline);flex-shrink:0;}
 .dc-title{display:flex;align-items:center;gap:10px;font-size:19px;font-weight:700;letter-spacing:-.3px;}
-.dc-title .ic{font-size:22px;}
+.dc-title .ic{display:inline-flex;align-items:center;justify-content:center;color:var(--t1);}
 .dc-title .arrow{color:var(--t3);font-size:15px;font-weight:400;margin-left:2px;}
 .dc-period{font-size:11px;font-weight:700;color:var(--t3);letter-spacing:.5px;text-transform:uppercase;padding:4px 10px;border-radius:20px;background:var(--surface-b);}
 .dc-period.highlight{color:var(--blue);background:color-mix(in srgb, var(--blue) 16%, transparent);}
@@ -480,7 +496,7 @@ body.has-custom-bg::before{opacity:.25;}
 .dc-activity-list{padding:0 var(--s5) var(--s5);}
 .dc-act-item{display:grid;grid-template-columns:36px 1fr auto auto;gap:var(--s3);align-items:center;padding:9px 10px;border-radius:var(--r-sm);cursor:pointer;transition:background .18s var(--ease);}
 .dc-act-item:hover{background:var(--surface-b);}
-.dc-act-ico{width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:15px;flex:0 0 32px;}
+.dc-act-ico{width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;flex:0 0 32px;color:var(--t1);}
 .dc-act-info{min-width:0;}
 .dc-act-name{font-size:13px;font-weight:650;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .dc-act-meta{font-size:10.5px;color:var(--t3);margin-top:1px;}
@@ -502,7 +518,7 @@ body.has-custom-bg::before{opacity:.25;}
 .today-card.focused{border-color:color-mix(in srgb, var(--blue) 40%, transparent);box-shadow:0 32px 80px rgba(0,0,0,var(--glass-shadow-a)),0 0 0 1px color-mix(in srgb, var(--blue) 14%, transparent),inset 0 1px 0 var(--glass-inner);}
 .today-card-head{display:flex;align-items:center;justify-content:space-between;padding:var(--s4) var(--s5);border-bottom:1px solid var(--hairline);flex-shrink:0;}
 .today-card-title{display:flex;align-items:center;gap:12px;min-width:0;}
-.today-card-title .ic{font-size:24px;}
+.today-card-title .ic{display:inline-flex;align-items:center;justify-content:center;color:var(--t1);}
 .today-card-title .name{font-size:16px;font-weight:700;letter-spacing:-.2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .today-card-title .meta{font-size:11.5px;color:var(--t3);margin-top:2px;}
 .today-track-body{flex:1;min-height:0;display:flex;flex-direction:column;gap:var(--s4);padding:var(--s4) var(--s5) var(--s5);overflow-y:auto;}
@@ -535,14 +551,19 @@ body.has-custom-bg::before{opacity:.25;}
 .today-stat{display:flex;align-items:baseline;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--hairline);}
 .today-stat .k{font-size:12.5px;color:var(--t3);font-weight:500;}
 .today-stat .v{font-size:14px;color:var(--t1);font-weight:700;letter-spacing:-.2px;font-variant-numeric:tabular-nums;}
+.today-act-switcher{display:none;align-items:center;gap:var(--s2);margin-right:var(--s3);}
+.today-act-switcher.on{display:inline-flex;}
+.today-act-switcher .btn{padding:0;width:34px;height:34px;border-radius:50%;}
+.today-act-switcher .counter{font-size:12.5px;font-weight:700;font-variant-numeric:tabular-nums;min-width:52px;text-align:center;}
 .garmin-input{flex:1;padding:8px 12px;border-radius:10px;border:1px solid var(--hairline-strong);background:var(--surface-b);color:var(--t1);font-size:13px;outline:none;font-family:var(--font);}
 .garmin-input:focus{border-color:var(--blue);background:var(--surface-c);}
 .garmin-security-banner{background:color-mix(in srgb, var(--blue) 10%, transparent);border:1px solid color-mix(in srgb, var(--blue) 24%, transparent);border-radius:var(--r-md);padding:var(--s3) var(--s4);margin-top:var(--s3);font-size:12.5px;line-height:1.65;color:var(--t2);}
 .garmin-security-banner b{color:var(--blue);}
+.garmin-security-banner .ic-svg{color:var(--blue);vertical-align:-0.2em;}
 .garmin-pwd-row{display:none;margin-top:var(--s4);padding:var(--s3) var(--s4);background:var(--surface-a);border:1px solid var(--hairline-strong);border-radius:var(--r-md);}
 .garmin-pwd-row.show{display:block;animation:viewIn .3s var(--ease);}
 .garmin-pwd-row .row-line{display:flex;align-items:center;gap:var(--s3);flex-wrap:wrap;}
-.garmin-pwd-row .row-line .lbl{font-size:13px;font-weight:700;color:var(--t2);white-space:nowrap;}
+.garmin-pwd-row .row-line .lbl{font-size:13px;font-weight:700;color:var(--t2);white-space:nowrap;display:flex;align-items:center;gap:6px;}
 .garmin-pwd-row .row-line .garmin-input{min-width:200px;}
 .garmin-pwd-row .hint{margin-top:6px;font-size:11.5px;color:var(--t3);line-height:1.55;}
 .app-loading{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:99999;transition:opacity .4s var(--ease);}
@@ -557,7 +578,7 @@ body.has-custom-bg::before{opacity:.25;}
 
 .pb-section{margin-bottom:var(--s5);}
 .pb-section-head{display:flex;align-items:center;gap:8px;margin-bottom:var(--s3);font-size:14px;font-weight:700;}
-.pb-section-icon{font-size:18px;}
+.pb-section-icon{display:inline-flex;align-items:center;justify-content:center;color:var(--t2);}
 .pb-grid{display:grid;grid-template-columns:repeat(auto-fill, minmax(140px, 1fr));gap:var(--s3);}
 .pb-tile{
   padding:var(--s3) var(--s4);
@@ -572,11 +593,12 @@ body.has-custom-bg::before{opacity:.25;}
   background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:.7;}
 .pb-tile-label{font-size:11px;color:var(--t3);font-weight:600;margin-bottom:5px;}
 .pb-tile-value{font-size:19px;font-weight:800;letter-spacing:-.5px;color:var(--gold);line-height:1.15;font-variant-numeric:tabular-nums;}
-.pb-tile-date{font-size:10.5px;color:var(--t3);margin-top:4px;font-variant-numeric:tabular-nums;}
-.pb-tile-trophy{opacity:.65;}
+.pb-tile-date{font-size:10.5px;color:var(--t3);margin-top:4px;font-variant-numeric:tabular-nums;display:flex;align-items:center;gap:4px;}
+.pb-tile-trophy{display:inline-flex;align-items:center;color:var(--gold);}
 .pb-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:12px;font-size:11px;font-weight:700;
   background:color-mix(in srgb, var(--gold) 16%, transparent);color:var(--gold);
   border:1px solid color-mix(in srgb, var(--gold) 30%, transparent);}
+.pb-badge .ic-svg{vertical-align:-0.15em;}
 
 /* ============ 分段 PB 网格（数据分析页） ============ */
 .seg-pb-grid{display:grid;gap:var(--s3);}
@@ -681,16 +703,35 @@ body.has-custom-bg::before{opacity:.25;}
     </div>
     <nav class="nav" id="mainNav">
       <div class="nav-title">主控台</div>
-      <div class="nav-item active" data-view="dashboard"><span class="ico">🏠</span><span class="label">总览</span></div>
-      <div class="nav-item" data-view="activities"><span class="ico">🏃</span><span class="label">活动记录</span><span class="nav-badge" id="navCount">0</span></div>
-      <div class="nav-item" data-view="analysis"><span class="ico">📊</span><span class="label">数据分析</span></div>
-      <div class="nav-item" data-view="import"><span class="ico">📁</span><span class="label">数据导入</span></div>
+      <div class="nav-item active" data-view="dashboard">
+        <span class="ico" data-ic="grid" data-size="19"></span>
+        <span class="label">总览</span>
+      </div>
+      <div class="nav-item" data-view="activities">
+        <span class="ico" data-ic="list" data-size="19"></span>
+        <span class="label">活动记录</span>
+        <span class="nav-badge" id="navCount">0</span>
+      </div>
+      <div class="nav-item" data-view="analysis">
+        <span class="ico" data-ic="bar" data-size="19"></span>
+        <span class="label">数据分析</span>
+      </div>
+      <div class="nav-item" data-view="import">
+        <span class="ico" data-ic="download" data-size="19"></span>
+        <span class="label">数据导入</span>
+      </div>
       <div class="nav-title">系统</div>
-      <div class="nav-item" data-view="settings"><span class="ico">⚙️</span><span class="label">设置</span></div>
+      <div class="nav-item" data-view="settings">
+        <span class="ico" data-ic="sliders" data-size="19"></span>
+        <span class="label">设置</span>
+      </div>
     </nav>
     <div class="sb-footer">
       <div class="sb-divider"></div>
-      <div class="nav-item" id="btnDemoSide"><span class="ico">✨</span><span class="label">载入演示数据</span></div>
+      <div class="nav-item" id="btnDemoSide">
+        <span class="ico" data-ic="sparkle" data-size="19"></span>
+        <span class="label">载入演示数据</span>
+      </div>
     </div>
   </aside>
 
@@ -703,8 +744,8 @@ body.has-custom-bg::before{opacity:.25;}
       </div>
     </div>
     <div class="header-actions">
-      <button class="btn btn-ghost btn-sm" id="btnQuickImport">📂 导入数据</button>
-      <button class="btn btn-primary btn-sm" id="btnDemoTop">✨ 演示数据</button>
+      <button class="btn btn-ghost btn-sm" id="btnQuickImport"><span data-ic="folder" data-size="14"></span>导入数据</button>
+      <button class="btn btn-primary btn-sm" id="btnDemoTop"><span data-ic="sparkle" data-size="14"></span>演示数据</button>
     </div>
   </header>
 
@@ -841,19 +882,19 @@ body.has-custom-bg::before{opacity:.25;}
           <p class="header-sub">共 <span id="actCount">0</span> 条记录 · 点击任意行查看详情</p>
         </div>
         <div style="display:flex;gap:var(--s2);">
-          <button class="btn btn-ghost btn-sm" id="btnExportCSV">📥 导出 CSV</button>
-          <button class="btn btn-primary btn-sm" id="btnGoImport">📂 导入数据</button>
+          <button class="btn btn-ghost btn-sm" id="btnExportCSV"><span data-ic="upload" data-size="14"></span>导出 CSV</button>
+          <button class="btn btn-primary btn-sm" id="btnGoImport"><span data-ic="folder" data-size="14"></span>导入数据</button>
         </div>
       </div>
       <div style="margin-bottom:var(--s5);">
         <div class="tabs" id="actTabs">
           <div class="tab active" data-filter="all">全部</div>
-          <div class="tab" data-filter="run">🏃 跑步</div>
-          <div class="tab" data-filter="cycle">🚴 骑行</div>
-          <div class="tab" data-filter="swim">🏊 游泳</div>
-          <div class="tab" data-filter="walk">🚶 步行</div>
-          <div class="tab" data-filter="hike">🥾 徒步</div>
-          <div class="tab" data-filter="gym">🏋️ 力量</div>
+          <div class="tab" data-filter="run"><span data-ic="run" data-size="14"></span>跑步</div>
+          <div class="tab" data-filter="cycle"><span data-ic="bike" data-size="14"></span>骑行</div>
+          <div class="tab" data-filter="swim"><span data-ic="swim" data-size="14"></span>游泳</div>
+          <div class="tab" data-filter="walk"><span data-ic="walk" data-size="14"></span>步行</div>
+          <div class="tab" data-filter="hike"><span data-ic="hike" data-size="14"></span>徒步</div>
+          <div class="tab" data-filter="gym"><span data-ic="gym" data-size="14"></span>力量</div>
         </div>
       </div>
       <div class="card glass" style="padding:var(--s3);">
@@ -868,32 +909,28 @@ body.has-custom-bg::before{opacity:.25;}
       </div>
       <div class="grid">
         <div class="card glass shine col-2">
-          <div class="card-head"><span class="card-label">📈 ACWR 急慢性负荷比</span><span class="tag green">0.8–1.3 安全</span></div>
+          <div class="card-head"><span class="card-label"><span data-ic="trendingUp" data-size="14"></span>ACWR 急慢性负荷比</span><span class="tag green">0.8–1.3 安全</span></div>
           <div class="chart-box" style="height:250px;"><canvas id="chAcwr"></canvas></div>
         </div>
         <div class="card glass shine col-2">
-          <div class="card-head"><span class="card-label">📊 每周训练量</span></div>
+          <div class="card-head"><span class="card-label"><span data-ic="bar" data-size="14"></span>每周训练量</span></div>
           <div class="chart-box" style="height:250px;"><canvas id="chWeekly"></canvas></div>
         </div>
       </div>
-
-      <!-- 现有 PB 区块 -->
       <div style="margin-top:var(--s6);">
         <div class="card-head" style="margin-bottom:var(--s4);">
           <span class="card-label">
-            <span style="font-size:16px;">🏆</span>
+            <span data-ic="trophy" data-size="16"></span>
             个人最佳纪录
             <span class="tag gold" style="font-size:10px;padding:2px 8px;">全部时间</span>
           </span>
         </div>
         <div id="pbContainer"></div>
       </div>
-
-      <!-- 新增：分段最佳时间 -->
       <div style="margin-top:var(--s6);">
         <div class="card-head" style="margin-bottom:var(--s4);">
           <span class="card-label">
-            <span style="font-size:16px;">⏱️</span>
+            <span data-ic="timer" data-size="16"></span>
             分段最佳时间
             <span class="tag gold" style="font-size:10px;padding:2px 8px;">全部时间</span>
           </span>
@@ -905,7 +942,7 @@ body.has-custom-bg::before{opacity:.25;}
     <section class="view" id="view-import">
       <div style="margin-bottom:var(--s5);">
         <h1 class="header-title" style="font-size:24px;">数据导入</h1>
-        <p class="header-sub">支持 Garmin 同步，或拖入 FIT / GPX / TCX / ZIP / XLSX（自动去重）</p>
+        <p class="header-sub">支持 Garmin 同步，或拖入 FIT / GPX / TCX / ZIP / XLSX / CSV（自动去重）</p>
       </div>
 
       <div class="card glass" style="padding:var(--s5);margin-bottom:var(--s5);">
@@ -920,19 +957,19 @@ body.has-custom-bg::before{opacity:.25;}
               <div class="setting-desc" id="garminDescSub">点击「配置账号」填写 Garmin 邮箱和后端地址，密码每次同步时手动输入</div>
             </div>
             <div style="display:flex;gap:var(--s2);flex-shrink:0;flex-wrap:wrap;">
-              <button class="btn btn-ghost btn-sm" id="btnGarminTest">🔌 测试连接</button>
-              <button class="btn btn-ghost btn-sm" id="btnGarminConfig">⚙️ 配置账号</button>
-              <button class="btn btn-primary btn-sm" id="btnGarminSync" disabled>🔄 同步新活动</button>
+              <button class="btn btn-ghost btn-sm" id="btnGarminTest"><span data-ic="plug" data-size="14"></span>测试连接</button>
+              <button class="btn btn-ghost btn-sm" id="btnGarminConfig"><span data-ic="cog" data-size="14"></span>配置账号</button>
+              <button class="btn btn-primary btn-sm" id="btnGarminSync" disabled><span data-ic="refresh" data-size="14"></span>同步新活动</button>
             </div>
           </div>
 
           <div id="garminPasswordRow" class="garmin-pwd-row">
             <div class="row-line">
-              <span class="lbl">🔑 Garmin 密码</span>
+              <span class="lbl"><span data-ic="key" data-size="14"></span>Garmin 密码</span>
               <input type="password" id="garminSyncPassword" class="garmin-input"
                      placeholder="每次同步前手动输入 · 不会被保存"
                      autocomplete="new-password" spellcheck="false" autocapitalize="off" autocorrect="off">
-              <span class="tag green" style="font-size:10px;flex:0 0 auto;">🛡️ 仅内存</span>
+              <span class="tag green" style="font-size:10px;flex:0 0 auto;"><span data-ic="shield" data-size="11"></span>仅内存</span>
             </div>
             <div class="hint">
               出于安全考虑，本应用<b>不会保存 Garmin 密码</b>。密码仅保存在当前页面的内存中，同步完成后立即清除。
@@ -948,7 +985,7 @@ body.has-custom-bg::before{opacity:.25;}
           </div>
           <div id="garminResults" style="display:none;margin-top:var(--s4);"></div>
           <div class="setting-desc" style="margin-top:var(--s4);padding-top:var(--s3);border-top:1px solid var(--hairline);line-height:1.7;">
-            💡 纯前端页面无法直连 Garmin Connect，需要在本机运行 <b>garmin_server.py</b> 作为代理服务。<br>
+            <span data-ic="info" data-size="13"></span> 纯前端页面无法直连 Garmin Connect，需要在本机运行 <b>garmin_server.py</b> 作为代理服务。<br>
             先执行：<code style="font-family:var(--mono);color:var(--blue);">pip install --upgrade "garminconnect>=0.3.4" curl_cffi ua-generator flask flask-cors</code>，然后 <code style="font-family:var(--mono);color:var(--blue);">python garmin_server.py</code>。
           </div>
         </div>
@@ -973,27 +1010,27 @@ body.has-custom-bg::before{opacity:.25;}
             </div>
           </div>
           <div class="garmin-security-banner">
-            🛡️ <b>密码安全说明</b>：本应用<b>不会保存</b> Garmin 密码到浏览器存储。配置面板只保存邮箱、后端地址和拉取天数。每次同步前，请在主界面密码框中手动输入密码，同步完成后立即清除。
+            <span data-ic="shield" data-size="14"></span> <b>密码安全说明</b>：本应用<b>不会保存</b> Garmin 密码到浏览器存储。配置面板只保存邮箱、后端地址和拉取天数。每次同步前，请在主界面密码框中手动输入密码，同步完成后立即清除。
           </div>
           <div style="display:flex;gap:var(--s2);margin-top:var(--s3);">
-            <button class="btn btn-primary btn-sm" id="btnGarminSave">保存配置</button>
+            <button class="btn btn-primary btn-sm" id="btnGarminSave"><span data-ic="save" data-size="14"></span>保存配置</button>
             <button class="btn btn-ghost btn-sm" id="btnGarminCancel">取消</button>
-            <button class="btn btn-ghost btn-sm" id="btnGarminReset" style="margin-left:auto;">清除配置</button>
+            <button class="btn btn-ghost btn-sm" id="btnGarminReset" style="margin-left:auto;"><span data-ic="trash" data-size="14"></span>清除配置</button>
           </div>
         </div>
       </div>
 
       <div class="drop glass" id="dropZone">
-        <input type="file" id="fileInput" multiple accept=".gpx,.tcx,.fit,.zip,.xlsx">
-        <span class="drop-ico">📁</span>
+        <input type="file" id="fileInput" multiple accept=".gpx,.tcx,.fit,.zip,.xlsx,.csv">
+        <span class="drop-ico" data-ic="uploadCloud" data-size="44"></span>
         <div class="drop-title">拖拽文件到此处，或点击选择</div>
-        <div class="drop-desc">支持 .fit（Garmin 二进制）/ .gpx / .tcx / .zip / .xlsx（Keep / 悦跑圈等导出表） · 自动跳过重复活动</div>
+        <div class="drop-desc">支持 .fit（Garmin 二进制）/ .gpx / .tcx / .zip / .xlsx / .csv（Garmin 官方导出）· 自动跳过重复活动</div>
       </div>
 
       <div style="margin-top:var(--s6);">
         <div style="display:flex;justify-content:space-between;margin-bottom:var(--s4);">
           <h2 style="font-size:17px;font-weight:700;">已导入记录</h2>
-          <button class="btn btn-ghost btn-sm" id="btnClearImports">清空全部</button>
+          <button class="btn btn-ghost btn-sm" id="btnClearImports"><span data-ic="trash" data-size="14"></span>清空全部</button>
         </div>
         <div class="card glass" style="padding:var(--s3);">
           <div class="list" id="importedList"></div>
@@ -1008,20 +1045,20 @@ body.has-custom-bg::before{opacity:.25;}
       </div>
 
       <div class="group">
-        <div class="group-title">🎨 主题风格</div>
+        <div class="group-title"><span data-ic="palette" data-size="16"></span>主题风格</div>
         <div class="theme-grid" id="themeGrid"></div>
       </div>
 
       <div class="group">
-        <div class="group-title">🖼️ 页面背景</div>
+        <div class="group-title"><span data-ic="image" data-size="16"></span>页面背景</div>
         <div class="setting">
           <div>
             <div class="setting-label">自定义背景图片</div>
             <div class="setting-desc">上传一张图片作为页面最底层背景，会自动缩放并叠加暗色遮罩保证内容可读</div>
           </div>
           <div style="display:flex;gap:var(--s2);flex-shrink:0;">
-            <button class="btn btn-ghost btn-sm" id="btnUploadBg">📷 上传图片</button>
-            <button class="btn btn-ghost btn-sm" id="btnResetBg">↺ 恢复默认</button>
+            <button class="btn btn-ghost btn-sm" id="btnUploadBg"><span data-ic="camera" data-size="14"></span>上传图片</button>
+            <button class="btn btn-ghost btn-sm" id="btnResetBg"><span data-ic="rotate" data-size="14"></span>恢复默认</button>
           </div>
           <input type="file" id="bgInput" accept="image/*" style="display:none;">
         </div>
@@ -1029,7 +1066,7 @@ body.has-custom-bg::before{opacity:.25;}
       </div>
 
       <div class="group">
-        <div class="group-title">💎 液态玻璃</div>
+        <div class="group-title"><span data-ic="sparkle" data-size="16"></span>液态玻璃</div>
         <div class="setting">
           <div><div class="setting-label">玻璃透明度</div><div class="setting-desc">0 = 完全不透明　·　100 = 完全透明</div></div>
           <div class="control">
@@ -1054,7 +1091,7 @@ body.has-custom-bg::before{opacity:.25;}
       </div>
 
       <div class="group">
-        <div class="group-title">💪 生理阈值参数</div>
+        <div class="group-title"><span data-ic="activity" data-size="16"></span>生理阈值参数</div>
         <div class="setting">
           <div><div class="setting-label">最大心率 (bpm)</div><div class="setting-desc">用于心率区间计算</div></div>
           <div class="control">
@@ -1079,7 +1116,7 @@ body.has-custom-bg::before{opacity:.25;}
       </div>
 
       <div class="group">
-        <div class="group-title">📊 数据与显示</div>
+        <div class="group-title"><span data-ic="bar" data-size="16"></span>数据与显示</div>
         <div class="setting">
           <div><div class="setting-label">距离单位</div><div class="setting-desc">切换后全部换算</div></div>
           <div class="tabs" id="unitTabs">
@@ -1090,20 +1127,20 @@ body.has-custom-bg::before{opacity:.25;}
         <div class="setting">
           <div><div class="setting-label">存储后端</div><div class="setting-desc" id="storageInfo">正在检测...</div></div>
           <div class="control" style="min-width:auto;">
-            <button class="btn btn-ghost btn-sm" id="btnStorageInfo">🔍 查看详情</button>
+            <button class="btn btn-ghost btn-sm" id="btnStorageInfo"><span data-ic="search" data-size="14"></span>查看详情</button>
           </div>
         </div>
         <div style="margin-top:var(--s5);display:flex;gap:var(--s3);flex-wrap:wrap;">
-          <button class="btn btn-ghost" id="btnDemoSettings">✨ 载入演示数据</button>
-          <button class="btn btn-ghost" id="btnClearIcons">🗂️ 清除所有图标</button>
-          <button class="btn btn-danger" id="btnClearAll">🗑️ 清除所有数据</button>
+          <button class="btn btn-ghost" id="btnDemoSettings"><span data-ic="sparkle" data-size="15"></span>载入演示数据</button>
+          <button class="btn btn-ghost" id="btnClearIcons"><span data-ic="trash2" data-size="15"></span>清除所有图标</button>
+          <button class="btn btn-danger" id="btnClearAll"><span data-ic="trash" data-size="15"></span>清除所有数据</button>
         </div>
       </div>
     </section>
 
     <section class="view" id="view-detail">
       <div class="detail-header">
-        <button class="btn btn-ghost btn-icon" id="detailBack">←</button>
+        <button class="btn btn-ghost btn-icon" id="detailBack"><span data-ic="arrowLeft" data-size="16"></span></button>
         <div class="grow">
           <div class="header-title" id="detailTitle">—</div>
           <div class="header-sub" id="detailSub">—</div>
@@ -1120,15 +1157,16 @@ body.has-custom-bg::before{opacity:.25;}
 
     <section class="view" id="view-today">
       <div class="detail-header">
-        <button class="btn btn-ghost btn-icon" id="todayBack">←</button>
+        <button class="btn btn-ghost btn-icon" id="todayBack"><span data-ic="arrowLeft" data-size="16"></span></button>
         <div class="grow">
           <div class="header-title" id="todayTitle">—</div>
           <div class="header-sub" id="todaySub">—</div>
         </div>
+        <div class="today-act-switcher" id="todayActSwitcher"></div>
         <div class="tabs" id="todayPageTabs">
-          <div class="tab active" data-page="0">📍 轨迹</div>
-          <div class="tab" data-page="1">📊 对比</div>
-          <div class="tab" data-page="2">📋 统计</div>
+          <div class="tab active" data-page="0"><span data-ic="route" data-size="14"></span>轨迹</div>
+          <div class="tab" data-page="1"><span data-ic="bar" data-size="14"></span>对比</div>
+          <div class="tab" data-page="2"><span data-ic="list" data-size="14"></span>统计</div>
         </div>
       </div>
       <div class="detail-stage" id="todayStage"></div>
@@ -1144,41 +1182,41 @@ body.has-custom-bg::before{opacity:.25;}
         <div class="header-sub" id="aSub">—</div>
         <div id="aPBBadges" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;"></div>
       </div>
-      <button class="btn btn-ghost btn-icon" id="aClose">✕</button>
+      <button class="btn btn-ghost btn-icon" id="aClose"><span data-ic="x" data-size="16"></span></button>
     </div>
     <div class="metric-grid" id="aMetrics"></div>
     <div style="border-radius:var(--r-md);background:var(--surface-a);border:1px solid var(--hairline);padding:var(--s3) var(--s4);" id="aTrackSection">
-      <div style="font-size:12.5px;font-weight:700;color:var(--t2);margin-bottom:var(--s3);">🛰️ 轨迹</div>
+      <div style="font-size:12.5px;font-weight:700;color:var(--t2);margin-bottom:var(--s3);"><span data-ic="route" data-size="14"></span> 轨迹</div>
       <div class="chart-box" style="height:240px;" id="aTrackChartBox"><canvas id="aTrack"></canvas></div>
       <img id="aTrackImg" alt="运动轨迹" style="display:none;width:100%;border-radius:12px;background:rgba(0,0,0,.25);">
     </div>
     <div style="border-radius:var(--r-md);background:var(--surface-a);border:1px solid var(--hairline);padding:var(--s3) var(--s4);" id="aEleSection">
-      <div style="font-size:12.5px;font-weight:700;color:var(--t2);margin-bottom:var(--s3);">⛰️ 海拔</div>
+      <div style="font-size:12.5px;font-weight:700;color:var(--t2);margin-bottom:var(--s3);"><span data-ic="mountain" data-size="14"></span> 海拔</div>
       <div class="chart-box" style="height:100px;"><canvas id="aEle"></canvas></div>
     </div>
     <div style="border-radius:var(--r-md);background:var(--surface-a);border:1px solid var(--hairline);padding:var(--s3) var(--s4);" id="aPaceSection">
-      <div style="font-size:12.5px;font-weight:700;color:var(--t2);margin-bottom:var(--s3);">⏱️ <span id="aPaceLabel">配速</span></div>
+      <div style="font-size:12.5px;font-weight:700;color:var(--t2);margin-bottom:var(--s3);"><span data-ic="timer" data-size="14"></span> <span id="aPaceLabel">配速</span></div>
       <div class="chart-box" style="height:100px;"><canvas id="aPace"></canvas></div>
     </div>
     <div style="border-radius:var(--r-md);background:var(--surface-a);border:1px solid var(--hairline);padding:var(--s3) var(--s4);" id="aHRSection">
-      <div style="font-size:12.5px;font-weight:700;color:var(--t2);margin-bottom:var(--s3);">❤️ 心率</div>
+      <div style="font-size:12.5px;font-weight:700;color:var(--t2);margin-bottom:var(--s3);"><span data-ic="heart" data-size="14"></span> 心率</div>
       <div class="chart-box" style="height:100px;"><canvas id="aHR"></canvas></div>
     </div>
     <div style="border-radius:var(--r-md);background:var(--surface-a);border:1px solid var(--hairline);padding:var(--s3) var(--s4);display:none;" id="aCadSection">
-      <div style="font-size:12.5px;font-weight:700;color:var(--t2);margin-bottom:var(--s3);">👟 步频</div>
+      <div style="font-size:12.5px;font-weight:700;color:var(--t2);margin-bottom:var(--s3);"><span data-ic="footprints" data-size="14"></span> 步频</div>
       <div class="chart-box" style="height:100px;"><canvas id="aCad"></canvas></div>
     </div>
     <div style="border-radius:var(--r-md);background:var(--surface-a);border:1px solid var(--hairline);padding:var(--s3) var(--s4);display:none;" id="aPowerSection">
-      <div style="font-size:12.5px;font-weight:700;color:var(--t2);margin-bottom:var(--s3);">⚡ 功率</div>
+      <div style="font-size:12.5px;font-weight:700;color:var(--t2);margin-bottom:var(--s3);"><span data-ic="zap" data-size="14"></span> 功率</div>
       <div class="chart-box" style="height:100px;"><canvas id="aPower"></canvas></div>
     </div>
     <div style="border-radius:var(--r-md);background:var(--surface-a);border:1px solid var(--hairline);padding:var(--s3) var(--s4);">
-      <div style="font-size:12.5px;font-weight:700;color:var(--t2);margin-bottom:var(--s3);">🎯 心率区间</div>
+      <div style="font-size:12.5px;font-weight:700;color:var(--t2);margin-bottom:var(--s3);"><span data-ic="target" data-size="14"></span> 心率区间</div>
       <div style="display:flex;height:14px;border-radius:7px;overflow:hidden;gap:2px;" id="aZones"></div>
       <div id="aZoneLegend" style="display:flex;flex-wrap:wrap;gap:8px 20px;margin-top:var(--s3);"></div>
     </div>
     <div style="border-radius:var(--r-md);background:var(--surface-a);border:1px solid var(--hairline);padding:var(--s3) var(--s4);">
-      <div style="font-size:12.5px;font-weight:700;color:var(--t2);margin-bottom:var(--s3);">📊 统计信息</div>
+      <div style="font-size:12.5px;font-weight:700;color:var(--t2);margin-bottom:var(--s3);"><span data-ic="bar" data-size="14"></span> 统计信息</div>
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:var(--s2) var(--s6);" id="aStats"></div>
     </div>
   </div>
@@ -1186,7 +1224,7 @@ body.has-custom-bg::before{opacity:.25;}
 
 <div class="heatmap-tooltip" id="heatmapTooltip"></div>
 <div class="toasts" id="toasts"></div>
-<button class="btn btn-ghost btn-icon fab" id="fabTop">⬆️</button>
+<button class="btn btn-ghost btn-icon fab" id="fabTop"><span data-ic="arrowUp" data-size="18"></span></button>
 
 <script>
 (function(){
@@ -1195,6 +1233,113 @@ const $ = (s,r=document)=>r.querySelector(s);
 const $$ = (s,r=document)=>Array.from(r.querySelectorAll(s));
 const clamp = (v,a,b)=>Math.min(b,Math.max(a,v));
 const DAY = 86400000;
+
+/* ============================================================
+   全站 SVG 图标系统
+   ============================================================ */
+const ICONS = {
+  /* 导航 */
+  grid: '<rect x="3" y="3" width="7.5" height="7.5" rx="1.6"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="1.6"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="1.6"/><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="1.6"/>',
+  list: '<line x1="9.5" y1="6" x2="20.5" y2="6"/><line x1="9.5" y1="12" x2="20.5" y2="12"/><line x1="9.5" y1="18" x2="20.5" y2="18"/><circle cx="4.5" cy="6" r="1.5" style="fill:currentColor;stroke:none"/><circle cx="4.5" cy="12" r="1.5" style="fill:currentColor;stroke:none"/><circle cx="4.5" cy="18" r="1.5" style="fill:currentColor;stroke:none"/>',
+  bar: '<line x1="6" y1="20" x2="6" y2="13"/><line x1="12" y1="20" x2="12" y2="9"/><line x1="18" y1="20" x2="18" y2="4"/>',
+  download: '<path d="M12 4v11"/><path d="m7.5 10.5 4.5 4.5 4.5-4.5"/><path d="M4.5 20h15"/>',
+  upload: '<path d="M12 16V5"/><path d="m7.5 9.5 4.5-4.5 4.5 4.5"/><path d="M4.5 20h15"/>',
+  sliders: '<line x1="4" y1="20.5" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3.5"/><line x1="12" y1="20.5" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3.5"/><line x1="20" y1="20.5" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3.5"/><line x1="2" y1="14" x2="6" y2="14"/><line x1="10" y1="8" x2="14" y2="8"/><line x1="18" y1="16" x2="22" y2="16"/>',
+  sparkle: '<path d="M12 3.5v3"/><path d="M12 17.5v3"/><path d="M3.5 12h3"/><path d="M17.5 12h3"/><path d="m6.2 6.2 2.1 2.1"/><path d="m15.7 15.7 2.1 2.1"/><path d="m6.2 17.8 2.1-2.1"/><path d="m15.7 8.3 2.1-2.1"/><circle cx="12" cy="12" r="2.2"/>',
+
+  /* 文件/上传 */
+  folder: '<path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>',
+  file: '<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><polyline points="14 3 14 8 19 8"/>',
+  uploadCloud: '<path d="M6 18a4 4 0 0 1 0-8 5 5 0 0 1 9.6-2A3.5 3.5 0 0 1 20 11.5a3.5 3.5 0 0 1-1 6.5"/><polyline points="9 14 12 11 15 14"/><line x1="12" y1="11" x2="12" y2="19"/>',
+
+  /* 运动类型 */
+  run: '<circle cx="15" cy="4" r="1.7"/><path d="m13 8-2 5 3 2 2 5"/><path d="m11 13-4 1-2 4"/><path d="m16 11 4 1"/>',
+  bike: '<circle cx="5.5" cy="17.5" r="3.5"/><circle cx="18.5" cy="17.5" r="3.5"/><path d="M5.5 17.5 10 7h5l3.5 10.5"/><path d="M10 7H7"/>',
+  swim: '<path d="M2 16c2-1.5 4-1.5 6 0s4 1.5 6 0 4-1.5 6 0"/><path d="M2 20c2-1.5 4-1.5 6 0s4 1.5 6 0 4-1.5 6 0"/><circle cx="17" cy="7" r="2"/><path d="m9 12 3-2 3 3 3-1"/>',
+  walk: '<circle cx="13" cy="4" r="1.7"/><path d="m12 8-2 5 3 3 1 5"/><path d="m10 13-2 4"/><path d="m15 16 3 5"/>',
+  hike: '<circle cx="13" cy="4" r="1.7"/><path d="m11 9-3 6 3 3 1 5"/><path d="m13 10 3 3 2 5"/><path d="M8 20V9l2-2"/>',
+  gym: '<path d="M6.5 6.5v11"/><path d="M17.5 6.5v11"/><path d="M3.5 9v6"/><path d="M20.5 9v6"/><path d="M6.5 12h11"/>',
+  activity: '<polyline points="3 12 8 12 11 4 14 20 17 12 21 12"/>',
+
+  /* 数据/统计 */
+  trophy: '<path d="M6 3h12v5a6 6 0 0 1-12 0z"/><path d="M6 5H3v2a3 3 0 0 0 3 3"/><path d="M18 5h3v2a3 3 0 0 1-3 3"/><path d="M9 20h6"/><path d="M12 14v6"/>',
+  timer: '<circle cx="12" cy="13" r="8"/><path d="M12 9v4l3 2"/><path d="M9 2h6"/>',
+  trendingUp: '<polyline points="3 17 9 11 13 15 21 7"/><polyline points="15 7 21 7 21 13"/>',
+  route: '<circle cx="6" cy="19" r="2"/><circle cx="18" cy="5" r="2"/><path d="M6 17V9a4 4 0 0 1 4-4h4a4 4 0 0 0 4-4"/>',
+  mountain: '<path d="m3 20 8-14 4 7 3-4 3 11z"/><path d="M11 6v.01"/>',
+  heart: '<path d="M12 20s-7-4.5-7-10a4 4 0 0 1 7-2.5A4 4 0 0 1 19 10c0 5.5-7 10-7 10z"/>',
+  zap: '<polygon points="13 2 4 14 11 14 10 22 19 10 12 10 13 2"/>',
+  target: '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.4" style="fill:currentColor;stroke:none"/>',
+  footprints: '<path d="M5 11a2 2 0 1 1 4 0v4a2 2 0 0 1-4 0z"/><path d="M14 8a2 2 0 1 1 4 0v4a2 2 0 0 1-4 0z"/>',
+  hash: '<line x1="4" y1="9" x2="20" y2="9"/><line x1="4" y1="15" x2="20" y2="15"/><line x1="10" y1="3" x2="8" y2="21"/><line x1="16" y1="3" x2="14" y2="21"/>',
+  clock: '<circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 16 14"/>',
+  calendar: '<rect x="3" y="5" width="18" height="16" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="8" y1="3" x2="8" y2="7"/><line x1="16" y1="3" x2="16" y2="7"/>',
+  flame: '<path d="M12 3c1 3 4 5 4 9a4 4 0 0 1-8 0c0-2 1-3 1-3s0 2 1 2c0-3 2-4 2-8z"/>',
+
+  /* 提示/状态 */
+  info: '<circle cx="12" cy="12" r="9"/><line x1="12" y1="10" x2="12" y2="16"/><circle cx="12" cy="7.5" r=".9" style="fill:currentColor;stroke:none"/>',
+  check: '<circle cx="12" cy="12" r="9"/><polyline points="8 12 11 15 16 9"/>',
+  warning: '<path d="M12 3 2 20h20z"/><line x1="12" y1="9" x2="12" y2="14"/><circle cx="12" cy="17" r=".9" style="fill:currentColor;stroke:none"/>',
+  bell: '<path d="M6 8a6 6 0 1 1 12 0c0 5 2 6 2 6H4s2-1 2-6"/><path d="M10 18a2 2 0 1 0 4 0"/>',
+  shield: '<path d="M12 3 4 6v6c0 5 3.5 8.5 8 9.5 4.5-1 8-4.5 8-9.5V6z"/><polyline points="9 12 11 14 15 10"/>',
+  key: '<circle cx="8" cy="15" r="3.5"/><path d="m10.5 12.5 8-8"/><path d="m15 8 3 3"/><path d="m17 5 2 2"/>',
+
+  /* 设备/操作 */
+  plug: '<line x1="9" y1="3" x2="9" y2="8"/><line x1="15" y1="3" x2="15" y2="8"/><path d="M6 8h12v3a6 6 0 0 1-6 6 6 6 0 0 1-6-6z"/><line x1="12" y1="17" x2="12" y2="21"/>',
+  cog: '<circle cx="12" cy="12" r="3.2"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/>',
+  refresh: '<path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><polyline points="21 3 21 8 16 8"/>',
+  save: '<path d="M5 3h11l3 3v13a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><polyline points="8 3 8 9 16 9"/><circle cx="12" cy="15" r="2.5"/>',
+  camera: '<path d="M3 8a2 2 0 0 1 2-2h2.5L9 4h6l1.5 2H19a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><circle cx="12" cy="12.5" r="3.5"/>',
+  image: '<rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><polyline points="4 19 10 13 14 17 17 14 21 18"/>',
+  palette: '<circle cx="12" cy="12" r="9"/><circle cx="8" cy="10" r="1.1" style="fill:currentColor;stroke:none"/><circle cx="12" cy="8" r="1.1" style="fill:currentColor;stroke:none"/><circle cx="16" cy="10" r="1.1" style="fill:currentColor;stroke:none"/><circle cx="15" cy="15" r="1.1" style="fill:currentColor;stroke:none"/>',
+  rotate: '<path d="M21 4v6h-6"/><path d="M20 14a8 8 0 1 1-2.3-6.3L21 10"/>',
+  search: '<circle cx="11" cy="11" r="6"/><line x1="20" y1="20" x2="15.5" y2="15.5"/>',
+  trash: '<path d="M4 6h16"/><path d="M9 6V4h6v2"/><path d="M6 6v14a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V6"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/>',
+  trash2: '<polyline points="3 6 5 6 21 6"/><path d="M19 6 18 20a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/><path d="M9 6V4h6v2"/>',
+
+  /* UI 通用 */
+  x: '<line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/>',
+  arrowLeft: '<line x1="20" y1="12" x2="4" y2="12"/><polyline points="10 6 4 12 10 18"/>',
+  arrowUp: '<line x1="12" y1="20" x2="12" y2="4"/><polyline points="6 10 12 4 18 10"/>',
+  chevronLeft: '<polyline points="15 6 9 12 15 18"/>',
+  chevronRight: '<polyline points="9 6 15 12 9 18"/>',
+  inbox: '<path d="M3 13h5l1 3h6l1-3h5"/><path d="M5 5h14l2 8v5a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-5z"/>',
+};
+
+function ic(name, size){
+  size = size || 16;
+  const body = ICONS[name];
+  if (!body) return '';
+  return `<svg class="ic-svg" width="${size}" height="${size}" viewBox="0 0 24 24" aria-hidden="true">${body}</svg>`;
+}
+
+function materializeIcons(root){
+  root = root || document;
+  root.querySelectorAll('[data-ic]').forEach(el => {
+    if (el.dataset.icDone === '1') return;
+    const name = el.dataset.ic;
+    const size = parseInt(el.dataset.size, 10) || 16;
+    el.innerHTML = ic(name, size);
+    el.classList.add('ic-slot');
+    el.dataset.icDone = '1';
+  });
+}
+
+/* ============================================================
+   P0-5：稳健 ID 生成器
+   ============================================================ */
+let _idSeq = 0;
+function genId(prefix){
+  prefix = prefix || 'a';
+  _idSeq = (_idSeq + 1) >>> 0;
+  if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+    return prefix + crypto.randomUUID().replace(/-/g, '').slice(0, 24);
+  }
+  const time = Date.now().toString(36);
+  const seq  = _idSeq.toString(36).padStart(4, '0');
+  const rand = Math.random().toString(36).slice(2, 8);
+  return prefix + time + seq + rand;
+}
 
 /* ============================================================
    IndexedDB 存储层
@@ -1470,8 +1615,7 @@ const PB_DEFS = {
 };
 
 /* ============================================================
-   分段最佳时间：从单个活动的轨迹点中，求覆盖指定距离的最短耗时
-   算法：双指针 O(n) 滑动窗口 + 边界线性插值
+   分段最佳时间算法
    ============================================================ */
 function getSegBest(a, segName) {
   const targets = SEG_TARGETS_BY_TYPE[a.type];
@@ -1480,7 +1624,6 @@ function getSegBest(a, segName) {
   if (!target || !(a.distance >= target)) return null;
   if (!a.points || a.points.length < 5) return null;
 
-  // 1) 提取 (t, d) 序列；过滤非法点，跳过距离回退点，保证 d 单调非递减
   const pts = [];
   let lastD = -Infinity;
   for (const p of a.points) {
@@ -1488,7 +1631,7 @@ function getSegBest(a, segName) {
     const t = Number(p.t);
     const d = Number(p.d);
     if (!isFinite(t) || !isFinite(d) || t <= 0 || d < 0) continue;
-    if (d < lastD) continue;            // 距离回退 → 丢弃
+    if (d < lastD) continue;
     lastD = d;
     pts.push({ t, d });
   }
@@ -1497,19 +1640,17 @@ function getSegBest(a, segName) {
   const lastDist = pts[pts.length - 1].d;
   if (lastDist < target) return null;
 
-  // 2) 双指针：对每个左端点 l，找覆盖 target 距离的最早右端点 r
   let best = Infinity;
   let r = 1;
 
   for (let l = 0; l < pts.length - 1; l++) {
     const targetD = pts[l].d + target;
-    if (targetD > lastDist) break;      // 剩余距离不足，提前结束
+    if (targetD > lastDist) break;
     if (r <= l) r = l + 1;
 
     while (r < pts.length && pts[r].d < targetD) r++;
     if (r >= pts.length) break;
 
-    // 3) 在 [r-1, r] 两点间线性插值，找到恰好 target 距离对应的精确时刻
     const prev = pts[r - 1];
     const cur  = pts[r];
     const dd   = cur.d - prev.d;
@@ -1521,7 +1662,7 @@ function getSegBest(a, segName) {
       endT = cur.t;
     }
 
-    const segTime = (endT - pts[l].t) / 1000;   // 秒
+    const segTime = (endT - pts[l].t) / 1000;
     if (segTime > 0 && segTime < best) best = segTime;
   }
 
@@ -1597,7 +1738,6 @@ function computeAllPB() {
   return { byType, byDay, byActivity };
 }
 
-// 计算所有运动类型的分段 PB（全部时间），带缓存
 function computeAllSegPBs() {
   if (State.segPBCache) return State.segPBCache;
 
@@ -1630,7 +1770,30 @@ function computeAllSegPBs() {
 
 function refreshPBCache() {
   State.pbCache = computeAllPB();
-  State.segPBCache = null;   // 数据变化时让分段 PB 缓存失效
+  State.segPBCache = null;
+}
+
+/* ============================================================
+   P1：心率漂移 (HR Drift)
+   ============================================================ */
+function computeHrDrift(points) {
+  if (!points || points.length < 20) return null;
+  const mid = Math.floor(points.length / 2);
+  const first = points.slice(0, mid);
+  const second = points.slice(mid);
+  const avg = (arr) => {
+    const valid = arr.filter(v => isFinite(v) && v > 0);
+    return valid.length ? valid.reduce((a, b) => a + b, 0) / valid.length : 0;
+  };
+  const hr1 = avg(first.map(p => p.hr || 0));
+  const hr2 = avg(second.map(p => p.hr || 0));
+  const sp1 = avg(first.map(p => p.sp || 0));
+  const sp2 = avg(second.map(p => p.sp || 0));
+  if (!hr1 || !hr2 || !sp1 || !sp2) return null;
+  const ratio1 = hr1 / sp1;
+  const ratio2 = hr2 / sp2;
+  if (!isFinite(ratio1) || ratio1 <= 0) return null;
+  return ((ratio2 - ratio1) / ratio1) * 100;
 }
 
 /* ============ 主题 ============ */
@@ -1733,35 +1896,62 @@ function fmtBytes(bytes){
   return (bytes/Math.pow(1024,i)).toFixed(i===0?0:2) + ' ' + units[i];
 }
 
-/* ============ 查重 ============ */
+/* ============================================================
+   P0-4：查重 - 按运动类型分层容差
+   ============================================================ */
+const DUP_TOLERANCE = {
+  run:   { timeMs: 3*60*1000, absDist: 300, relDist: 0.08, absDur: 120, relDur: 0.08 },
+  walk:  { timeMs: 3*60*1000, absDist: 300, relDist: 0.10, absDur: 120, relDur: 0.10 },
+  hike:  { timeMs: 3*60*1000, absDist: 500, relDist: 0.08, absDur: 180, relDur: 0.08 },
+  cycle: { timeMs: 3*60*1000, absDist: 500, relDist: 0.05, absDur: 120, relDur: 0.08 },
+  swim:  { timeMs: 6*60*1000, absDist: 50,  relDist: 0.05, absDur: 120, relDur: 0.08 },
+  gym:   { timeMs: 5*60*1000, absDist: 0,   relDist: 0,    absDur: 300, relDur: 0.15 },
+  other: { timeMs: 3*60*1000, absDist: 500, relDist: 0.10, absDur: 120, relDur: 0.10 },
+};
+
 function isDuplicate(newAct, list){
   if(!newAct || !newAct.date) return null;
   const t1 = new Date(newAct.date).getTime();
   if(!isFinite(t1)) return null;
-  const TOL = 3 * 60 * 1000;
+  const tol = DUP_TOLERANCE[newAct.type] || DUP_TOLERANCE.other;
   for(const old of list){
     if(!old || !old.date) continue;
+    if(newAct.type !== old.type) continue;
     const t2 = new Date(old.date).getTime();
     if(!isFinite(t2)) continue;
-    if(Math.abs(t1 - t2) > TOL) continue;
-    if(newAct.type !== old.type) continue;
+    if(Math.abs(t1 - t2) > tol.timeMs) continue;
+
     const d1 = newAct.distance || 0, d2 = old.distance || 0;
-    const distClose = (d1 > 0 && d2 > 0) && (Math.abs(d1-d2) < 500 || Math.abs(d1-d2)/Math.max(d1,d2) < 0.1);
     const du1 = newAct.duration || 0, du2 = old.duration || 0;
-    const durClose = (du1 > 0 && du2 > 0) && (Math.abs(du1-du2) < 120 || Math.abs(du1-du2)/Math.max(du1,du2) < 0.1);
-    if(distClose || durClose) return old;
+
+    let distMatch = false;
+    if(d1 > 0 && d2 > 0){
+      const absDiff = Math.abs(d1 - d2);
+      const relDiff = absDiff / Math.max(d1, d2);
+      distMatch = absDiff < tol.absDist || relDiff < tol.relDist;
+    }
+    let durMatch = false;
+    if(du1 > 0 && du2 > 0){
+      const absDiff = Math.abs(du1 - du2);
+      const relDiff = absDiff / Math.max(du1, du2);
+      durMatch = absDiff < tol.absDur || relDiff < tol.relDur;
+    }
+
+    if(d1 === 0 && d2 === 0 && du1 === 0 && du2 === 0) return old;
+    if(distMatch || durMatch) return old;
   }
   return null;
 }
 
+/* TYPE_META 现在存储图标名（SVG name）而非 Emoji */
 const TYPE_META = {
-  run:{icon:'🏃',label:'跑步',color:'#FF9F0A'},
-  cycle:{icon:'🚴',label:'骑行',color:'#0A84FF'},
-  swim:{icon:'🏊',label:'游泳',color:'#64D2FF'},
-  gym:{icon:'🏋️',label:'力量',color:'#BF5AF2'},
-  walk:{icon:'🚶',label:'步行',color:'#30D158'},
-  hike:{icon:'🥾',label:'徒步',color:'#FFD60A'},
-  other:{icon:'📌',label:'其他',color:'#8E8E93'},
+  run:{icon:'run',label:'跑步',color:'#FF9F0A'},
+  cycle:{icon:'bike',label:'骑行',color:'#0A84FF'},
+  swim:{icon:'swim',label:'游泳',color:'#64D2FF'},
+  gym:{icon:'gym',label:'力量',color:'#BF5AF2'},
+  walk:{icon:'walk',label:'步行',color:'#30D158'},
+  hike:{icon:'hike',label:'徒步',color:'#FFD60A'},
+  other:{icon:'activity',label:'其他',color:'#8E8E93'},
 };
 const ZONE_COLORS = ['#64D2FF','#30D158','#FFD60A','#FF9F0A','#FF453A'];
 const ZONE_NAMES  = ['Z1 恢复','Z2 有氧','Z3 节奏','Z4 阈值','Z5 无氧'];
@@ -1775,13 +1965,14 @@ const State = {
   segPBCache: null,
 };
 
+/* Toast：使用 SVG 图标 */
+const TOAST_ICON = { info:'info', success:'check', error:'warning', warn:'bell' };
 function toast(msg,type){
   type=type||'info';
   const box=$('#toasts');
   const el=document.createElement('div');
-  el.className='toast glass';
-  const icons={info:'ℹ️',success:'✅',error:'⚠️',warn:'🔔'};
-  el.innerHTML=`<span style="font-size:16px;">${icons[type]||'ℹ️'}</span><span style="flex:1;">${msg}</span>`;
+  el.className='toast glass ' + type;
+  el.innerHTML = `<span class="toast-ico">${ic(TOAST_ICON[type]||'info', 18)}</span><span style="flex:1;">${msg}</span>`;
   box.appendChild(el);
   setTimeout(()=>{el.classList.add('out');setTimeout(()=>el.remove(),300);},3400);
 }
@@ -2179,7 +2370,7 @@ const HeatmapChart = {
     }
     if (pbInfo && pbInfo.length) {
       html += `<div style="margin-top:8px;padding-top:8px;border-top:1px dashed ${hexA(goldHex, .4)};">`;
-      html += `<div style="font-size:10.5px;color:${goldHex};font-weight:700;margin-bottom:5px;letter-spacing:.4px;">🏆 个人最佳</div>`;
+      html += `<div style="font-size:10.5px;color:${goldHex};font-weight:700;margin-bottom:5px;letter-spacing:.4px;display:flex;align-items:center;gap:4px;">${ic('trophy',12)}个人最佳</div>`;
       for (const pb of pbInfo) {
         html += `<div style="display:flex;justify-content:space-between;gap:8px;font-size:11px;padding:2px 0;">
           <span style="color:var(--t2);">${pb.label}</span>
@@ -2218,13 +2409,14 @@ function renderHeatmapLegend() {
   const types = ['run', 'cycle', 'swim', 'gym', 'walk', 'hike'];
   const items = types.map(t => {
     const meta = TYPE_META[t];
-    return `<div class="legend-item"><span class="legend-swatch" style="background:${meta.color};"></span><span>${meta.label}</span></div>`;
+    const hex = HeatmapChart.getTypeHex(t);
+    return `<div class="legend-item"><span class="legend-swatch" style="background:${hex};"></span><span>${meta.label}</span></div>`;
   }).join('');
-  const baseColor = TYPE_META.run.color;
+  const baseColor = HeatmapChart.getTypeHex('run');
   const scaleAlphas = [0.35, 0.55, 0.72, 0.88, 1.0];
   const scale = scaleAlphas.map(a => `<span class="scale-cell" style="background:${hexA(baseColor, a)};"></span>`).join('');
   const goldHex = cssVar('--gold', '#FFD700');
-  const pbLegend = `<div class="legend-pb"><span class="legend-pb-ring" style="border-color:${goldHex};box-shadow:0 0 8px ${hexA(goldHex, .55)};"></span><span>🏆 个人最佳</span></div>`;
+  const pbLegend = `<div class="legend-pb"><span class="legend-pb-ring" style="border-color:${goldHex};box-shadow:0 0 8px ${hexA(goldHex, .55)};"></span><span>${ic('trophy',12)}个人最佳</span></div>`;
   el.innerHTML = `${items}${pbLegend}<div class="legend-scale"><span>少</span>${scale}<span>多</span></div>`;
 }
 
@@ -2240,7 +2432,7 @@ function updateHeatmapSummary() {
     if (d >= yearAgo && d <= today) { total++; activeDays.add(dayKey(d)); }
   }
   const pbCount = State.pbCache.byDay.size;
-  el.textContent = `${total} 次 · ${activeDays.size} 活跃天 · 🏆 ${pbCount}`;
+  el.innerHTML = `${total} 次 · ${activeDays.size} 活跃天 · <span style="display:inline-flex;align-items:center;gap:3px;color:var(--gold);font-weight:700;">${ic('trophy',11)}${pbCount}</span>`;
 }
 
 /* ============ 外观 ============ */
@@ -2274,7 +2466,7 @@ function renderThemeGrid(){
           <div class="tc-name">${escapeHtml(t.name)}</div>
           <div class="tc-sub">${escapeHtml(t.sub)}</div>
         </div>
-        <div class="tc-check">✓</div>
+        <div class="tc-check">${ic('check',12)}</div>
       </div>
       <div class="tc-dots">${t.dots.map(c=>`<span style="background:${c}"></span>`).join('')}</div>
     </div>`;
@@ -2320,12 +2512,12 @@ function applyCardIcons(){
       figWrap.classList.add('has-image');
       figMask.style.webkitMaskImage = `url(${dataURL})`;
       figMask.style.maskImage = `url(${dataURL})`;
-      if(btn){ btn.classList.add('has-icon'); btn.textContent = '✕'; btn.title = '移除图标'; }
+      if(btn){ btn.classList.add('has-icon'); btn.innerHTML = ic('x',14); btn.title = '移除图标'; }
     } else {
       figWrap.classList.remove('has-image');
       figMask.style.webkitMaskImage = '';
       figMask.style.maskImage = '';
-      if(btn){ btn.classList.remove('has-icon'); btn.textContent = '+'; btn.title = '上传图标'; }
+      if(btn){ btn.classList.remove('has-icon'); btn.innerHTML = '+'; btn.title = '上传图标'; }
     }
   });
 }
@@ -2707,6 +2899,7 @@ function readFieldValue(dv,offset,field,le){
     return null;
   }catch(e){return null;}
 }
+
 function parseFIT(buffer){
   const dv=new DataView(buffer);
   if(buffer.byteLength<14)throw new Error('FIT 文件过短');
@@ -2728,6 +2921,7 @@ function parseFIT(buffer){
       if(!def)break;
       const values={};
       for(const f of def.fields){values[f.fieldDefNum]=readFieldValue(dv,p,f,def.littleEndian);p+=f.size;}
+      if(def.devFields && def.devFields.length){ for(const df of def.devFields){ p += df.size; } }
       let prev=lastTs[localType]||0;
       let ts=(prev&~0x1f)|timeOffset;
       if(ts<prev)ts+=0x20;
@@ -2750,13 +2944,23 @@ function parseFIT(buffer){
           const baseType=dv.getUint8(p);p+=1;
           fields.push({fieldDefNum,size,baseType});
         }
-        if(devFlag){const numDev=dv.getUint8(p);p+=1;for(let i=0;i<numDev;i++)p+=3;}
-        defs[localType]={globalMsgNum,littleEndian:le,fields};
+        const devFields=[];
+        if(devFlag){
+          const numDev=dv.getUint8(p);p+=1;
+          for(let i=0;i<numDev;i++){
+            const fieldDefNum=dv.getUint8(p);p+=1;
+            const size=dv.getUint8(p);p+=1;
+            const devDataIndex=dv.getUint8(p);p+=1;
+            devFields.push({fieldDefNum, size, devDataIndex});
+          }
+        }
+        defs[localType]={globalMsgNum,littleEndian:le,fields,devFields};
       }else{
         const def=defs[localType];
         if(!def)break;
         const values={};
         for(const f of def.fields){values[f.fieldDefNum]=readFieldValue(dv,p,f,def.littleEndian);p+=f.size;}
+        if(def.devFields && def.devFields.length){ for(const df of def.devFields){ p += df.size; } }
         if(values[253]!=null)lastTs[localType]=values[253];
         records.push({globalMsgNum:def.globalMsgNum,values});
       }
@@ -3012,7 +3216,7 @@ function buildActivity(opt){
     ele:p.ele!=null?p.ele:0,cad:p.cad||0,temp:p.temp!=null?p.temp:0,power:p.power||0,lat:p.lat,lon:p.lon,
   })),800);
   return {
-    id:'a'+Date.now().toString(36)+Math.random().toString(36).slice(2,7),
+    id:genId('a'),
     name:opt.name||'未命名活动',type:opt.type||'other',indoor:!!opt.indoor,
     date:opt.date||(t0?new Date(t0).toISOString():new Date().toISOString()),
     duration:Math.round(duration),distance:Math.round(distance),
@@ -3023,6 +3227,10 @@ function buildActivity(opt){
     maxTemp:temps.length?Math.max.apply(null,temps):null,
     zones:zoneSec.map(v=>Math.round(v)),points:finalPoints,source:opt.source||'manual',
     trackImage:opt.trackImage||null,
+    voAvg: opt.voAvg != null && isFinite(opt.voAvg) ? opt.voAvg : null,
+    strideLenAvg: opt.strideLenAvg != null && isFinite(opt.strideLenAvg) ? opt.strideLenAvg : null,
+    vertOscAvg: opt.vertOscAvg != null && isFinite(opt.vertOscAvg) ? opt.vertOscAvg : null,
+    gctAvg: opt.gctAvg != null && isFinite(opt.gctAvg) ? opt.gctAvg : null,
   };
 }
 
@@ -3228,6 +3436,316 @@ async function parseXlsxFile(buffer, filename){
   return acts;
 }
 
+/* ============================================================
+   Garmin 官方 CSV 支持
+   ============================================================ */
+function parseCSV(text){
+  if(text == null) return [];
+  if(text.charCodeAt(0) === 0xFEFF) text = text.slice(1);
+  const rows = [];
+  let cur = [];
+  let field = '';
+  let i = 0;
+  let inQuotes = false;
+  const len = text.length;
+  while(i < len){
+    const c = text[i];
+    if(inQuotes){
+      if(c === '"'){
+        if(text[i+1] === '"'){ field += '"'; i += 2; continue; }
+        inQuotes = false; i++;
+      } else { field += c; i++; }
+    } else {
+      if(c === '"'){ inQuotes = true; i++; }
+      else if(c === ','){ cur.push(field); field = ''; i++; }
+      else if(c === '\r'){
+        if(text[i+1] === '\n') i += 2; else i++;
+        cur.push(field); field = '';
+        rows.push(cur); cur = [];
+      } else if(c === '\n'){
+        cur.push(field); field = '';
+        rows.push(cur); cur = [];
+        i++;
+      } else { field += c; i++; }
+    }
+  }
+  if(field.length > 0 || cur.length > 0){
+    cur.push(field);
+    rows.push(cur);
+  }
+  return rows.filter(r => r.some(c => String(c || '').trim() !== ''));
+}
+
+function detectGarminCSV(rows){
+  if(!rows || !rows.length) return null;
+  const header = (rows[0] || []).map(h => String(h || '').trim()).join('|');
+  if(/活动类型/.test(header) && /日期/.test(header) && /距离/.test(header)) return 'activities';
+  if(/计圈/.test(header) && /累积时间/.test(header)) return 'laps';
+  if(/摘要信息/.test(header)) return 'laps';
+  return null;
+}
+
+function parseNumLoose(v){
+  if(v == null) return null;
+  let s = String(v).trim();
+  if(!s || s === '--' || s === '-' || s === '—') return null;
+  s = s.replace(/,/g, '');
+  s = s.replace(/^['"]/, '').replace(/['"]$/, '');
+  const n = parseFloat(s);
+  return isFinite(n) ? n : null;
+}
+
+function parseDurationStr(s){
+  if(s == null) return 0;
+  const str = String(s).trim();
+  if(!str || str === '--') return 0;
+  let m = str.match(/^(\d+):(\d+):(\d+(?:\.\d+)?)$/);
+  if(m) return (+m[1]) * 3600 + (+m[2]) * 60 + parseFloat(m[3]);
+  m = str.match(/^(\d+):(\d+(?:\.\d+)?)$/);
+  if(m) return (+m[1]) * 60 + parseFloat(m[2]);
+  const n = parseFloat(str);
+  return isFinite(n) ? n : 0;
+}
+
+function parsePaceStr(s){
+  if(s == null) return 0;
+  const str = String(s).trim();
+  if(!str || str === '--') return 0;
+  const m = str.match(/^(\d+):(\d+(?:\.\d+)?)$/);
+  if(m) return (+m[1]) * 60 + parseFloat(m[2]);
+  const n = parseFloat(str);
+  return isFinite(n) ? n : 0;
+}
+
+function normalizeGarminType(s){
+  const t = String(s || '').trim();
+  if(/跑步机|treadmill/i.test(t)) return { type:'run',   indoor:true  };
+  if(/跑步|run|jog|慢跑/i.test(t)) return { type:'run',   indoor:false };
+  if(/骑行|单车|自行车|cycl|bik|ride/i.test(t)) return { type:'cycle', indoor:false };
+  if(/游泳|泳|swim/i.test(t)) return { type:'swim',  indoor:true  };
+  if(/徒步|登山|爬山|hike|hiking/i.test(t)) return { type:'hike',  indoor:false };
+  if(/步行|行走|散步|walk/i.test(t)) return { type:'walk',  indoor:false };
+  if(/力量|健身|器械|strength|gym|weight/i.test(t)) return { type:'gym',   indoor:true  };
+  if(/室内|indoor|虚拟|virtual/i.test(t)) return { type:'other', indoor:true  };
+  return { type:'other', indoor:false };
+}
+
+function parseGarminDate(s){
+  if(!s) return new Date().toISOString();
+  const str = String(s).trim();
+  if(!str) return new Date().toISOString();
+  const m = str.match(/^(\d{4})-(\d{1,2})-(\d{1,2})[ T](\d{1,2}):(\d{1,2})(?::(\d{1,2}))?/);
+  if(m){
+    const d = new Date(+m[1], +m[2]-1, +m[3], +m[4], +m[5], +(m[6]||0));
+    if(!isNaN(d)) return d.toISOString();
+  }
+  const t = Date.parse(str.replace(/ /g, 'T'));
+  if(isFinite(t)) return new Date(t).toISOString();
+  return new Date().toISOString();
+}
+
+/* Garmin Activities.csv */
+function garminActivitiesRowsToActivities(rows, filename){
+  if(!rows || rows.length < 2) return [];
+  const header = (rows[0] || []).map(h => String(h || '').trim());
+  const col = {};
+  header.forEach((h, i) => {
+    if(/^活动类型$/.test(h)) col.type = i;
+    else if(/^日期$/.test(h)) col.date = i;
+    else if(/^标题$/.test(h)) col.title = i;
+    else if(/^距离$/.test(h)) col.distance = i;
+    else if(/^热量消耗$/.test(h)) col.calories = i;
+    else if(/^时间$/.test(h)) col.duration = i;
+    else if(/^平均心率$/.test(h)) col.avgHR = i;
+    else if(/^最大心率$/.test(h)) col.maxHR = i;
+    else if(/^平均步频$/.test(h)) col.avgCad = i;
+    else if(/^累计爬升$/.test(h)) col.elevation = i;
+    else if(/^累计下降$/.test(h)) col.descent = i;
+    else if(/^平均功率$/.test(h)) col.avgPower = i;
+    else if(/^最大功率$/.test(h)) col.maxPower = i;
+    else if(/^最低温度$/.test(h)) col.minTemp = i;
+    else if(/^最高温度$/.test(h)) col.maxTemp = i;
+    else if(/^平均配速$/.test(h)) col.avgPace = i;
+    else if(/^步数$/.test(h)) col.steps = i;
+    else if(/^平均垂直步幅比$/.test(h)) col.vo = i;
+    else if(/^平均步长$/.test(h)) col.strideLen = i;
+    else if(/^平均垂直摆动$/.test(h)) col.vertOsc = i;
+    else if(/^平均触地时间$/.test(h)) col.gct = i;
+  });
+  if(col.type == null || col.date == null) return [];
+  const acts = [];
+  for(let i = 1; i < rows.length; i++){
+    const row = rows[i];
+    if(!row || !row.length) continue;
+    const get = (k) => {
+      const ci = col[k];
+      if(ci == null) return '';
+      const v = row[ci];
+      return v == null ? '' : String(v).trim();
+    };
+    const typeRaw = get('type');
+    if(!typeRaw) continue;
+    const typeInfo = normalizeGarminType(typeRaw);
+    const dateRaw = get('date');
+    const title = get('title') || (TYPE_META[typeInfo.type] || TYPE_META.other).label;
+    const distKm = parseNumLoose(get('distance'));
+    const distance = distKm != null ? distKm * 1000 : 0;
+    const duration = parseDurationStr(get('duration'));
+    const calories = parseNumLoose(get('calories')) || 0;
+    const avgHR = parseNumLoose(get('avgHR'));
+    const maxHR = parseNumLoose(get('maxHR'));
+    const avgCad = parseNumLoose(get('avgCad'));
+    const elevation = parseNumLoose(get('elevation')) || 0;
+    const descent = parseNumLoose(get('descent')) || 0;
+    const avgPower = parseNumLoose(get('avgPower'));
+    const maxPower = parseNumLoose(get('maxPower'));
+    const minTemp = parseNumLoose(get('minTemp'));
+    const maxTemp = parseNumLoose(get('maxTemp'));
+    const voAvg = parseNumLoose(get('vo'));
+    const strideLenAvg = parseNumLoose(get('strideLen'));
+    const vertOscAvg = parseNumLoose(get('vertOsc'));
+    const gctAvg = parseNumLoose(get('gct'));
+    if(distance === 0 && duration === 0) continue;
+    try {
+      const a = buildActivity({
+        name: title,
+        type: typeInfo.type,
+        indoor: typeInfo.indoor,
+        date: parseGarminDate(dateRaw),
+        points: [],
+        presetDuration: duration,
+        presetDistance: distance,
+        calories,
+        avgHR,
+        maxHR,
+        ascent: elevation,
+        descent,
+        avgCad,
+        avgPower,
+        maxPower,
+        avgTemp: (minTemp != null && maxTemp != null) ? Math.round((minTemp + maxTemp) / 2) : (minTemp != null ? minTemp : maxTemp),
+        voAvg,
+        strideLenAvg,
+        vertOscAvg,
+        gctAvg,
+        source: filename,
+      });
+      if(a){
+        a.minTemp = minTemp != null ? minTemp : null;
+        a.maxTemp = maxTemp != null ? maxTemp : null;
+        acts.push(a);
+      }
+    } catch(err){ console.warn('Activities.csv 行解析失败', i, err); }
+  }
+  return acts;
+}
+
+/* Garmin activity_*.csv */
+function garminLapRowsToActivity(rows, filename, fallbackDateMs){
+  if(!rows || rows.length < 2) return null;
+  let summaryRow = null;
+  for(let i = rows.length - 1; i >= 1; i--){
+    const row = rows[i];
+    if(row && String(row[0] || '').trim() === '摘要信息'){ summaryRow = row; break; }
+  }
+  if(!summaryRow) return null;
+  const duration = parseDurationStr(summaryRow[1]);
+  const totalDistKm = parseNumLoose(summaryRow[3]);
+  const distance = totalDistKm != null ? totalDistKm * 1000 : 0;
+  const avgHR = parseNumLoose(summaryRow[6]);
+  const maxHR = parseNumLoose(summaryRow[7]);
+  const elevation = parseNumLoose(summaryRow[8]) || 0;
+  const descent = parseNumLoose(summaryRow[9]) || 0;
+  const avgPower = parseNumLoose(summaryRow[10]);
+  const maxPower = parseNumLoose(summaryRow[12]);
+  const avgCad = parseNumLoose(summaryRow[14]);
+  const strideLenAvg = parseNumLoose(summaryRow[17]);
+  const vertOscAvg = parseNumLoose(summaryRow[18]);
+  const voAvg = parseNumLoose(summaryRow[19]);
+  const gctAvg = parseNumLoose(summaryRow[15]);
+  const calories = parseNumLoose(summaryRow[20]) || 0;
+  const avgTemp = parseNumLoose(summaryRow[21]);
+  if(duration === 0 && distance === 0) return null;
+
+  const baseTime = fallbackDateMs && isFinite(fallbackDateMs) ? fallbackDateMs : Date.now();
+
+  const lapPoints = [];
+  let cumTime = 0;
+  let cumDist = 0;
+  for(let i = 1; i < rows.length; i++){
+    const row = rows[i];
+    if(!row || !row.length) continue;
+    if(String(row[0] || '').trim() === '摘要信息') break;
+    const lapTime = parseDurationStr(row[1]);
+    const lapDistKm = parseNumLoose(row[3]);
+    const lapDist = lapDistKm != null ? lapDistKm * 1000 : 0;
+    if(lapTime <= 0 && lapDist <= 0) continue;
+    const lapHR = parseNumLoose(row[6]);
+    const lapCad = parseNumLoose(row[14]);
+    const lapPower = parseNumLoose(row[10]);
+    const lapTemp = parseNumLoose(row[21]);
+    const N_PER_LAP = 8;
+    for(let k = 0; k < N_PER_LAP; k++){
+      const p = k / N_PER_LAP;
+      const tSec = cumTime + lapTime * p;
+      const dMeters = cumDist + lapDist * p;
+      lapPoints.push({
+        d: dMeters,
+        t: baseTime + tSec * 1000,
+        hr: lapHR || 0,
+        sp: lapTime > 0 ? lapDist / lapTime : 0,
+        cad: lapCad || 0,
+        power: lapPower || 0,
+        temp: lapTemp != null ? lapTemp : 0,
+        ele: 0,
+        lat: null, lon: null,
+      });
+    }
+    cumTime += lapTime;
+    cumDist += lapDist;
+  }
+  if(lapPoints.length >= 2){
+    const last = lapPoints[lapPoints.length - 1];
+    if(distance > 0 && Math.abs(last.d - distance) > 1){
+      last.d = distance;
+    }
+    if(duration > 0 && Math.abs((last.t - baseTime) / 1000 - duration) > 1){
+      last.t = baseTime + duration * 1000;
+    }
+  }
+
+  const nameBase = filename.replace(/\.csv$/i, '').replace(/^activity_/i, '跑步活动 ');
+  try {
+    const a = buildActivity({
+      name: nameBase,
+      type: 'run',
+      indoor: false,
+      date: new Date(baseTime).toISOString(),
+      points: lapPoints,
+      presetDuration: duration,
+      presetDistance: distance,
+      calories,
+      avgHR,
+      maxHR,
+      ascent: elevation,
+      descent,
+      avgCad,
+      avgPower,
+      maxPower,
+      avgTemp,
+      voAvg,
+      strideLenAvg,
+      vertOscAvg,
+      gctAvg,
+      source: filename,
+    });
+    return a;
+  } catch(err){
+    console.warn('分圈文件解析失败', filename, err);
+    return null;
+  }
+}
+
 /* ============ 文件导入 ============ */
 async function importFiles(fileList){
   const files=Array.from(fileList||[]);
@@ -3267,6 +3785,21 @@ async function importFiles(fileList){
         const list=await parseXlsxFile(buf, file.name);
         if(!list.length) throw new Error('表格中未识别到运动记录（缺少表头或数据）');
         for(const a of list) pushActivity(a);
+      }else if(ext==='csv'){
+        const text=await file.text();
+        const rows=parseCSV(text);
+        const kind=detectGarminCSV(rows);
+        if(kind==='activities'){
+          const list=garminActivitiesRowsToActivities(rows, file.name);
+          if(!list.length) throw new Error('Activities.csv 中未识别到活动记录（表头或数据异常）');
+          for(const a of list) pushActivity(a);
+        }else if(kind==='laps'){
+          const a=garminLapRowsToActivity(rows, file.name, file.lastModified);
+          if(a) pushActivity(a);
+          else throw new Error('分圈文件解析失败：缺少摘要信息行或数据不完整');
+        }else{
+          throw new Error('无法识别的 CSV 格式（需要 Garmin Activities.csv 或分圈文件）');
+        }
       }else if(ext==='xls'){
         throw new Error('旧版 .xls 不受支持，请另存为 .xlsx 后再导入');
       }else{
@@ -3444,7 +3977,7 @@ async function generateDemoData(){
     };
     const nm= force ? '汉中市 跑步' : names[type][Math.floor(Math.random()*names[type].length)];
     list.push({
-      id:'d'+day.getTime().toString(36)+Math.random().toString(36).slice(2,6),
+      id:genId('d'),
       name:nm,type,indoor,date:day.toISOString(),
       duration:Math.round(dur),distance:Math.round(dist),
       elevation:elev,descent:Math.round(elev*0.9),
@@ -3456,6 +3989,10 @@ async function generateDemoData(){
       maxPower:type==='cycle'?420:type==='run'?480:null,
       zones:zones.map(v=>Math.round(v)),points:pts,source:'demo',
       trackImage:null,
+      voAvg: type==='run' ? +(6.9 + Math.random()*1.0).toFixed(1) : null,
+      strideLenAvg: type==='run' ? +(1.02 + Math.random()*0.12).toFixed(2) : null,
+      vertOscAvg: type==='run' ? +(7.5 + Math.random()*0.8).toFixed(1) : null,
+      gctAvg: type==='run' ? Math.round(225 + Math.random()*20) : null,
     });
   }
   State.activities=list.sort((a,b)=>new Date(b.date)-new Date(a.date));
@@ -3510,7 +4047,6 @@ function renderDashboard(){
   setKPI('#kWalkOutdoor','#kWalkOutdoorSub',sum(outdoor(walkAll),'distance'),`室外 ${outdoor(walkAll).length} 次`);
   const hikeAll=byType('hike');
   setKPI('#kHikeTotal','#kHikeTotalSub',sum(hikeAll,'distance'),`共 ${hikeAll.length} 次徒步`);
-
   if (HeatmapChart.canvas) {
     requestAnimationFrame(() => {
       HeatmapChart.setPBDays(State.pbCache.byDay);
@@ -3520,12 +4056,12 @@ function renderDashboard(){
   }
 }
 
-/* ============ PB 网格（数据分析页 - 现有） ============ */
+/* ============ PB 网格 ============ */
 function renderPBGrid() {
   const container = document.getElementById('pbContainer');
   if (!container) return;
   if (!State.activities.length) {
-    container.innerHTML = `<div class="card glass" style="padding:var(--s5);"><div class="empty"><span class="e-ico">🏆</span><span class="e-t">暂无 PB 数据</span><span class="e-d">导入活动后，系统会自动计算各类型运动的最佳纪录，并在热力图上用金色光环标记。</span></div></div>`;
+    container.innerHTML = `<div class="card glass" style="padding:var(--s5);"><div class="empty"><span class="e-ico">${ic('trophy',38)}</span><span class="e-t">暂无 PB 数据</span><span class="e-d">导入活动后，系统会自动计算各类型运动的最佳纪录，并在热力图上用金色光环标记。</span></div></div>`;
     return;
   }
   const pb = State.pbCache.byType;
@@ -3545,13 +4081,13 @@ function renderPBGrid() {
           <div class="pb-tile" data-id="${rec.activity.id}" title="点击查看详情">
             <div class="pb-tile-label">${def.label}</div>
             <div class="pb-tile-value">${rec.formatted}</div>
-            <div class="pb-tile-date">${dateStr} <span class="pb-tile-trophy">🏆</span></div>
+            <div class="pb-tile-date">${dateStr} <span class="pb-tile-trophy">${ic('trophy',11)}</span></div>
           </div>`;
       }).join('');
     sections.push(`
       <div class="pb-section">
         <div class="pb-section-head">
-          <span class="pb-section-icon">${meta.icon}</span>
+          <span class="pb-section-icon">${ic(meta.icon,18)}</span>
           <span class="pb-section-name">${meta.label}</span>
         </div>
         <div class="pb-grid">${tiles}</div>
@@ -3559,18 +4095,18 @@ function renderPBGrid() {
   }
   container.innerHTML = sections.length
     ? sections.join('')
-    : `<div class="card glass" style="padding:var(--s5);"><div class="empty"><span class="e-ico">🏆</span><span class="e-t">暂无 PB 数据</span></div></div>`;
+    : `<div class="card glass" style="padding:var(--s5);"><div class="empty"><span class="e-ico">${ic('trophy',38)}</span><span class="e-t">暂无 PB 数据</span></div></div>`;
   container.querySelectorAll('.pb-tile').forEach(el => {
     el.addEventListener('click', () => openActivityDetail(el.dataset.id));
   });
 }
 
-/* ============ 分段 PB 网格（数据分析页 - 新增） ============ */
+/* ============ 分段 PB 网格 ============ */
 function renderAnalysisSegPBs() {
   const container = document.getElementById('segPBContainer');
   if (!container) return;
   if (!State.activities.length) {
-    container.innerHTML = `<div class="card glass" style="padding:var(--s5);"><div class="empty"><span class="e-ico">⏱️</span><span class="e-t">暂无分段数据</span><span class="e-d">导入活动后，系统会自动计算各运动类型的分段最佳时间。</span></div></div>`;
+    container.innerHTML = `<div class="card glass" style="padding:var(--s5);"><div class="empty"><span class="e-ico">${ic('timer',38)}</span><span class="e-t">暂无分段数据</span><span class="e-d">导入活动后，系统会自动计算各运动类型的分段最佳时间。</span></div></div>`;
     return;
   }
   const allSeg = computeAllSegPBs();
@@ -3601,7 +4137,6 @@ function renderAnalysisSegPBs() {
         if (pb.activity.type === 'swim') dist = `${Math.round(pb.activity.distance)} m`;
         else dist = `${(pb.activity.distance/dd).toFixed(2)} ${du}`;
       }
-      // 该分段平均配速（按目标距离计算）
       let paceStr = '';
       if (pb.target > 0 && pb.value > 0) {
         const segKm = pb.target / 1000;
@@ -3609,7 +4144,7 @@ function renderAnalysisSegPBs() {
         paceStr = `均速 ${fmtPace(paceSec)}/${du}`;
       }
       return `<div class="seg-pb-card" data-id="${pb.activity.id}" title="点击查看详情">
-        <div class="seg-pb-card-label">🏆 ${seg.label}</div>
+        <div class="seg-pb-card-label">${ic('trophy',11)} ${seg.label}</div>
         <div class="seg-pb-card-value">${fmtDur(pb.value)}</div>
         <div class="seg-pb-card-meta">
           <span class="d">${dateStr}</span>
@@ -3621,7 +4156,7 @@ function renderAnalysisSegPBs() {
     sections.push(`
       <div class="pb-section">
         <div class="pb-section-head">
-          <span class="pb-section-icon">${meta.icon}</span>
+          <span class="pb-section-icon">${ic(meta.icon,18)}</span>
           <span class="pb-section-name">${meta.label} · 分段最佳时间</span>
         </div>
         <div class="${gridClass}">${cards}</div>
@@ -3630,15 +4165,17 @@ function renderAnalysisSegPBs() {
   }
   container.innerHTML = sections.length
     ? sections.join('')
-    : `<div class="card glass" style="padding:var(--s5);"><div class="empty"><span class="e-ico">⏱️</span><span class="e-t">暂无分段数据</span></div></div>`;
+    : `<div class="card glass" style="padding:var(--s5);"><div class="empty"><span class="e-ico">${ic('timer',38)}</span><span class="e-t">暂无分段数据</span></div></div>`;
   container.querySelectorAll('.seg-pb-card[data-id]').forEach(el => {
     el.addEventListener('click', () => openActivityDetail(el.dataset.id));
   });
 }
 
-/* ============ 当日详情 ============ */
+/* ============================================================
+   当日详情
+   ============================================================ */
 const TodayDetail = {
-  activity: null, page: 0, hoverIndex: -1, chartData: null, chartCardEl: null,
+  activity: null, list: [], idx: 0, page: 0, hoverIndex: -1, chartData: null, chartCardEl: null,
   open(cardType){
     let type = 'run';
     if(cardType === 'cycle-today') type = 'cycle';
@@ -3647,15 +4184,55 @@ const TodayDetail = {
     const list = State.activities.filter(a => a.type === type && dayKey(new Date(a.date)) === todayK)
       .sort((a,b) => new Date(a.date) - new Date(b.date));
     if(!list.length){ toast(`今日暂无${TYPE_META[type].label}活动`, 'info'); return; }
-    this.activity = list[list.length - 1];
+    this.list = list;
+    this.idx = list.length - 1;
+    this.activity = list[this.idx];
     this.page = 0;
     this.hoverIndex = -1;
     this.chartData = this.prepareChartData(this.activity);
-    $('#todayTitle').textContent = this.activity.name;
-    $('#todaySub').textContent = `${TYPE_META[type].label} · ${fmtDate(this.activity.date)}`;
+    this.updateHeader();
     State.prevView = State.view;
     switchView('today');
     requestAnimationFrame(() => this.renderStage());
+  },
+  updateHeader(){
+    const a = this.activity;
+    if(!a) return;
+    const meta = TYPE_META[a.type] || TYPE_META.other;
+    $('#todayTitle').textContent = a.name;
+    let sub = `${meta.label} · ${fmtDate(a.date)}`;
+    if(this.list.length > 1){
+      sub += ` · 今日共 ${this.list.length} 次，当前第 ${this.idx + 1} 次`;
+    }
+    $('#todaySub').textContent = sub;
+    const sw = $('#todayActSwitcher');
+    if(!sw) return;
+    if(this.list.length > 1){
+      sw.classList.add('on');
+      sw.innerHTML = `
+        <button class="btn btn-ghost" id="todayPrevAct" title="上一次" ${this.idx === 0 ? 'disabled' : ''}>${ic('chevronLeft',18)}</button>
+        <span class="counter">${this.idx + 1} / ${this.list.length}</span>
+        <button class="btn btn-ghost" id="todayNextAct" title="下一次" ${this.idx === this.list.length - 1 ? 'disabled' : ''}>${ic('chevronRight',18)}</button>
+      `;
+      const prev = sw.querySelector('#todayPrevAct');
+      const next = sw.querySelector('#todayNextAct');
+      if(prev) prev.addEventListener('click', (e) => { e.stopPropagation(); this.switchActivity(-1); });
+      if(next) next.addEventListener('click', (e) => { e.stopPropagation(); this.switchActivity(1); });
+    } else {
+      sw.classList.remove('on');
+      sw.innerHTML = '';
+    }
+  },
+  switchActivity(delta){
+    const ni = clamp(this.idx + delta, 0, this.list.length - 1);
+    if(ni === this.idx) return;
+    this.idx = ni;
+    this.activity = this.list[this.idx];
+    this.hoverIndex = -1;
+    this.chartData = this.prepareChartData(this.activity);
+    this.page = 0;
+    this.updateHeader();
+    this.renderStage();
   },
   prepareChartData(activity){
     const pts = activity.points || [];
@@ -3669,14 +4246,6 @@ const TodayDetail = {
     const xLabels = [0, 0.25, 0.5, 0.75, 1].map(p => fmtDurShort(dur * p));
     const timeLabels = sampled.map(p => fmtDurShort((p.t - t0) / 1000));
     const hrValues = sampled.map(p => p.hr || 0);
-    const maxHRSet = State.settings.maxHR || 189;
-    let bb = 0;
-    const bbValues = sampled.map(p => {
-      const r = (p.hr || 0) / maxHRSet;
-      const delta = r > 0.85 ? -0.6 : r > 0.75 ? -0.2 : r > 0.6 ? 0.1 : 0.5;
-      bb += delta;
-      return Math.max(-20, Math.min(20, bb));
-    });
     const strideValues = sampled.map(p => {
       const cad = p.cad || 0;
       const sp = p.sp || 0;
@@ -3685,18 +4254,30 @@ const TodayDetail = {
     });
     const cadValues = sampled.map(p => p.cad || 0);
     const powerValues = sampled.map(p => p.power || 0);
-    const voValues = sampled.map((p, i) => 7.0 + Math.sin(i / 20) * 0.4 + (Math.random() - 0.5) * 0.15);
+    const hrPaceValues = sampled.map(p => {
+      const sp = p.sp || 0;
+      const hr = p.hr || 0;
+      if(sp > 0.5 && hr > 40) return hr / sp;
+      return 0;
+    });
     const avg = arr => { const valid = arr.filter(v => v > 0); return valid.length ? valid.reduce((a,b)=>a+b,0)/valid.length : 0; };
+    const charts = [
+      { id:'hr',    label:'心率',           color:'#FF453A', values:hrValues,    unit:'bpm',   avg:activity.avgHR, baselineZero:false },
+      { id:'stride',label:'步幅',           color:'#64D2FF', values:strideValues,unit:'米',    avg:avg(strideValues), baselineZero:false },
+      { id:'cad',   label:'步频',           color:'#BF5AF2', values:cadValues,   unit:'步/分', avg:activity.avgCad || avg(cadValues), baselineZero:false },
+      { id:'power', label:'功率',           color:'#BF5AF2', values:powerValues, unit:'瓦',    avg:activity.avgPower || avg(powerValues), baselineZero:false },
+    ];
+    if(hrPaceValues.filter(v => v > 0).length > 5){
+      charts.push({
+        id:'hrpace', label:'心率-速度比',  color:'#FF9F0A',
+        values: hrPaceValues, unit:'bpm/(m/s)',
+        avg: avg(hrPaceValues), baselineZero:false,
+      });
+    }
     return {
       xLabels, timeLabels,
-      charts: [
-        { id:'hr',    label:'心率',           color:'#FF453A', values:hrValues,    unit:'bpm',   avg:activity.avgHR, baselineZero:false },
-        { id:'bb',    label:'体能状况指数',   color:'#0A84FF', values:bbValues,    unit:'',      avg:null,           baselineZero:true  },
-        { id:'stride',label:'步幅',           color:'#64D2FF', values:strideValues,unit:'米',    avg:avg(strideValues), baselineZero:false },
-        { id:'cad',   label:'步频',           color:'#BF5AF2', values:cadValues,   unit:'步/分', avg:activity.avgCad || avg(cadValues), baselineZero:false },
-        { id:'power', label:'功率',           color:'#BF5AF2', values:powerValues, unit:'瓦',    avg:activity.avgPower || avg(powerValues), baselineZero:false },
-        { id:'vo',    label:'垂直步幅比',     color:'#0A84FF', values:voValues,    unit:'%',     avg:avg(voValues), baselineZero:false },
-      ],
+      charts,
+      hrDrift: computeHrDrift(sampled),
     };
   },
   renderStage(){
@@ -3735,13 +4316,13 @@ const TodayDetail = {
     card.innerHTML = `
       <div class="today-card-head">
         <div class="today-card-title">
-          <span class="ic">${meta.icon}</span>
+          <span class="ic">${ic(meta.icon,24)}</span>
           <div style="min-width:0;">
             <div class="name">${escapeHtml(a.name)}</div>
             <div class="meta">${meta.label} · ${fmtDate(a.date)} · 来源 ${escapeHtml(a.source || '未知')}</div>
           </div>
         </div>
-        <span class="tag blue">📍 轨迹</span>
+        <span class="tag blue">${ic('route',12)} 轨迹</span>
       </div>
       <div class="today-track-body">
         <div class="today-track-metrics">
@@ -3765,13 +4346,13 @@ const TodayDetail = {
     card.innerHTML = `
       <div class="today-card-head">
         <div class="today-card-title">
-          <span class="ic">📊</span>
+          <span class="ic">${ic('bar',24)}</span>
           <div style="min-width:0;">
             <div class="name">坐标系对比</div>
             <div class="meta">鼠标悬停任意图表，所有图表会在同一时刻同步显示</div>
           </div>
         </div>
-        <span class="tag blue">📊 对比</span>
+        <span class="tag blue">${ic('bar',12)} 对比</span>
       </div>
       <div class="today-charts-body">
         ${data.charts.map(c => `
@@ -3798,6 +4379,9 @@ const TodayDetail = {
     const isRun = a.type === 'run' || a.type === 'walk' || a.type === 'hike';
     const zones = a.zones || [0,0,0,0,0];
     const zTotal = zones.reduce((x,y) => x+y, 0) || 1;
+    const driftVal = this.chartData && this.chartData.hrDrift;
+    const driftStr = driftVal != null ? `${driftVal >= 0 ? '+' : ''}${driftVal.toFixed(1)}%` : '—';
+    const driftCls = driftVal == null ? 'flat' : (Math.abs(driftVal) > 10 ? 'down' : '');
     const stats = [
       { k: '距离', v: a.distance > 0 ? `${num(a.distance/dd, 2)} ${du}` : '—' },
       { k: '时长', v: fmtDur(a.duration) },
@@ -3807,7 +4391,12 @@ const TodayDetail = {
       { k: '累计下降', v: `${num(a.descent||0)} m` },
       { k: '平均心率', v: a.avgHR ? `${a.avgHR} bpm` : '—' },
       { k: '最大心率', v: a.maxHR ? `${a.maxHR} bpm` : '—' },
+      { k: '心率漂移', v: driftStr, cls: driftCls },
       { k: '平均步频', v: a.avgCad ? `${a.avgCad} spm` : '—' },
+      { k: '垂直步幅比', v: a.voAvg != null ? `${a.voAvg.toFixed(1)}%` : '—' },
+      { k: '平均步长', v: a.strideLenAvg != null ? `${a.strideLenAvg.toFixed(2)} m` : '—' },
+      { k: '垂直摆动', v: a.vertOscAvg != null ? `${a.vertOscAvg.toFixed(1)} cm` : '—' },
+      { k: '平均触地时间', v: a.gctAvg != null ? `${Math.round(a.gctAvg)} ms` : '—' },
       { k: '平均功率', v: a.avgPower ? `${a.avgPower} W` : '—' },
       { k: '平均温度', v: a.avgTemp != null ? `${a.avgTemp} °C` : '—' },
       { k: '热量消耗', v: `${num(a.calories)} kcal` },
@@ -3819,13 +4408,13 @@ const TodayDetail = {
     card.innerHTML = `
       <div class="today-card-head">
         <div class="today-card-title">
-          <span class="ic">📋</span>
+          <span class="ic">${ic('list',24)}</span>
           <div style="min-width:0;">
             <div class="name">区间与统计</div>
             <div class="meta">心率区间分布与完整数据</div>
           </div>
         </div>
-        <span class="tag blue">📋 统计</span>
+        <span class="tag blue">${ic('list',12)} 统计</span>
       </div>
       <div class="today-summary-body">
         <div class="today-summary-block">
@@ -3844,7 +4433,7 @@ const TodayDetail = {
         <div class="today-summary-block">
           <div class="today-summary-title"><span class="dot" style="background:var(--blue)"></span>统计信息</div>
           <div class="today-stats-grid">
-            ${stats.map(s => `<div class="today-stat"><span class="k">${s.k}</span><span class="v">${s.v}</span></div>`).join('')}
+            ${stats.map(s => `<div class="today-stat"><span class="k">${s.k}</span><span class="v" style="${s.cls==='down'?'color:var(--red);':''}">${s.v}</span></div>`).join('')}
           </div>
         </div>
       </div>
@@ -4261,13 +4850,13 @@ function renderDetailStage(){
   stage.innerHTML='';
   stage.classList.toggle('no-cards',Detail.cards.length===0);
   if(!Detail.cards.length){
-    stage.innerHTML=`<div class="empty"><span class="e-ico">📭</span><span class="e-t">暂无该类别活动数据</span><span class="e-d">请先导入 FIT / GPX / TCX / XLSX 文件，或点击「演示数据」快速体验。</span></div>`;
+    stage.innerHTML=`<div class="empty"><span class="e-ico">${ic('inbox',38)}</span><span class="e-t">暂无该类别活动数据</span><span class="e-d">请先导入 FIT / GPX / TCX / XLSX / CSV 文件，或点击「演示数据」快速体验。</span></div>`;
     return;
   }
   Detail.cards.forEach((cardData,i)=>{const cardEl=buildDetailCardEl(cardData,i);stage.appendChild(cardEl);});
   const hint=document.createElement('div');
   hint.className='dc-drag-hint';
-  hint.innerHTML='<span class="ic">↔</span>拖动或点击两侧卡片切换周期';
+  hint.innerHTML=`${ic('chevronLeft',12)} 拖动或点击两侧卡片切换周期 ${ic('chevronRight',12)}`;
   stage.appendChild(hint);
   const dots=document.createElement('div');
   dots.className='dc-dots';
@@ -4338,7 +4927,7 @@ function buildDetailCardEl(cardData,index){
     const aDist=a.distance>0?`${num(a.distance/dd,2)} ${du}`:'—';
     const aPace=isRun&&a.distance>0&&a.duration>0?fmtPace(a.duration/(a.distance/dd)):fmtHM(a.duration);
     return `<div class="dc-act-item" data-id="${a.id}">
-      <div class="dc-act-ico" style="background:${hexA(aMeta.color,.18)}">${aMeta.icon}</div>
+      <div class="dc-act-ico" style="background:${hexA(aMeta.color,.18)};color:${aMeta.color}">${ic(aMeta.icon,16)}</div>
       <div class="dc-act-info">
         <div class="dc-act-name">${escapeHtml(a.name)}</div>
         <div class="dc-act-meta">${fmtDate(a.date)} · ${aMeta.label}</div>
@@ -4350,7 +4939,7 @@ function buildDetailCardEl(cardData,index){
   card.innerHTML=`
     <div class="dc-scroll">
       <div class="dc-head">
-        <div class="dc-title"><span class="ic">${meta.icon}</span><span>${meta.label}</span><span class="arrow">›</span></div>
+        <div class="dc-title"><span class="ic">${ic(meta.icon,22)}</span><span>${meta.label}</span><span class="arrow">›</span></div>
         <div class="dc-period ${index===Detail.index?'highlight':''}">${PERIOD_LABELS[period]}</div>
       </div>
       <div class="dc-metrics">${metricsHTML}</div>
@@ -4616,7 +5205,7 @@ function renderActivities(){
   $('#actCount').textContent=State.activities.length;
   $('#navCount').textContent=State.activities.length;
   if(!list.length){
-    box.innerHTML=`<div class="empty"><span class="e-ico">📭</span><span class="e-t">暂无活动记录</span><span class="e-d">上传 FIT / GPX / TCX / ZIP / XLSX 文件即可开始分析。</span></div>`;
+    box.innerHTML=`<div class="empty"><span class="e-ico">${ic('inbox',38)}</span><span class="e-t">暂无活动记录</span><span class="e-d">上传 FIT / GPX / TCX / ZIP / XLSX / CSV 文件即可开始分析。</span></div>`;
     return;
   }
   const mi=State.settings.unit==='mi';
@@ -4628,10 +5217,10 @@ function renderActivities(){
     const pace=a.distance>0&&a.duration>0?(isRun?fmtPace(a.duration/(a.distance/dd)):`${((a.distance/dd)/(a.duration/3600)).toFixed(1)}`):'—';
     const pbs = State.pbCache.byActivity.get(a.id);
     const trophyCell = pbs
-      ? `<div class="r-cell" style="align-items:center;"><span class="r-trophy" title="${pbs.map(p=>p.label).join('、')}">🏆</span></div>`
+      ? `<div class="r-cell" style="align-items:center;"><span class="r-trophy" title="${pbs.map(p=>p.label).join('、')}">${ic('trophy',15)}</span></div>`
       : `<div class="r-cell"></div>`;
     return `<div class="row row-activities" data-id="${a.id}">
-      <div class="r-ico ${a.type}">${meta.icon}</div>
+      <div class="r-ico ${a.type}">${ic(meta.icon,18)}</div>
       <div>
         <div class="r-name">${escapeHtml(a.name)}${a.indoor?' <span style="color:var(--t3);font-weight:500;font-size:11px;">·室内</span>':''}</div>
         <div class="r-meta">${fmtDate(a.date)} · ${meta.label}</div>
@@ -4658,7 +5247,7 @@ function openActivityDetail(id){
   const pbs = State.pbCache.byActivity.get(a.id) || [];
   const pbBox = $('#aPBBadges');
   if (pbs.length) {
-    pbBox.innerHTML = pbs.map(p => `<span class="pb-badge">🏆 ${p.label} · ${p.formatted}</span>`).join('');
+    pbBox.innerHTML = pbs.map(p => `<span class="pb-badge">${ic('trophy',11)}${p.label} · ${p.formatted}</span>`).join('');
   } else {
     pbBox.innerHTML = '';
   }
@@ -4682,6 +5271,8 @@ function openActivityDetail(id){
       <span style="color:var(--t2);">${ZONE_NAMES[i]}</span>
       <span style="font-weight:700;color:var(--t1);font-variant-numeric:tabular-nums;">${(v/zTotal*100).toFixed(0)}%</span>
     </div>`).join('');
+  const drift = computeHrDrift(a.points || []);
+  const driftStr = drift != null ? `${drift >= 0 ? '+' : ''}${drift.toFixed(1)}%` : '—';
   const stats=[
     {k:'距离',v:a.distance>0?`${num(a.distance/dd,2)} ${du}`:'—'},
     {k:'时长',v:fmtDur(a.duration)},
@@ -4691,7 +5282,12 @@ function openActivityDetail(id){
     {k:'累计下降',v:`${num(a.descent||0)} m`},
     {k:'平均心率',v:a.avgHR?`${a.avgHR} bpm`:'—'},
     {k:'最大心率',v:a.maxHR?`${a.maxHR} bpm`:'—'},
+    {k:'心率漂移',v:driftStr},
     {k:'平均步频',v:a.avgCad?`${a.avgCad} spm`:'—'},
+    {k:'垂直步幅比',v:a.voAvg!=null?`${a.voAvg.toFixed(1)}%`:'—'},
+    {k:'平均步长',v:a.strideLenAvg!=null?`${a.strideLenAvg.toFixed(2)} m`:'—'},
+    {k:'垂直摆动',v:a.vertOscAvg!=null?`${a.vertOscAvg.toFixed(1)} cm`:'—'},
+    {k:'平均触地时间',v:a.gctAvg!=null?`${Math.round(a.gctAvg)} ms`:'—'},
     {k:'平均功率',v:a.avgPower?`${a.avgPower} W`:'—'},
     {k:'平均温度',v:a.avgTemp!=null?`${a.avgTemp} °C`:'—'},
     {k:'热量消耗',v:`${num(a.calories)} kcal`},
@@ -4831,7 +5427,7 @@ function renderImported(){
   const box=$('#importedList');
   const list=State.activities;
   if(!list.length){
-    box.innerHTML=`<div class="empty"><span class="e-ico">📁</span><span class="e-t">暂无导入数据</span><span class="e-d">拖拽 FIT / GPX / TCX / ZIP / XLSX 文件到上方区域即可开始解析（重复活动会自动跳过）。</span></div>`;
+    box.innerHTML=`<div class="empty"><span class="e-ico">${ic('folder',38)}</span><span class="e-t">暂无导入数据</span><span class="e-d">拖拽 FIT / GPX / TCX / ZIP / XLSX / CSV 文件到上方区域即可开始解析（重复活动会自动跳过）。</span></div>`;
     return;
   }
   const mi=State.settings.unit==='mi';
@@ -4840,7 +5436,7 @@ function renderImported(){
   box.innerHTML=list.slice(0,60).map(a=>{
     const meta=TYPE_META[a.type]||TYPE_META.other;
     return `<div class="row row-mini" data-id="${a.id}">
-      <div class="r-ico ${a.type}">${meta.icon}</div>
+      <div class="r-ico ${a.type}">${ic(meta.icon,18)}</div>
       <div>
         <div class="r-name">${escapeHtml(a.name)}${a.indoor?' <span style="color:var(--t3);font-size:11px;">·室内</span>':''}</div>
         <div class="r-meta">${fmtDate(a.date)} · ${a.distance>0?num(a.distance/dd,2)+' '+du:fmtHM(a.duration)} · 负荷 ${a.load} · ${a.source}</div>
@@ -5029,7 +5625,7 @@ const GarminSync = {
       }
       toast(`后端连接失败：${hint}`, 'error');
       this.setStatus('后端未连接', 'red');
-    } finally { if(btn){ btn.disabled = false; btn.textContent = '🔌 测试连接'; } }
+    } finally { if(btn){ btn.disabled = false; btn.innerHTML = ic('plug',14) + '测试连接'; } }
   },
   async startSync(){
     if(this.syncing) return;
@@ -5102,7 +5698,7 @@ const GarminSync = {
     } finally {
       this.syncing = false;
       this.clearPassword();
-      if(btn){ btn.disabled = false; btn.textContent = '🔄 同步新活动'; }
+      if(btn){ btn.disabled = false; btn.innerHTML = ic('refresh',14) + '同步新活动'; }
       setTimeout(() => this.showProgress(false), 2500);
     }
   },
@@ -5111,9 +5707,9 @@ const GarminSync = {
     if(!box) return;
     box.style.display = 'block';
     box.innerHTML = `
-      <div style="font-size:12px;font-weight:700;color:var(--t2);margin-bottom:var(--s3);">✅ 本次拉取 ${files.length} 条活动（重复的已自动跳过）</div>
+      <div style="font-size:12px;font-weight:700;color:var(--t2);margin-bottom:var(--s3);display:flex;align-items:center;gap:6px;color:var(--green);">${ic('check',14)}本次拉取 ${files.length} 条活动（重复的已自动跳过）</div>
       <div class="list" style="max-height:200px;overflow-y:auto;">
-        ${files.map(f => `<div class="row row-mini" style="padding:6px 10px;grid-template-columns:34px 1fr;"><div class="r-ico" style="background:var(--surface-c);width:28px;height:28px;font-size:14px;flex:0 0 28px;">📄</div><div><div class="r-name" style="font-size:12px;">${escapeHtml(f.name)}</div></div></div>`).join('')}
+        ${files.map(f => `<div class="row row-mini" style="padding:6px 10px;grid-template-columns:34px 1fr;"><div class="r-ico" style="background:var(--surface-c);width:28px;height:28px;flex:0 0 28px;color:var(--t2)">${ic('file',14)}</div><div><div class="r-name" style="font-size:12px;">${escapeHtml(f.name)}</div></div></div>`).join('')}
       </div>`;
   },
   updateDesc(){
@@ -5191,7 +5787,7 @@ const VIEW_META={
   dashboard:{title:'总览',sub:'全部运动数据一览'},
   activities:{title:'活动记录',sub:'浏览、筛选与导出全部训练记录'},
   analysis:{title:'数据分析',sub:'基于运动科学模型的训练负荷与体能评估'},
-  import:{title:'数据导入',sub:'导入 FIT / GPX / TCX / ZIP / XLSX 文件'},
+  import:{title:'数据导入',sub:'导入 FIT / GPX / TCX / ZIP / XLSX / CSV 文件'},
   settings:{title:'设置',sub:'调整界面外观、生理阈值与数据偏好'},
   detail:{title:'详情',sub:''},
   today:{title:'当日详情',sub:''},
@@ -5256,6 +5852,9 @@ function hideLoading(){
 }
 
 async function init(){
+  /* 首先替换所有 data-ic 占位符，避免闪烁 */
+  materializeIcons();
+
   setLoadingStatus('正在初始化数据库...');
   try { await IDB.open(); }
   catch(e) {
@@ -5398,7 +5997,7 @@ async function init(){
         a.distance>0?(a.distance/dd).toFixed(3):'',mi?'mi':'km',
         a.duration,a.avgHR||'',a.maxHR||'',a.elevation||0,a.calories||0,a.load||0,a.source||'',pbStr]);
     });
-    const csv='\uFEFF'+rows.map(r=>r.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(',')).join('\n');
+    const csv='\uFEFF'+rows.map(r=>r.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(',')).join('\r\n');
     const blob=new Blob([csv],{type:'text/csv;charset=utf-8'});
     const url=URL.createObjectURL(blob);
     const a=document.createElement('a');
