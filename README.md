@@ -1,4 +1,4 @@
-````markdown
+
 # PROATHLETE · 个人多生态运动数据中枢
 
 > 一个纯前端 + 本地代理后端的个人运动数据看板。支持 Garmin 中国区一键同步，多主题液态玻璃 UI，FIT / GPX / TCX / XLSX / CSV 多格式导入，以及完整的运动科学分析。
@@ -127,7 +127,7 @@ PROATHLETE 是一个自托管的运动数据中枢，包含：
 ├── garmin_server.py      # Garmin 同步后端（Flask）
 ├── requirements.txt      # Python 依赖（可选）
 └── README.md
-````
+```
 
 ---
 
@@ -657,7 +657,7 @@ ua-generator>=0.1
 
 MIT License。仅供个人学习与自用，请遵守 Garmin 服务条款。
 
-```text
+
 ## 本次 README 更新要点
 
 | 区块 | 主要变化 |
@@ -671,4 +671,4 @@ MIT License。仅供个人学习与自用，请遵守 Garmin 服务条款。
 | **踩坑记录** | 新增 4 条：<br>• 坑 17：Garmin 官方 CSV 解析的单位陷阱<br>• 坑 18：活动去重容差不能一刀切<br>• 坑 19：别用随机数伪装运动科学指标<br>• 坑 20：全站 Emoji 图标难以统一风格<br>（原坑 13 分段 PB、坑 14 IndexedDB、坑 15 XLSX、坑 16 FIT 保留，坑 16 补充 developer fields 修复细节） |
 | **FAQ** | 新增 4 条：CSV 格式区别、心率漂移判读、Running Dynamics 字段来源、"为什么有些指标显示 —" |
 | **版本演进** | 新增表格，追溯 v1.x → v2.4 的关键变化 |
-```
+
