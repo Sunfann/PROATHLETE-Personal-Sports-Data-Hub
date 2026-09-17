@@ -1,0 +1,2079 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PROATHLETE · 运动数据可视化样本集</title>
+<style>
+:root{
+  --bg:#06080d; --panel:rgba(20,24,36,.72); --panel-b:rgba(255,255,255,.08);
+  --t1:#fff; --t2:rgba(255,255,255,.72); --t3:rgba(255,255,255,.46); --t4:rgba(255,255,255,.24);
+  --line:rgba(255,255,255,.06);
+  --blue:#0A84FF; --green:#30D158; --orange:#FF9F0A; --red:#FF453A;
+  --purple:#BF5AF2; --teal:#64D2FF; --yellow:#FFD60A; --pink:#FF375F;
+  --r-sm:8px; --r-md:14px; --r-lg:20px;
+  --ease:cubic-bezier(.22,1,.36,1);
+  --font:-apple-system,BlinkMacSystemFont,'SF Pro Text','PingFang SC','Helvetica Neue',sans-serif;
+  --mono:'SF Mono','Menlo','Consolas',monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{-webkit-font-smoothing:antialiased;background:var(--bg);}
+body{
+  font-family:var(--font);background:var(--bg);color:var(--t1);
+  min-height:100vh;line-height:1.5;letter-spacing:-.01em;
+  background:
+    radial-gradient(45% 40% at 12% 6%,  rgba(10,132,255,.16) 0%, transparent 60%),
+    radial-gradient(42% 46% at 88% 14%, rgba(191,90,242,.14) 0%, transparent 60%),
+    radial-gradient(48% 42% at 70% 90%, rgba(48,209,88,.10) 0%, transparent 60%),
+    radial-gradient(40% 44% at 8% 88%,  rgba(255,159,10,.10) 0%, transparent 60%),
+    var(--bg);
+  background-attachment:fixed;
+}
+
+/* 顶部 */
+.page-head{
+  position:sticky;top:0;z-index:100;
+  padding:18px 32px;
+  background:rgba(6,8,13,.75);
+  backdrop-filter:blur(24px) saturate(160%);
+  -webkit-backdrop-filter:blur(24px) saturate(160%);
+  border-bottom:1px solid var(--line);
+  display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;
+}
+.page-head .brand{display:flex;align-items:center;gap:12px;}
+.page-head .logo{
+  width:38px;height:38px;border-radius:11px;
+  background:linear-gradient(135deg,var(--blue),var(--purple));
+  display:flex;align-items:center;justify-content:center;
+  font-weight:800;font-size:18px;color:#fff;
+  box-shadow:0 6px 18px rgba(10,132,255,.32),inset 0 1px 0 rgba(255,255,255,.35);
+}
+.page-head h1{font-size:16px;font-weight:800;letter-spacing:-.3px;}
+.page-head .sub{font-size:11px;color:var(--t3);letter-spacing:1px;text-transform:uppercase;font-weight:600;}
+.page-head .stats{font-size:12px;color:var(--t3);display:flex;gap:16px;flex-wrap:wrap;}
+.page-head .stats b{color:var(--t1);font-weight:700;}
+
+/* 目录 */
+.toc{
+  position:sticky;top:73px;z-index:90;
+  padding:10px 32px;
+  background:rgba(6,8,13,.75);
+  backdrop-filter:blur(20px) saturate(160%);
+  -webkit-backdrop-filter:blur(20px) saturate(160%);
+  border-bottom:1px solid var(--line);
+  display:flex;gap:6px;flex-wrap:wrap;
+}
+.toc a{
+  padding:5px 11px;border-radius:20px;font-size:11.5px;font-weight:600;
+  color:var(--t2);text-decoration:none;
+  background:rgba(255,255,255,.04);
+  border:1px solid transparent;
+  transition:all .2s var(--ease);white-space:nowrap;
+}
+.toc a:hover{color:var(--t1);background:rgba(255,255,255,.09);border-color:var(--panel-b);}
+.toc .grp{font-size:10px;color:var(--t4);letter-spacing:1px;text-transform:uppercase;
+  font-weight:700;align-self:center;padding:0 6px;}
+
+/* 主区域 */
+main{padding:28px 32px 80px;max-width:1500px;margin:0 auto;}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;}
+@media (max-width:900px){.grid{grid-template-columns:1fr;}.page-head{padding:14px 18px;}.toc{padding:8px 18px;top:auto;position:static;}main{padding:18px 16px 60px;}}
+
+/* 卡片 */
+.card{
+  background:var(--panel);
+  backdrop-filter:blur(24px) saturate(160%);
+  -webkit-backdrop-filter:blur(24px) saturate(160%);
+  border:1px solid var(--panel-b);
+  border-radius:var(--r-lg);
+  padding:20px;
+  display:flex;flex-direction:column;gap:14px;
+  box-shadow:0 10px 32px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.05);
+}
+.card.span-2{grid-column:span 2;}
+@media (max-width:900px){.card.span-2{grid-column:span 1;}}
+
+.card-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;}
+.card-title{display:flex;align-items:center;gap:10px;min-width:0;}
+.card-num{
+  font-family:var(--mono);font-size:11px;font-weight:700;
+  color:var(--blue);background:rgba(10,132,255,.12);
+  padding:3px 8px;border-radius:6px;flex-shrink:0;
+}
+.card-title h2{font-size:15px;font-weight:700;letter-spacing:-.2px;}
+.card-title .en{font-size:10.5px;color:var(--t4);font-family:var(--mono);
+  text-transform:uppercase;letter-spacing:.5px;}
+.tag{
+  font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px;
+  background:rgba(255,255,255,.05);color:var(--t3);
+  border:1px solid var(--panel-b);white-space:nowrap;flex-shrink:0;
+}
+.tag.g{background:rgba(48,209,88,.12);color:var(--green);border-color:rgba(48,209,88,.22);}
+.tag.b{background:rgba(10,132,255,.12);color:var(--blue);border-color:rgba(10,132,255,.22);}
+.tag.o{background:rgba(255,159,10,.12);color:var(--orange);border-color:rgba(255,159,10,.22);}
+.tag.p{background:rgba(191,90,242,.12);color:var(--purple);border-color:rgba(191,90,242,.22);}
+
+.card-desc{font-size:12px;color:var(--t3);line-height:1.65;}
+.card-desc b{color:var(--t2);font-weight:600;}
+.card-desc code{
+  font-family:var(--mono);font-size:11px;padding:1px 5px;border-radius:4px;
+  background:rgba(255,255,255,.06);color:var(--blue);
+}
+
+.canvas-wrap{
+  position:relative;width:100%;height:280px;
+  border-radius:var(--r-md);
+  background:rgba(255,255,255,.018);
+  border:1px solid var(--line);
+  overflow:hidden;
+}
+.canvas-wrap.tall{height:340px;}
+.canvas-wrap canvas{width:100%;height:100%;display:block;}
+
+.legend{
+  display:flex;flex-wrap:wrap;gap:10px 18px;
+  font-size:11px;color:var(--t3);font-weight:500;
+}
+.legend .item{display:flex;align-items:center;gap:6px;}
+.legend .sw{width:11px;height:11px;border-radius:3px;flex-shrink:0;}
+.legend .sw.line{height:3px;border-radius:2px;}
+
+/* 滚动条 */
+::-webkit-scrollbar{width:8px;height:8px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:rgba(255,255,255,.12);border-radius:4px;}
+::-webkit-scrollbar-thumb:hover{background:rgba(255,255,255,.24);}
+</style>
+</head>
+<body>
+
+<header class="page-head">
+  <div class="brand">
+    <div class="logo">P</div>
+    <div>
+      <h1>运动数据可视化样本集</h1>
+      <div class="sub">16 Chart Types · Live Canvas</div>
+    </div>
+  </div>
+  <div class="stats">
+    <span>样本活动 <b id="hdrCount">0</b></span>
+    <span>时间跨度 <b id="hdrSpan">—</b></span>
+    <span>总里程 <b id="hdrDist">—</b></span>
+    <span>总时长 <b id="hdrDur">—</b></span>
+  </div>
+</header>
+
+<nav class="toc" id="toc">
+  <span class="grp">网格</span>
+  <a href="#viz-01">01 小时×星期</a>
+  <a href="#viz-02">02 配速×距离</a>
+  <a href="#viz-03">03 心率×配速</a>
+  <a href="#viz-04">04 月份×年</a>
+  <a href="#viz-05">05 类型×月份</a>
+  <a href="#viz-06">06 强度×月份</a>
+  <span class="grp">变形</span>
+  <a href="#viz-07">07 螺旋日历</a>
+  <a href="#viz-08">08 环形日历</a>
+  <a href="#viz-09">09 山脊图</a>
+  <a href="#viz-10">10 河流图</a>
+  <span class="grp">非网格</span>
+  <a href="#viz-11">11 相关矩阵</a>
+  <a href="#viz-12">12 配速-距离散点</a>
+  <a href="#viz-13">13 心率-配速回归</a>
+  <a href="#viz-14">14 箱线图</a>
+  <a href="#viz-15">15 负荷堆叠</a>
+  <a href="#viz-16">16 坡度图</a>
+</nav>
+
+<main>
+<div class="grid">
+
+  <!-- 01 小时 × 星期 -->
+  <article class="card span-2" id="viz-01">
+    <div class="card-head">
+      <div class="card-title">
+        <span class="card-num">01</span>
+        <div>
+          <h2>小时 × 星期 热力图</h2>
+          <div class="en">hour × weekday heatmap</div>
+        </div>
+      </div>
+      <span class="tag o">网格类</span>
+    </div>
+    <p class="card-desc">
+      7 行（周一~周日）× 24 列（0~23 时），颜色深浅代表该时段的<b>累计训练时长</b>。
+      能一眼看出你的<b>训练生物钟</b>——比如是否总是早 6 点跑步、周末上午是否集中骑行。
+    </p>
+    <div class="canvas-wrap tall"><canvas id="cv-01"></canvas></div>
+    <div class="legend">
+      <div class="item"><span class="sw" style="background:rgba(255,159,10,.15)"></span>低</div>
+      <div class="item"><span class="sw" style="background:rgba(255,159,10,.55)"></span>中</div>
+      <div class="item"><span class="sw" style="background:rgba(255,159,10,1)"></span>高</div>
+      <div class="item"><span class="sw" style="background:rgba(255,255,255,.05)"></span>无运动</div>
+    </div>
+  </article>
+
+  <!-- 02 配速 × 距离 -->
+  <article class="card" id="viz-02">
+    <div class="card-head">
+      <div class="card-title">
+        <span class="card-num">02</span>
+        <div>
+          <h2>配速 × 距离 二维热力图</h2>
+          <div class="en">pace × distance</div>
+        </div>
+      </div>
+      <span class="tag o">网格类</span>
+    </div>
+    <p class="card-desc">
+      X 轴距离分箱，Y 轴配速分箱，颜色代表落入该组合的<b>活动次数</b>。
+      老手会看到<b>沿对角线分布的云团</b>；新手则集中在低距离-低配速区。
+    </p>
+    <div class="canvas-wrap"><canvas id="cv-02"></canvas></div>
+  </article>
+
+  <!-- 03 心率 × 配速 -->
+  <article class="card" id="viz-03">
+    <div class="card-head">
+      <div class="card-title">
+        <span class="card-num">03</span>
+        <div>
+          <h2>心率 × 配速 二维热力图</h2>
+          <div class="en">hr × pace</div>
+        </div>
+      </div>
+      <span class="tag o">网格类</span>
+    </div>
+    <p class="card-desc">
+      揭示<b>有氧效率的长期演变</b>。同配速下心率越低越高效——如果整个点云随时间"向下移动"，
+      就是你进步的直接证据（配合 13 号回归图更直观）。
+    </p>
+    <div class="canvas-wrap"><canvas id="cv-03"></canvas></div>
+  </article>
+
+  <!-- 04 月份 × 年 -->
+  <article class="card" id="viz-04">
+    <div class="card-head">
+      <div class="card-title">
+        <span class="card-num">04</span>
+        <div>
+          <h2>月份 × 年 热力图</h2>
+          <div class="en">month × year</div>
+        </div>
+      </div>
+      <span class="tag o">网格类</span>
+    </div>
+    <p class="card-desc">
+      12 行（月）× N 列（年），颜色代表该月<b>累计距离</b>。
+      需要 2–3 年数据才显价值，用于发现<b>季节性与年度规律</b>。
+    </p>
+    <div class="canvas-wrap"><canvas id="cv-04"></canvas></div>
+  </article>
+
+  <!-- 05 类型 × 月份 -->
+  <article class="card" id="viz-05">
+    <div class="card-head">
+      <div class="card-title">
+        <span class="card-num">05</span>
+        <div>
+          <h2>运动类型 × 月份 热力图</h2>
+          <div class="en">type × month</div>
+        </div>
+      </div>
+      <span class="tag o">网格类</span>
+    </div>
+    <p class="card-desc">
+      6 行运动类型 × 12 列月份，颜色代表该类型在该月的<b>累计时长</b>。
+      整行空着说明你从来没做过——比饼图更直观地看出<b>运动多样化</b>。
+    </p>
+    <div class="canvas-wrap"><canvas id="cv-05"></canvas></div>
+  </article>
+
+  <!-- 06 训练强度 × 月份 -->
+  <article class="card" id="viz-06">
+    <div class="card-head">
+      <div class="card-title">
+        <span class="card-num">06</span>
+        <div>
+          <h2>训练强度 × 月份 热力图</h2>
+          <div class="en">zone × month</div>
+        </div>
+      </div>
+      <span class="tag p">网格类</span>
+    </div>
+    <p class="card-desc">
+      5 行心率区间 Z1–Z5 × 12 列月份，颜色代表该强度在该月的<b>累计时长</b>。
+      这是<b>周期化训练</b>的教练级视角——看你的训练是否真在按周期走，还是每周都差不多。
+    </p>
+    <div class="canvas-wrap"><canvas id="cv-06"></canvas></div>
+  </article>
+
+  <!-- 07 螺旋日历 -->
+  <article class="card" id="viz-07">
+    <div class="card-head">
+      <div class="card-title">
+        <span class="card-num">07</span>
+        <div>
+          <h2>螺旋日历</h2>
+          <div class="en">spiral calendar</div>
+        </div>
+      </div>
+      <span class="tag g">变形</span>
+    </div>
+    <p class="card-desc">
+      全年 365 天沿螺旋线排布，颜色深浅代表当日训练强度。
+      比 GitHub 日历更紧凑有机，<b>艺术感强</b>但不利于精确对比两个日期。
+    </p>
+    <div class="canvas-wrap tall"><canvas id="cv-07"></canvas></div>
+  </article>
+
+  <!-- 08 环形日历 -->
+  <article class="card" id="viz-08">
+    <div class="card-head">
+      <div class="card-title">
+        <span class="card-num">08</span>
+        <div>
+          <h2>环形日历</h2>
+          <div class="en">radial calendar</div>
+        </div>
+      </div>
+      <span class="tag g">变形</span>
+    </div>
+    <p class="card-desc">
+      12 个月排列成一圈，每个扇区内的色带代表当日训练强度。
+      更适合做<b>年度报告装裱</b>，分享到社交媒体时视觉冲击力强。
+    </p>
+    <div class="canvas-wrap tall"><canvas id="cv-08"></canvas></div>
+  </article>
+
+  <!-- 09 山脊图 -->
+  <article class="card" id="viz-09">
+    <div class="card-head">
+      <div class="card-title">
+        <span class="card-num">09</span>
+        <div>
+          <h2>山脊图（Joyplot）</h2>
+          <div class="en">ridge / joyplot</div>
+        </div>
+      </div>
+      <span class="tag g">变形</span>
+    </div>
+    <p class="card-desc">
+      按月堆叠配速的核密度估计曲线，形成连绵"山脉"。
+      平均值可能没变，但<b>分布的胖瘦和尾部</b>能揭示疲劳期或受伤期。
+    </p>
+    <div class="canvas-wrap tall"><canvas id="cv-09"></canvas></div>
+  </article>
+
+  <!-- 10 河流图 -->
+  <article class="card" id="viz-10">
+    <div class="card-head">
+      <div class="card-title">
+        <span class="card-num">10</span>
+        <div>
+          <h2>河流图（Streamgraph）</h2>
+          <div class="en">streamgraph</div>
+        </div>
+      </div>
+      <span class="tag g">变形</span>
+    </div>
+    <p class="card-desc">
+      时间轴上各运动类型时长的流动变化，比热力图更"叙事"。
+      对样本量敏感——少于 100 条活动时图形会很碎。
+    </p>
+    <div class="canvas-wrap"><canvas id="cv-10"></canvas></div>
+  </article>
+
+  <!-- 11 相关性矩阵 -->
+  <article class="card" id="viz-11">
+    <div class="card-head">
+      <div class="card-title">
+        <span class="card-num">11</span>
+        <div>
+          <h2>变量相关性矩阵</h2>
+          <div class="en">correlation matrix</div>
+        </div>
+      </div>
+      <span class="tag b">非网格</span>
+    </div>
+    <p class="card-desc">
+      6×6 单元格，颜色代表 Pearson 相关系数（−1 到 +1）。
+      这是看板里少见的<b>"发现型"图</b>——大部分图告诉你"你已经知道的东西"，
+      只有它告诉你"你没意识到的东西"（如"温度显著拖慢配速"）。<b>相关系数不等于因果</b>。
+    </p>
+    <div class="canvas-wrap tall"><canvas id="cv-11"></canvas></div>
+  </article>
+
+  <!-- 12 配速-距离散点 -->
+  <article class="card" id="viz-12">
+    <div class="card-head">
+      <div class="card-title">
+        <span class="card-num">12</span>
+        <div>
+          <h2>配速 - 距离 散点图</h2>
+          <div class="en">pace-distance scatter</div>
+        </div>
+      </div>
+      <span class="tag b">非网格</span>
+    </div>
+    <p class="card-desc">
+      X 距离、Y 配速，点大小=时长，点颜色=运动类型。
+      你的整个训练史就是一团云。<b>云团是否沿对角线分布</b>决定了你的有氧基础评价。
+    </p>
+    <div class="canvas-wrap"><canvas id="cv-12"></canvas></div>
+    <div class="legend">
+      <div class="item"><span class="sw" style="background:#FF9F0A"></span>跑步</div>
+      <div class="item"><span class="sw" style="background:#0A84FF"></span>骑行</div>
+      <div class="item"><span class="sw" style="background:#64D2FF"></span>游泳</div>
+      <div class="item"><span class="sw" style="background:#30D158"></span>步行</div>
+      <div class="item"><span class="sw" style="background:#FFD60A"></span>徒步</div>
+    </div>
+  </article>
+
+  <!-- 13 心率-配速回归 -->
+  <article class="card" id="viz-13">
+    <div class="card-head">
+      <div class="card-title">
+        <span class="card-num">13</span>
+        <div>
+          <h2>心率 - 配速 散点 + 回归</h2>
+          <div class="en">hr-pace regression</div>
+        </div>
+      </div>
+      <span class="tag b">非网格</span>
+    </div>
+    <p class="card-desc">
+      X 配速、Y 心率，点按年份分色，附<b>最小二乘回归线</b>。
+      回归线整体"下移"代表同配速下心率降低——<b>这是进步最直接的可视化证据</b>。
+    </p>
+    <div class="canvas-wrap"><canvas id="cv-13"></canvas></div>
+  </article>
+
+  <!-- 14 箱线图 -->
+  <article class="card" id="viz-14">
+    <div class="card-head">
+      <div class="card-title">
+        <span class="card-num">14</span>
+        <div>
+          <h2>配速分布 箱线图</h2>
+          <div class="en">boxplot by month</div>
+        </div>
+      </div>
+      <span class="tag b">非网格</span>
+    </div>
+    <p class="card-desc">
+      按月展示配速分布的五数概括（min / Q1 / median / Q3 / max）。
+      老手分布窄，新手分布宽；出现"异常胖的尾部"往往意味着<b>疲劳期或受伤期</b>。
+    </p>
+    <div class="canvas-wrap"><canvas id="cv-14"></canvas></div>
+  </article>
+
+  <!-- 15 负荷堆叠 -->
+  <article class="card" id="viz-15">
+    <div class="card-head">
+      <div class="card-title">
+        <span class="card-num">15</span>
+        <div>
+          <h2>训练负荷 堆叠面积图</h2>
+          <div class="en">stacked load area</div>
+        </div>
+      </div>
+      <span class="tag b">非网格</span>
+    </div>
+    <p class="card-desc">
+      X 轴时间、Y 轴累计训练负荷，按运动类型分层。
+      一眼看出每周训练量的<b>"香肠图"</b>——是均匀分布还是集中爆发。
+    </p>
+    <div class="canvas-wrap"><canvas id="cv-15"></canvas></div>
+  </article>
+
+  <!-- 16 坡度图 -->
+  <article class="card" id="viz-16">
+    <div class="card-head">
+      <div class="card-title">
+        <span class="card-num">16</span>
+        <div>
+          <h2>坡度图（Slopegraph）</h2>
+          <div class="en">slopegraph</div>
+        </div>
+      </div>
+      <span class="tag b">非网格</span>
+    </div>
+    <p class="card-desc">
+      左右两列时间点（如"上月 vs 本月"），中间画线连接各指标。
+      一目了然的涨跌，比堆一堆"↑12% ↓8%"的文字要清楚得多，适合放在周期详情卡片顶部。
+    </p>
+    <div class="canvas-wrap"><canvas id="cv-16"></canvas></div>
+  </article>
+
+</div>
+</main>
+
+<script>
+(function(){
+'use strict';
+
+/* ============================================================
+   工具
+   ============================================================ */
+function cssVar(name, fallback){
+  try{
+    const v = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+    return v || fallback;
+  }catch(e){ return fallback; }
+}
+function roundRect(ctx, x, y, w, h, r){
+  ctx.beginPath();
+  if(ctx.roundRect) ctx.roundRect(x, y, w, h, r);
+  else {
+    ctx.moveTo(x + r, y);
+    ctx.arcTo(x + w, y, x + w, y + h, r);
+    ctx.arcTo(x + w, y + h, x, y + h, r);
+    ctx.arcTo(x, y + h, x, y, r);
+    ctx.arcTo(x, y, x + w, y, r);
+    ctx.closePath();
+  }
+}
+function prep(cv){
+  const dpr = window.devicePixelRatio || 1;
+  const rect = cv.getBoundingClientRect();
+  const w = Math.max(1, Math.round(rect.width));
+  const h = Math.max(1, Math.round(rect.height));
+  cv.width = Math.round(w * dpr);
+  cv.height = Math.round(h * dpr);
+  const ctx = cv.getContext('2d');
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  ctx.clearRect(0, 0, w, h);
+  return { ctx, w, h };
+}
+function lerp(a, b, t){ return a + (b - a) * t; }
+function formatDur(sec){
+  sec = Math.round(sec || 0);
+  const h = Math.floor(sec / 3600);
+  const m = Math.floor(sec % 3600 / 60);
+  if(h > 0) return h + 'h' + m + 'm';
+  return m + 'm';
+}
+function formatKm(m){
+  return (m / 1000).toFixed(1) + ' km';
+}
+function formatPace(secPerKm){
+  if(!isFinite(secPerKm) || secPerKm <= 0) return '—';
+  const m = Math.floor(secPerKm / 60);
+  const s = Math.round(secPerKm % 60);
+  return m + ':' + String(s).padStart(2, '0');
+}
+function binIndex(value, bins){
+  // bins 是递增数组，返回落在第几个 bin（0 起）
+  for(let i = 0; i < bins.length - 1; i++){
+    if(value >= bins[i] && value < bins[i+1]) return i;
+  }
+  return -1;
+}
+
+/* ============================================================
+   模拟数据
+   ============================================================ */
+const TYPES = ['run', 'cycle', 'swim', 'gym', 'walk', 'hike'];
+const TYPE_META = {
+  run:   { label:'跑步', color:'#FF9F0A' },
+  cycle: { label:'骑行', color:'#0A84FF' },
+  swim:  { label:'游泳', color:'#64D2FF' },
+  gym:   { label:'力量', color:'#BF5AF2' },
+  walk:  { label:'步行', color:'#30D158' },
+  hike:  { label:'徒步', color:'#FFD60A' },
+};
+const TYPE_WEIGHTS = [0.40, 0.22, 0.06, 0.08, 0.16, 0.08];
+
+function makeActivities(){
+  const list = [];
+  const now = Date.now();
+  const DAY = 86400000;
+
+  for(let i = 0; i < 500; i++){
+    // 时间：跨约 3 年
+    const dayAgo = Math.floor(Math.random() * 1000) + 1;
+    const date = new Date(now - dayAgo * DAY);
+    const dow = date.getDay();
+    let hour;
+    if(dow === 0 || dow === 6){
+      hour = 9 + Math.floor(Math.random() * 3);   // 周末 9-11 点
+    } else {
+      hour = Math.random() < 0.65
+        ? 6 + Math.floor(Math.random() * 2)       // 工作日早 6-7 点
+        : 18 + Math.floor(Math.random() * 3);     // 或晚 18-20 点
+    }
+    date.setHours(hour, Math.floor(Math.random() * 60), 0, 0);
+
+    // 类型
+    const r = Math.random();
+    let acc = 0, type = 'run';
+    for(let k = 0; k < TYPES.length; k++){
+      acc += TYPE_WEIGHTS[k];
+      if(r <= acc){ type = TYPES[k]; break; }
+    }
+
+    // 参数
+    let dist, dur, avgHR;
+    if(type === 'run'){
+      dist = 5000 + Math.random() * 14000;
+      const pace = 270 + Math.random() * 110;
+      dur = dist / 1000 * pace;
+      avgHR = 152 + Math.random() * 28;
+    } else if(type === 'cycle'){
+      dist = 20000 + Math.random() * 55000;
+      const spd = 6.5 + Math.random() * 3.5;
+      dur = dist / spd;
+      avgHR = 128 + Math.random() * 28;
+    } else if(type === 'swim'){
+      dist = 1000 + Math.random() * 1800;
+      dur = dist / 100 * (110 + Math.random() * 45);
+      avgHR = 122 + Math.random() * 22;
+    } else if(type === 'gym'){
+      dist = 0;
+      dur = 2400 + Math.random() * 1800;
+      avgHR = 108 + Math.random() * 22;
+    } else if(type === 'walk'){
+      dist = 2000 + Math.random() * 6500;
+      dur = dist / 1000 * (600 + Math.random() * 160);
+      avgHR = 92 + Math.random() * 22;
+    } else {
+      dist = 6000 + Math.random() * 12000;
+      dur = dist / 1000 * (720 + Math.random() * 260);
+      avgHR = 112 + Math.random() * 28;
+    }
+
+    const elevation =
+      type === 'hike'  ? 200 + Math.random() * 700 :
+      type === 'cycle' ? 50  + Math.random() * 400 :
+      type === 'run'   ? 5   + Math.random() * 100 : 0;
+
+    const hrr = Math.max(0, Math.min(1.2, (avgHR - 50) / (189 - 50)));
+    const load = Math.round((dur / 60) * hrr * 0.64 * Math.exp(1.92 * hrr));
+
+    // 心率区间
+    const zones = [0, 0, 0, 0, 0];
+    const zWeights = [
+      0.15 + Math.random() * 0.1,
+      0.30 + Math.random() * 0.1,
+      0.25 + Math.random() * 0.15,
+      0.18 + Math.random() * 0.15,
+      0.05 + Math.random() * 0.1
+    ];
+    const zSum = zWeights.reduce((a, b) => a + b, 0);
+    for(let z = 0; z < 5; z++) zones[z] = Math.round(dur * zWeights[z] / zSum);
+
+    list.push({
+      date, type, distance: dist, duration: dur,
+      avgHR, elevation, load, zones
+    });
+  }
+  return list.sort((a, b) => a.date - b.date);
+}
+
+const ACTIVITIES = makeActivities();
+
+/* ============================================================
+   01 小时 × 星期 热力图
+   ============================================================ */
+function drawHourWeek(cv, acts){
+  const { ctx, w, h } = prep(cv);
+  const grid = Array.from({ length: 7 }, () => Array(24).fill(0));
+  for(const a of acts){
+    const wd = (a.date.getDay() + 6) % 7;
+    const hr = a.date.getHours();
+    grid[wd][hr] += a.duration / 3600;
+  }
+  let maxV = 0.001;
+  for(const row of grid) for(const v of row) if(v > maxV) maxV = v;
+
+  const padL = 52, padT = 34, padR = 24, padB = 40;
+  const cw = w - padL - padR, ch = h - padT - padB;
+  const cellW = cw / 24, cellH = ch / 7, gap = 2.5;
+
+  // 行标签
+  const weekday = ['周一','周二','周三','周四','周五','周六','周日'];
+  ctx.font = '11px -apple-system,"PingFang SC",sans-serif';
+  ctx.textBaseline = 'middle';
+  ctx.textAlign = 'right';
+  ctx.fillStyle = cssVar('--t3','rgba(255,255,255,.46)');
+  for(let r = 0; r < 7; r++){
+    ctx.fillText(weekday[r], padL - 10, padT + r * cellH + cellH / 2);
+  }
+
+  // 列标签
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'bottom';
+  for(let c = 0; c < 24; c += 3){
+    ctx.fillText(String(c).padStart(2,'0') + ':00', padL + c * cellW + cellW / 2, padT - 8);
+  }
+
+  // 单元格
+  for(let r = 0; r < 7; r++){
+    for(let c = 0; c < 24; c++){
+      const v = grid[r][c];
+      const x = padL + c * cellW + gap / 2;
+      const y = padT + r * cellH + gap / 2;
+      const ww = cellW - gap, hh = cellH - gap;
+      if(v <= 0){
+        ctx.fillStyle = 'rgba(255,255,255,.035)';
+      } else {
+        const t = Math.sqrt(v / maxV);
+        ctx.fillStyle = 'rgba(255,159,10,' + (0.15 + t * 0.85).toFixed(3) + ')';
+      }
+      roundRect(ctx, x, y, ww, hh, 3);
+      ctx.fill();
+    }
+  }
+
+  // 峰值标记
+  let peak = { r:0, c:0, v:0 };
+  for(let r = 0; r < 7; r++) for(let c = 0; c < 24; c++){
+    if(grid[r][c] > peak.v) peak = { r, c, v: grid[r][c] };
+  }
+  if(peak.v > 0){
+    const x = padL + peak.c * cellW + cellW / 2;
+    const y = padT + peak.r * cellH + cellH / 2;
+    ctx.strokeStyle = '#FFD700';
+    ctx.lineWidth = 1.5;
+    ctx.setLineDash([3, 3]);
+    ctx.beginPath();
+    ctx.arc(x, y, Math.min(cellW, cellH) * 0.65, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.setLineDash([]);
+  }
+}
+
+/* ============================================================
+   02 配速 × 距离 二维热力图
+   ============================================================ */
+function drawPaceDistance(cv, acts){
+  const { ctx, w, h } = prep(cv);
+
+  const distBins = [0, 5, 10, 21, 42, 200];   // km
+  const paceBins = [180, 240, 300, 360, 420, 900]; // sec/km
+  const nR = paceBins.length - 1;
+  const nC = distBins.length - 1;
+
+  const grid = Array.from({ length: nR }, () => Array(nC).fill(0));
+  for(const a of acts){
+    if(!a.distance || !a.duration) continue;
+    const distKm = a.distance / 1000;
+    const pace = a.duration / distKm;
+    const ci = binIndex(distKm, distBins);
+    const ri = binIndex(pace, paceBins);
+    if(ci >= 0 && ri >= 0) grid[ri][ci]++;
+  }
+  let maxV = 0.001;
+  for(const row of grid) for(const v of row) if(v > maxV) maxV = v;
+
+  const padL = 66, padT = 24, padR = 24, padB = 42;
+  const cw = w - padL - padR, ch = h - padT - padB;
+  const cellW = cw / nC, cellH = ch / nR, gap = 4;
+
+  // 行标签（配速，从上到下变慢）
+  const paceLabels = ['<4:00','4:00–5:00','5:00–6:00','6:00–7:00','>7:00'];
+  ctx.font = '11px -apple-system,"PingFang SC",sans-serif';
+  ctx.textBaseline = 'middle';
+  ctx.textAlign = 'right';
+  for(let r = 0; r < nR; r++){
+    ctx.fillStyle = cssVar('--t2','rgba(255,255,255,.72)');
+    ctx.fillText(paceLabels[r], padL - 10, padT + r * cellH + cellH / 2);
+  }
+  ctx.fillStyle = cssVar('--t4','rgba(255,255,255,.24)');
+  ctx.save();
+  ctx.translate(16, padT + ch / 2);
+  ctx.rotate(-Math.PI / 2);
+  ctx.textAlign = 'center';
+  ctx.fillText('配速 (min/km)', 0, 0);
+  ctx.restore();
+
+  // 列标签（距离）
+  const distLabels = ['<5','5–10','10–21','21–42','42+'];
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'top';
+  ctx.fillStyle = cssVar('--t2','rgba(255,255,255,.72)');
+  for(let c = 0; c < nC; c++){
+    ctx.fillText(distLabels[c], padL + c * cellW + cellW / 2, padT + ch + 8);
+  }
+  ctx.fillStyle = cssVar('--t4','rgba(255,255,255,.24)');
+  ctx.fillText('距离 (km)', padL + cw / 2, padT + ch + 24);
+
+  // 单元格
+  for(let r = 0; r < nR; r++){
+    for(let c = 0; c < nC; c++){
+      const v = grid[r][c];
+      const x = padL + c * cellW + gap / 2;
+      const y = padT + r * cellH + gap / 2;
+      const ww = cellW - gap, hh = cellH - gap;
+
+      if(v <= 0){
+        ctx.fillStyle = 'rgba(255,255,255,.03)';
+        roundRect(ctx, x, y, ww, hh, 6);
+        ctx.fill();
+      } else {
+        const t = Math.pow(v / maxV, 0.55);
+        ctx.fillStyle = 'rgba(10,132,255,' + (0.12 + t * 0.85).toFixed(3) + ')';
+        roundRect(ctx, x, y, ww, hh, 6);
+        ctx.fill();
+
+        // 数值
+        ctx.fillStyle = '#fff';
+        ctx.font = '600 13px -apple-system,"PingFang SC",sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(String(v), padL + c * cellW + cellW / 2, padT + r * cellH + cellH / 2);
+      }
+    }
+  }
+}
+
+/* ============================================================
+   03 心率 × 配速 二维热力图
+   ============================================================ */
+function drawHrPace(cv, acts){
+  const { ctx, w, h } = prep(cv);
+
+  const paceBins = [180, 240, 300, 360, 420, 900];
+  const hrBins = [90, 120, 140, 160, 175, 220];
+  const nR = hrBins.length - 1;
+  const nC = paceBins.length - 1;
+
+  const grid = Array.from({ length: nR }, () => Array(nC).fill(0));
+  for(const a of acts){
+    if(!a.distance || !a.duration || !a.avgHR) continue;
+    const distKm = a.distance / 1000;
+    const pace = a.duration / distKm;
+    const ci = binIndex(pace, paceBins);
+    const ri = binIndex(a.avgHR, hrBins);
+    if(ci >= 0 && ri >= 0) grid[ri][ci]++;
+  }
+  let maxV = 0.001;
+  for(const row of grid) for(const v of row) if(v > maxV) maxV = v;
+
+  const padL = 66, padT = 24, padR = 24, padB = 42;
+  const cw = w - padL - padR, ch = h - padT - padB;
+  const cellW = cw / nC, cellH = ch / nR, gap = 4;
+
+  const hrLabels = ['90–120','120–140','140–160','160–175','175+'];
+  const paceLabels = ['<4:00','4–5','5–6','6–7','>7:00'];
+
+  ctx.font = '11px -apple-system,"PingFang SC",sans-serif';
+  ctx.textBaseline = 'middle';
+  ctx.textAlign = 'right';
+  ctx.fillStyle = cssVar('--t2','rgba(255,255,255,.72)');
+  for(let r = 0; r < nR; r++){
+    ctx.fillText(hrLabels[r], padL - 10, padT + r * cellH + cellH / 2);
+  }
+
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'top';
+  for(let c = 0; c < nC; c++){
+    ctx.fillText(paceLabels[c], padL + c * cellW + cellW / 2, padT + ch + 8);
+  }
+
+  for(let r = 0; r < nR; r++){
+    for(let c = 0; c < nC; c++){
+      const v = grid[r][c];
+      const x = padL + c * cellW + gap / 2;
+      const y = padT + r * cellH + gap / 2;
+      const ww = cellW - gap, hh = cellH - gap;
+
+      if(v <= 0){
+        ctx.fillStyle = 'rgba(255,255,255,.03)';
+        roundRect(ctx, x, y, ww, hh, 6);
+        ctx.fill();
+      } else {
+        const t = Math.pow(v / maxV, 0.55);
+        ctx.fillStyle = 'rgba(255,69,58,' + (0.12 + t * 0.82).toFixed(3) + ')';
+        roundRect(ctx, x, y, ww, hh, 6);
+        ctx.fill();
+        ctx.fillStyle = '#fff';
+        ctx.font = '600 13px -apple-system,"PingFang SC",sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(String(v), padL + c * cellW + cellW / 2, padT + r * cellH + cellH / 2);
+      }
+    }
+  }
+}
+
+/* ============================================================
+   04 月份 × 年 热力图
+   ============================================================ */
+function drawMonthYear(cv, acts){
+  const { ctx, w, h } = prep(cv);
+
+  const years = [...new Set(acts.map(a => a.date.getFullYear()))].sort();
+  const grid = Array.from({ length: 12 }, () => Array(years.length).fill(0));
+  for(const a of acts){
+    const y = a.date.getFullYear();
+    const m = a.date.getMonth();
+    const yi = years.indexOf(y);
+    if(yi >= 0) grid[m][yi] += a.distance / 1000;
+  }
+  let maxV = 0.001;
+  for(const row of grid) for(const v of row) if(v > maxV) maxV = v;
+
+  const padL = 60, padT = 28, padR = 24, padB = 40;
+  const cw = w - padL - padR, ch = h - padT - padB;
+  const cellW = cw / years.length, cellH = ch / 12, gap = 3;
+
+  const monthLabels = ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
+  ctx.font = '11px -apple-system,"PingFang SC",sans-serif';
+  ctx.textBaseline = 'middle';
+  ctx.textAlign = 'right';
+  ctx.fillStyle = cssVar('--t3','rgba(255,255,255,.46)');
+  for(let m = 0; m < 12; m++){
+    ctx.fillText(monthLabels[m], padL - 10, padT + m * cellH + cellH / 2);
+  }
+
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'top';
+  for(let y = 0; y < years.length; y++){
+    ctx.fillText(String(years[y]), padL + y * cellW + cellW / 2, padT + ch + 8);
+  }
+
+  for(let m = 0; m < 12; m++){
+    for(let y = 0; y < years.length; y++){
+      const v = grid[m][y];
+      const x = padL + y * cellW + gap / 2;
+      const yy = padT + m * cellH + gap / 2;
+      const ww = cellW - gap, hh = cellH - gap;
+      if(v <= 0){
+        ctx.fillStyle = 'rgba(255,255,255,.035)';
+      } else {
+        const t = Math.pow(v / maxV, 0.6);
+        ctx.fillStyle = 'rgba(48,209,88,' + (0.15 + t * 0.85).toFixed(3) + ')';
+      }
+      roundRect(ctx, x, yy, ww, hh, 4);
+      ctx.fill();
+    }
+  }
+}
+
+/* ============================================================
+   05 运动类型 × 月份 热力图
+   ============================================================ */
+function drawTypeMonth(cv, acts){
+  const { ctx, w, h } = prep(cv);
+
+  const grid = Array.from({ length: TYPES.length }, () => Array(12).fill(0));
+  for(const a of acts){
+    const ti = TYPES.indexOf(a.type);
+    const m = a.date.getMonth();
+    if(ti >= 0) grid[ti][m] += a.duration / 3600;
+  }
+  let maxV = 0.001;
+  for(const row of grid) for(const v of row) if(v > maxV) maxV = v;
+
+  const padL = 60, padT = 28, padR = 24, padB = 40;
+  const cw = w - padL - padR, ch = h - padT - padB;
+  const cellW = cw / 12, cellH = ch / TYPES.length, gap = 3;
+
+  ctx.font = '11px -apple-system,"PingFang SC",sans-serif';
+  ctx.textBaseline = 'middle';
+  ctx.textAlign = 'right';
+  for(let t = 0; t < TYPES.length; t++){
+    ctx.fillStyle = TYPE_META[TYPES[t]].color;
+    ctx.fillText(TYPE_META[TYPES[t]].label, padL - 10, padT + t * cellH + cellH / 2);
+  }
+
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'top';
+  ctx.fillStyle = cssVar('--t4','rgba(255,255,255,.24)');
+  for(let m = 0; m < 12; m++){
+    ctx.fillText(m + 1, padL + m * cellW + cellW / 2, padT + ch + 8);
+  }
+
+  for(let t = 0; t < TYPES.length; t++){
+    const base = TYPE_META[TYPES[t]].color;
+    for(let m = 0; m < 12; m++){
+      const v = grid[t][m];
+      const x = padL + m * cellW + gap / 2;
+      const y = padT + t * cellH + gap / 2;
+      const ww = cellW - gap, hh = cellH - gap;
+      if(v <= 0){
+        ctx.fillStyle = 'rgba(255,255,255,.03)';
+      } else {
+        const t2 = Math.pow(v / maxV, 0.55);
+        ctx.fillStyle = hexA(base, 0.15 + t2 * 0.85);
+      }
+      roundRect(ctx, x, y, ww, hh, 4);
+      ctx.fill();
+    }
+  }
+}
+
+/* ============================================================
+   06 训练强度 × 月份 热力图
+   ============================================================ */
+function drawZoneMonth(cv, acts){
+  const { ctx, w, h } = prep(cv);
+
+  const zoneColors = ['#64D2FF','#30D158','#FFD60A','#FF9F0A','#FF453A'];
+  const zoneNames  = ['Z1 恢复','Z2 有氧','Z3 节奏','Z4 阈值','Z5 无氧'];
+
+  const grid = Array.from({ length: 5 }, () => Array(12).fill(0));
+  for(const a of acts){
+    const m = a.date.getMonth();
+    if(!a.zones) continue;
+    for(let z = 0; z < 5; z++) grid[z][m] += (a.zones[z] || 0) / 3600;
+  }
+  let maxV = 0.001;
+  for(const row of grid) for(const v of row) if(v > maxV) maxV = v;
+
+  const padL = 72, padT = 28, padR = 24, padB = 40;
+  const cw = w - padL - padR, ch = h - padT - padB;
+  const cellW = cw / 12, cellH = ch / 5, gap = 3;
+
+  ctx.font = '11px -apple-system,"PingFang SC",sans-serif';
+  ctx.textBaseline = 'middle';
+  ctx.textAlign = 'right';
+  for(let z = 0; z < 5; z++){
+    ctx.fillStyle = zoneColors[z];
+    ctx.fillText(zoneNames[z], padL - 10, padT + z * cellH + cellH / 2);
+  }
+
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'top';
+  ctx.fillStyle = cssVar('--t4','rgba(255,255,255,.24)');
+  for(let m = 0; m < 12; m++){
+    ctx.fillText(m + 1, padL + m * cellW + cellW / 2, padT + ch + 8);
+  }
+
+  for(let z = 0; z < 5; z++){
+    const base = zoneColors[z];
+    for(let m = 0; m < 12; m++){
+      const v = grid[z][m];
+      const x = padL + m * cellW + gap / 2;
+      const y = padT + z * cellH + gap / 2;
+      const ww = cellW - gap, hh = cellH - gap;
+      if(v <= 0){
+        ctx.fillStyle = 'rgba(255,255,255,.03)';
+      } else {
+        const t2 = Math.pow(v / maxV, 0.55);
+        ctx.fillStyle = hexA(base, 0.12 + t2 * 0.85);
+      }
+      roundRect(ctx, x, y, ww, hh, 4);
+      ctx.fill();
+    }
+  }
+}
+
+function hexA(hex, a){
+  const h = hex.replace('#','');
+  const r = parseInt(h.slice(0,2), 16);
+  const g = parseInt(h.slice(2,4), 16);
+  const b = parseInt(h.slice(4,6), 16);
+  return 'rgba(' + r + ',' + g + ',' + b + ',' + a + ')';
+}
+
+/* ============================================================
+   07 螺旋日历
+   ============================================================ */
+function drawSpiralCalendar(cv, acts){
+  const { ctx, w, h } = prep(cv);
+
+  // 聚合当日时长
+  const byDay = new Map();
+  for(const a of acts){
+    const key = a.date.getFullYear() + '-' +
+      String(a.date.getMonth() + 1).padStart(2, '0') + '-' +
+      String(a.date.getDate()).padStart(2, '0');
+    byDay.set(key, (byDay.get(key) || 0) + a.duration / 3600);
+  }
+  let maxV = 0.001;
+  for(const v of byDay.values()) if(v > maxV) maxV = v;
+
+  const cx = w / 2, cy = h / 2 + 6;
+  const rMax = Math.min(w, h) / 2 - 20;
+  const rMin = 26;
+  const turns = 5;     // 5 圈
+  const days = 365;
+
+  const today = new Date();
+  const start = new Date(today);
+  start.setFullYear(today.getFullYear() - 1);
+  start.setDate(start.getDate() + 1);
+
+  for(let i = 0; i < days; i++){
+    const d = new Date(start);
+    d.setDate(d.getDate() + i);
+    const key = d.getFullYear() + '-' +
+      String(d.getMonth() + 1).padStart(2, '0') + '-' +
+      String(d.getDate()).padStart(2, '0');
+    const v = byDay.get(key) || 0;
+
+    const prog = i / (days - 1);
+    const angle = prog * turns * 2 * Math.PI - Math.PI / 2;
+    const r0 = lerp(rMin, rMax - 6, prog);
+    const r1 = r0 + 4;
+
+    const x0 = cx + Math.cos(angle) * r0;
+    const y0 = cy + Math.sin(angle) * r0;
+    const x1 = cx + Math.cos(angle) * r1;
+    const y1 = cy + Math.sin(angle) * r1;
+
+    if(v <= 0){
+      ctx.strokeStyle = 'rgba(255,255,255,.08)';
+      ctx.lineWidth = 1.5;
+    } else {
+      const t = Math.pow(v / maxV, 0.5);
+      ctx.strokeStyle = 'rgba(255,159,10,' + (0.2 + t * 0.8).toFixed(3) + ')';
+      ctx.lineWidth = 1.5 + t * 2;
+    }
+    ctx.lineCap = 'round';
+    ctx.beginPath();
+    ctx.moveTo(x0, y0);
+    ctx.lineTo(x1, y1);
+    ctx.stroke();
+  }
+
+  // 中心标注
+  ctx.fillStyle = cssVar('--t3','rgba(255,255,255,.46)');
+  ctx.font = '10px -apple-system,"PingFang SC",sans-serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('近 365 天', cx, cy - 6);
+  ctx.font = '800 16px -apple-system,"PingFang SC",sans-serif';
+  ctx.fillStyle = cssVar('--t1','#fff');
+  ctx.fillText(byDay.size + ' 天', cx, cy + 12);
+}
+
+/* ============================================================
+   08 环形日历
+   ============================================================ */
+function drawRadialCalendar(cv, acts){
+  const { ctx, w, h } = prep(cv);
+
+  const byDay = new Map();
+  for(const a of acts){
+    const key = a.date.getFullYear() + '-' +
+      String(a.date.getMonth() + 1).padStart(2, '0') + '-' +
+      String(a.date.getDate()).padStart(2, '0');
+    byDay.set(key, (byDay.get(key) || 0) + a.duration / 3600);
+  }
+  let maxV = 0.001;
+  for(const v of byDay.values()) if(v > maxV) maxV = v;
+
+  const cx = w / 2, cy = h / 2;
+  const rOuter = Math.min(w, h) / 2 - 20;
+  const rInner = rOuter - 34;
+
+  const year = new Date().getFullYear();
+  const start = new Date(year, 0, 1);
+  const end = new Date(year + 1, 0, 1);
+  const totalDays = Math.round((end - start) / 86400000);
+
+  // 每个月的扇区
+  let cumDays = 0;
+  for(let m = 0; m < 12; m++){
+    const daysInMonth = new Date(year, m + 1, 0).getDate();
+    for(let d = 1; d <= daysInMonth; d++){
+      const date = new Date(year, m, d);
+      const key = year + '-' +
+        String(m + 1).padStart(2, '0') + '-' +
+        String(d).padStart(2, '0');
+      const v = byDay.get(key) || 0;
+
+      const a0 = (cumDays / totalDays) * Math.PI * 2 - Math.PI / 2;
+      const a1 = ((cumDays + 1) / totalDays) * Math.PI * 2 - Math.PI / 2;
+
+      if(v > 0){
+        const t = Math.pow(v / maxV, 0.55);
+        ctx.fillStyle = 'rgba(10,132,255,' + (0.2 + t * 0.8).toFixed(3) + ')';
+        ctx.beginPath();
+        ctx.arc(cx, cy, rOuter, a0 + 0.004, a1 - 0.004);
+        ctx.arc(cx, cy, rInner, a1 - 0.004, a0 + 0.004, true);
+        ctx.closePath();
+        ctx.fill();
+      }
+      cumDays++;
+    }
+  }
+
+  // 内圈
+  ctx.strokeStyle = 'rgba(255,255,255,.06)';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.arc(cx, cy, rInner - 3, 0, Math.PI * 2);
+  ctx.stroke();
+
+  // 月份标签
+  ctx.font = '10px -apple-system,"PingFang SC",sans-serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  let cm = 0;
+  for(let m = 0; m < 12; m++){
+    const midDay = cm + new Date(year, m + 1, 0).getDate() / 2;
+    const angle = (midDay / totalDays) * Math.PI * 2 - Math.PI / 2;
+    const r = rOuter + 10;
+    const x = cx + Math.cos(angle) * r;
+    const y = cy + Math.sin(angle) * r;
+    ctx.fillStyle = cssVar('--t3','rgba(255,255,255,.46)');
+    ctx.fillText((m + 1) + '月', x, y);
+    cm += new Date(year, m + 1, 0).getDate();
+  }
+
+  // 中心
+  ctx.font = '800 20px -apple-system,"PingFang SC",sans-serif';
+  ctx.fillStyle = cssVar('--t1','#fff');
+  ctx.fillText(String(year), cx, cy - 8);
+  ctx.font = '10px -apple-system,"PingFang SC",sans-serif';
+  ctx.fillStyle = cssVar('--t3','rgba(255,255,255,.46)');
+  ctx.fillText(byDay.size + ' 活跃天', cx, cy + 14);
+}
+
+/* ============================================================
+   09 山脊图（Joyplot）
+   ============================================================ */
+function drawRidge(cv, acts){
+  const { ctx, w, h } = prep(cv);
+
+  // 按月聚合配速（仅跑步）
+  const months = Array.from({ length: 12 }, () => []);
+  for(const a of acts){
+    if(a.type !== 'run') continue;
+    if(!a.distance || !a.duration) continue;
+    const pace = a.duration / (a.distance / 1000);
+    if(pace < 180 || pace > 700) continue;
+    months[a.date.getMonth()].push(pace);
+  }
+
+  // 全局范围
+  const allPaces = months.flat();
+  if(allPaces.length === 0) return;
+  let gMin = Math.min(...allPaces), gMax = Math.max(...allPaces);
+  gMin = Math.floor(gMin / 30) * 30;
+  gMax = Math.ceil(gMax / 30) * 30;
+
+  // KDE
+  function kde(values, bw, xs){
+    if(values.length === 0) return xs.map(() => 0);
+    return xs.map(x => {
+      let sum = 0;
+      for(const v of values){
+        const u = (x - v) / bw;
+        sum += Math.exp(-0.5 * u * u);
+      }
+      return sum / (values.length * bw * Math.sqrt(2 * Math.PI));
+    });
+  }
+
+  const padL = 60, padT = 24, padR = 24, padB = 32;
+  const cw = w - padL - padR, ch = h - padT - padB;
+
+  const monthsNames = ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
+  const rowH = ch / 12;
+  const xSteps = 100;
+  const xs = Array.from({ length: xSteps }, (_, i) => lerp(gMin, gMax, i / (xSteps - 1)));
+
+  // 每行基准线（从下到上）
+  for(let m = 0; m < 12; m++){
+    const values = months[m];
+    const baseY = padT + ch - (m + 1) * rowH + rowH;   // 底边
+    const peakH = rowH * 0.95;
+    const bw = 25;
+
+    const ys = kde(values, bw, xs);
+    let maxY = 0;
+    for(const v of ys) if(v > maxY) maxY = v;
+    if(maxY <= 0) continue;
+
+    const points = ys.map((v, i) => {
+      const x = padL + (i / (xSteps - 1)) * cw;
+      const y = baseY - (v / maxY) * peakH;
+      return [x, y];
+    });
+
+    // 填充
+    const hue = 200 + m * 8;
+    const grad = ctx.createLinearGradient(0, baseY - peakH, 0, baseY);
+    grad.addColorStop(0, 'hsla(' + hue + ',70%,60%,.55)');
+    grad.addColorStop(1, 'hsla(' + hue + ',70%,60%,.08)');
+    ctx.fillStyle = grad;
+    ctx.beginPath();
+    ctx.moveTo(points[0][0], baseY);
+    for(const p of points) ctx.lineTo(p[0], p[1]);
+    ctx.lineTo(points[points.length - 1][0], baseY);
+    ctx.closePath();
+    ctx.fill();
+
+    // 描边
+    ctx.strokeStyle = 'hsla(' + hue + ',70%,68%,.9)';
+    ctx.lineWidth = 1.4;
+    ctx.beginPath();
+    for(let i = 0; i < points.length; i++){
+      i ? ctx.lineTo(points[i][0], points[i][1]) : ctx.moveTo(points[i][0], points[i][1]);
+    }
+    ctx.stroke();
+
+    // 月份标签
+    ctx.fillStyle = cssVar('--t3','rgba(255,255,255,.46)');
+    ctx.font = '10px -apple-system,"PingFang SC",sans-serif';
+    ctx.textAlign = 'right';
+    ctx.textBaseline = 'bottom';
+    ctx.fillText(monthsNames[m], padL - 6, baseY - 2);
+  }
+
+  // X 轴标签
+  ctx.fillStyle = cssVar('--t3','rgba(255,255,255,.46)');
+  ctx.font = '10px -apple-system,"PingFang SC",sans-serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'top';
+  for(let i = 0; i <= 4; i++){
+    const pace = lerp(gMin, gMax, i / 4);
+    const x = padL + (i / 4) * cw;
+    ctx.fillText(formatPace(pace), x, padT + ch + 6);
+  }
+}
+
+/* ============================================================
+   10 河流图（Streamgraph）
+   ============================================================ */
+function drawStreamgraph(cv, acts){
+  const { ctx, w, h } = prep(cv);
+
+  const years = [...new Set(acts.map(a => a.date.getFullYear()))].sort();
+  const monthKeys = [];
+  for(const y of years){
+    for(let m = 0; m < 12; m++) monthKeys.push({ y, m });
+  }
+  const nT = monthKeys.length;
+  const nTypes = TYPES.length;
+
+  const data = Array.from({ length: nT }, () => Array(nTypes).fill(0));
+  for(const a of acts){
+    const yi = years.indexOf(a.date.getFullYear());
+    if(yi < 0) continue;
+    const ti = TYPES.indexOf(a.type);
+    if(ti < 0) continue;
+    const idx = yi * 12 + a.date.getMonth();
+    data[idx][ti] += a.duration / 3600;
+  }
+
+  const padL = 24, padT = 24, padR = 24, padB = 32;
+  const cw = w - padL - padR, ch = h - padT - padB;
+
+  const totals = data.map(row => row.reduce((a, b) => a + b, 0));
+  const maxTotal = Math.max(...totals, 1);
+
+  // 计算基线与层顶（居中 streamgraph 布局）
+  const baselines = [];
+  const tops = [];
+  for(let i = 0; i < nT; i++){
+    let cum = 0;
+    baselines.push(new Array(nTypes));
+    tops.push(new Array(nTypes));
+    const totalH = (totals[i] / maxTotal) * ch * 0.9;
+    const offset = (ch - totalH) / 2;
+    for(let t = 0; t < nTypes; t++){
+      const hh = totalH > 0 ? (data[i][t] / totals[i]) * totalH : 0;
+      baselines[i][t] = padT + ch - offset - cum;
+      tops[i][t] = baselines[i][t] - hh;
+      cum += hh;
+    }
+  }
+
+  const xOf = i => padL + (i / (nT - 1 || 1)) * cw;
+
+  // 从底层往上层绘制
+  for(let t = 0; t < nTypes; t++){
+    const color = TYPE_META[TYPES[t]].color;
+    ctx.beginPath();
+    // 顶边
+    for(let i = 0; i < nT; i++){
+      const x = xOf(i), y = tops[i][t];
+      i ? ctx.lineTo(x, y) : ctx.moveTo(x, y);
+    }
+    // 底边倒序
+    for(let i = nT - 1; i >= 0; i--){
+      const x = xOf(i), y = baselines[i][t];
+      ctx.lineTo(x, y);
+    }
+    ctx.closePath();
+    ctx.fillStyle = hexA(color, 0.7);
+    ctx.fill();
+    ctx.strokeStyle = hexA(color, 0.95);
+    ctx.lineWidth = 1;
+    ctx.stroke();
+  }
+
+  // 年份分隔线
+  ctx.strokeStyle = 'rgba(255,255,255,.08)';
+  ctx.setLineDash([3, 4]);
+  for(let yi = 1; yi < years.length; yi++){
+    const x = xOf(yi * 12);
+    ctx.beginPath();
+    ctx.moveTo(x, padT);
+    ctx.lineTo(x, padT + ch);
+    ctx.stroke();
+  }
+  ctx.setLineDash([]);
+
+  // 年份标签
+  ctx.font = '10px -apple-system,"PingFang SC",sans-serif';
+  ctx.fillStyle = cssVar('--t3','rgba(255,255,255,.46)');
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'top';
+  for(let yi = 0; yi < years.length; yi++){
+    const x = xOf(yi * 12 + 6);
+    ctx.fillText(String(years[yi]), x, padT + ch + 6);
+  }
+}
+
+/* ============================================================
+   11 相关性矩阵
+   ============================================================ */
+function drawCorrelation(cv, acts){
+  const { ctx, w, h } = prep(cv);
+
+  const fields = [
+    { name:'距离',    get: a => a.distance / 1000 },
+    { name:'配速',    get: a => (a.distance > 0 && a.duration > 0) ? a.duration / (a.distance / 1000) : null },
+    { name:'心率',    get: a => a.avgHR },
+    { name:'时长',    get: a => a.duration / 60 },
+    { name:'爬升',    get: a => a.elevation },
+    { name:'负荷',    get: a => a.load },
+  ];
+
+  // 提取数据
+  const cols = fields.map(f => acts.map(f.get));
+  const n = fields.length;
+  const valid = cols.map(c => c.filter(v => v != null && isFinite(v) && v > 0));
+  const means = valid.map(v => v.reduce((a, b) => a + b, 0) / v.length);
+  const stds = valid.map((v, i) => {
+    let sum = 0;
+    for(const x of v) sum += (x - means[i]) ** 2;
+    return Math.sqrt(sum / v.length) || 1;
+  });
+
+  // Pearson 相关系数
+  function corr(x, y){
+    const n = x.length;
+    let sx = 0, sy = 0;
+    for(let i = 0; i < n; i++){ sx += x[i]; sy += y[i]; }
+    const mx = sx / n, my = sy / n;
+    let num = 0, dx = 0, dy = 0;
+    for(let i = 0; i < n; i++){
+      const a = x[i] - mx, b = y[i] - my;
+      num += a * b; dx += a * a; dy += b * b;
+    }
+    return (dx * dy) > 0 ? num / Math.sqrt(dx * dy) : 0;
+  }
+
+  // 找出每个字段组的最大公共长度（简化用最小长度对齐）
+  const minLen = Math.min(...valid.map(v => v.length));
+  const M = Array.from({ length: n }, () => Array(n).fill(0));
+  for(let i = 0; i < n; i++){
+    for(let j = 0; j < n; j++){
+      if(i === j) { M[i][j] = 1; continue; }
+      const xs = valid[i].slice(0, minLen);
+      const ys = valid[j].slice(0, minLen);
+      M[i][j] = corr(xs, ys);
+    }
+  }
+
+  const padL = 62, padT = 30, padR = 30, padB = 30;
+  const cw = w - padL - padR, ch = h - padT - padB;
+  const cellW = cw / n, cellH = ch / n;
+
+  ctx.font = '11px -apple-system,"PingFang SC",sans-serif';
+  // 列标签
+  ctx.textBaseline = 'bottom';
+  ctx.textAlign = 'center';
+  for(let c = 0; c < n; c++){
+    ctx.fillStyle = cssVar('--t2','rgba(255,255,255,.72)');
+    ctx.fillText(fields[c].name, padL + c * cellW + cellW / 2, padT - 6);
+  }
+  // 行标签
+  ctx.textBaseline = 'middle';
+  ctx.textAlign = 'right';
+  for(let r = 0; r < n; r++){
+    ctx.fillStyle = cssVar('--t2','rgba(255,255,255,.72)');
+    ctx.fillText(fields[r].name, padL - 8, padT + r * cellH + cellH / 2);
+  }
+
+  // 单元格
+  for(let r = 0; r < n; r++){
+    for(let c = 0; c < n; c++){
+      const v = M[r][c];
+      const x = padL + c * cellW + 1;
+      const y = padT + r * cellH + 1;
+      const ww = cellW - 2, hh = cellH - 2;
+
+      // 正相关红，负相关蓝，0 灰
+      let color;
+      const abs = Math.abs(v);
+      if(v > 0){
+        color = 'rgba(255,69,58,' + (0.08 + abs * 0.85).toFixed(3) + ')';
+      } else if(v < 0){
+        color = 'rgba(10,132,255,' + (0.08 + abs * 0.85).toFixed(3) + ')';
+      } else {
+        color = 'rgba(255,255,255,.05)';
+      }
+      ctx.fillStyle = color;
+      roundRect(ctx, x, y, ww, hh, 4);
+      ctx.fill();
+
+      // 数值
+      ctx.fillStyle = '#fff';
+      ctx.font = '600 12px -apple-system,"PingFang SC",sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(v.toFixed(2), padL + c * cellW + cellW / 2, padT + r * cellH + cellH / 2);
+    }
+  }
+}
+
+/* ============================================================
+   12 配速 - 距离 散点图
+   ============================================================ */
+function drawScatterPace(cv, acts){
+  const { ctx, w, h } = prep(cv);
+
+  const pts = acts.filter(a => a.distance > 0 && a.duration > 0)
+    .map(a => ({
+      dist: a.distance / 1000,
+      pace: a.duration / (a.distance / 1000),
+      dur: a.duration,
+      type: a.type,
+    }))
+    .filter(p => p.pace >= 180 && p.pace <= 700 && p.dist <= 90);
+
+  if(!pts.length) return;
+  const padL = 60, padT = 20, padR = 24, padB = 42;
+  const cw = w - padL - padR, ch = h - padT - padB;
+
+  let xMax = Math.max(...pts.map(p => p.dist));
+  let yMin = Math.min(...pts.map(p => p.pace));
+  let yMax = Math.max(...pts.map(p => p.pace));
+  xMax = Math.ceil(xMax / 10) * 10;
+  yMin = Math.floor(yMin / 30) * 30;
+  yMax = Math.ceil(yMax / 30) * 30;
+
+  // 网格
+  ctx.strokeStyle = 'rgba(255,255,255,.05)';
+  ctx.lineWidth = 1;
+  for(let i = 0; i <= 4; i++){
+    const y = padT + (ch / 4) * i;
+    ctx.beginPath(); ctx.moveTo(padL, y); ctx.lineTo(padL + cw, y); ctx.stroke();
+  }
+  for(let i = 0; i <= 5; i++){
+    const x = padL + (cw / 5) * i;
+    ctx.beginPath(); ctx.moveTo(x, padT); ctx.lineTo(x, padT + ch); ctx.stroke();
+  }
+
+  // 轴标签
+  ctx.font = '10px -apple-system,"PingFang SC",sans-serif';
+  ctx.fillStyle = cssVar('--t3','rgba(255,255,255,.46)');
+  ctx.textAlign = 'right';
+  ctx.textBaseline = 'middle';
+  for(let i = 0; i <= 4; i++){
+    const v = lerp(yMax, yMin, i / 4);
+    ctx.fillText(formatPace(v), padL - 6, padT + (ch / 4) * i);
+  }
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'top';
+  for(let i = 0; i <= 5; i++){
+    const v = (xMax / 5) * i;
+    ctx.fillText(Math.round(v) + '', padL + (cw / 5) * i, padT + ch + 6);
+  }
+  ctx.fillStyle = cssVar('--t4','rgba(255,255,255,.24)');
+  ctx.fillText('距离 (km)', padL + cw / 2, padT + ch + 22);
+
+  // 点
+  const maxDur = Math.max(...pts.map(p => p.dur));
+  for(const p of pts){
+    const x = padL + (p.dist / xMax) * cw;
+    const y = padT + ch - ((yMax - p.pace) / (yMax - yMin)) * ch;
+    const r = 2.5 + (p.dur / maxDur) * 5;
+    const color = TYPE_META[p.type].color;
+    ctx.fillStyle = hexA(color, 0.55);
+    ctx.beginPath();
+    ctx.arc(x, y, r, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = hexA(color, 0.9);
+    ctx.lineWidth = 0.8;
+    ctx.stroke();
+  }
+}
+
+/* ============================================================
+   13 心率 - 配速 散点 + 回归
+   ============================================================ */
+function drawHrPaceRegression(cv, acts){
+  const { ctx, w, h } = prep(cv);
+
+  const pts = acts
+    .filter(a => a.distance > 0 && a.duration > 0 && a.avgHR)
+    .map(a => ({
+      pace: a.duration / (a.distance / 1000),
+      hr: a.avgHR,
+      year: a.date.getFullYear(),
+    }))
+    .filter(p => p.pace >= 180 && p.pace <= 600 && p.hr >= 90 && p.hr <= 210);
+
+  if(pts.length < 5) return;
+
+  const years = [...new Set(pts.map(p => p.year))].sort();
+  const yearColors = ['#64D2FF','#30D158','#FFD60A','#FF9F0A','#FF453A','#BF5AF2'];
+  const colorOf = y => yearColors[years.indexOf(y) % yearColors.length];
+
+  const padL = 52, padT = 20, padR = 24, padB = 42;
+  const cw = w - padL - padR, ch = h - padT - padB;
+
+  let xMin = Math.min(...pts.map(p => p.pace));
+  let xMax = Math.max(...pts.map(p => p.pace));
+  let yMin = Math.min(...pts.map(p => p.hr));
+  let yMax = Math.max(...pts.map(p => p.hr));
+  xMin = Math.floor(xMin / 30) * 30;
+  xMax = Math.ceil(xMax / 30) * 30;
+  yMin = Math.floor(yMin / 10) * 10 - 10;
+  yMax = Math.ceil(yMax / 10) * 10 + 10;
+
+  // 网格
+  ctx.strokeStyle = 'rgba(255,255,255,.05)';
+  ctx.lineWidth = 1;
+  for(let i = 0; i <= 4; i++){
+    const y = padT + (ch / 4) * i;
+    ctx.beginPath(); ctx.moveTo(padL, y); ctx.lineTo(padL + cw, y); ctx.stroke();
+  }
+  for(let i = 0; i <= 5; i++){
+    const x = padL + (cw / 5) * i;
+    ctx.beginPath(); ctx.moveTo(x, padT); ctx.lineTo(x, padT + ch); ctx.stroke();
+  }
+
+  ctx.font = '10px -apple-system,"PingFang SC",sans-serif';
+  ctx.fillStyle = cssVar('--t3','rgba(255,255,255,.46)');
+  ctx.textAlign = 'right';
+  ctx.textBaseline = 'middle';
+  for(let i = 0; i <= 4; i++){
+    const v = lerp(yMax, yMin, i / 4);
+    ctx.fillText(Math.round(v), padL - 6, padT + (ch / 4) * i);
+  }
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'top';
+  for(let i = 0; i <= 5; i++){
+    const v = lerp(xMin, xMax, i / 5);
+    ctx.fillText(formatPace(v), padL + (cw / 5) * i, padT + ch + 6);
+  }
+
+  const xOf = p => padL + ((p - xMin) / (xMax - xMin)) * cw;
+  const yOf = hr => padT + ch - ((hr - yMin) / (yMax - yMin)) * ch;
+
+  // 回归线
+  let sx = 0, sy = 0, sxx = 0, sxy = 0;
+  for(const p of pts){
+    sx += p.pace; sy += p.hr;
+    sxx += p.pace * p.pace;
+    sxy += p.pace * p.hr;
+  }
+  const n = pts.length;
+  const slope = (n * sxy - sx * sy) / (n * sxx - sx * sx);
+  const intercept = (sy - slope * sx) / n;
+
+  const lx1 = xMin, lx2 = xMax;
+  const ly1 = slope * lx1 + intercept;
+  const ly2 = slope * lx2 + intercept;
+
+  ctx.strokeStyle = 'rgba(255,255,255,.6)';
+  ctx.lineWidth = 1.8;
+  ctx.setLineDash([6, 4]);
+  ctx.beginPath();
+  ctx.moveTo(xOf(lx1), yOf(ly1));
+  ctx.lineTo(xOf(lx2), yOf(ly2));
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  // 散点
+  for(const p of pts){
+    const x = xOf(p.pace);
+    const y = yOf(p.hr);
+    ctx.fillStyle = hexA(colorOf(p.year), 0.55);
+    ctx.beginPath();
+    ctx.arc(x, y, 3.5, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = hexA(colorOf(p.year), 0.9);
+    ctx.lineWidth = 0.8;
+    ctx.stroke();
+  }
+
+  // 年份图例
+  let lx = padL + 4, ly = padT + 4;
+  ctx.font = '10px -apple-system,"PingFang SC",sans-serif';
+  ctx.textAlign = 'left';
+  ctx.textBaseline = 'middle';
+  for(const y of years){
+    ctx.fillStyle = colorOf(y);
+    ctx.beginPath();
+    ctx.arc(lx + 5, ly + 6, 4, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = cssVar('--t2','rgba(255,255,255,.72)');
+    ctx.fillText(String(y), lx + 14, ly + 6);
+    lx += 42;
+  }
+}
+
+/* ============================================================
+   14 箱线图
+   ============================================================ */
+function drawBoxplot(cv, acts){
+  const { ctx, w, h } = prep(cv);
+
+  const months = Array.from({ length: 12 }, () => []);
+  for(const a of acts){
+    if(a.type !== 'run') continue;
+    if(!a.distance || !a.duration) continue;
+    const pace = a.duration / (a.distance / 1000);
+    if(pace < 200 || pace > 600) continue;
+    months[a.date.getMonth()].push(pace);
+  }
+
+  const allPaces = months.flat();
+  if(allPaces.length === 0) return;
+  let yMin = Math.floor(Math.min(...allPaces) / 30) * 30;
+  let yMax = Math.ceil(Math.max(...allPaces) / 30) * 30;
+
+  const padL = 56, padT = 20, padR = 24, padB = 34;
+  const cw = w - padL - padR, ch = h - padT - padB;
+  const slotW = cw / 12;
+
+  // 网格
+  ctx.strokeStyle = 'rgba(255,255,255,.05)';
+  for(let i = 0; i <= 4; i++){
+    const y = padT + (ch / 4) * i;
+    ctx.beginPath(); ctx.moveTo(padL, y); ctx.lineTo(padL + cw, y); ctx.stroke();
+  }
+
+  ctx.font = '10px -apple-system,"PingFang SC",sans-serif';
+  ctx.fillStyle = cssVar('--t3','rgba(255,255,255,.46)');
+  ctx.textAlign = 'right';
+  ctx.textBaseline = 'middle';
+  for(let i = 0; i <= 4; i++){
+    const v = lerp(yMax, yMin, i / 4);
+    ctx.fillText(formatPace(v), padL - 6, padT + (ch / 4) * i);
+  }
+
+  const yOf = pace => padT + ch - ((yMax - pace) / (yMax - yMin)) * ch;
+
+  const monthsNames = ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
+
+  for(let m = 0; m < 12; m++){
+    const vals = months[m].slice().sort((a, b) => a - b);
+    const cx = padL + m * slotW + slotW / 2;
+
+    // 月份标签
+    ctx.fillStyle = cssVar('--t4','rgba(255,255,255,.24)');
+    ctx.font = '9px -apple-system,"PingFang SC",sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'top';
+    ctx.fillText(monthsNames[m], cx, padT + ch + 6);
+
+    if(vals.length < 3) continue;
+
+    const q1 = vals[Math.floor(vals.length * 0.25)];
+    const med = vals[Math.floor(vals.length * 0.5)];
+    const q3 = vals[Math.floor(vals.length * 0.75)];
+    const lo = vals[0];
+    const hi = vals[vals.length - 1];
+
+    const boxW = slotW * 0.55;
+
+    // 须
+    ctx.strokeStyle = 'rgba(255,159,10,.7)';
+    ctx.lineWidth = 1.4;
+    ctx.beginPath();
+    ctx.moveTo(cx, yOf(lo));
+    ctx.lineTo(cx, yOf(q1));
+    ctx.moveTo(cx, yOf(q3));
+    ctx.lineTo(cx, yOf(hi));
+    ctx.stroke();
+
+    // 须端点
+    ctx.beginPath();
+    ctx.moveTo(cx - boxW * 0.3, yOf(lo));
+    ctx.lineTo(cx + boxW * 0.3, yOf(lo));
+    ctx.moveTo(cx - boxW * 0.3, yOf(hi));
+    ctx.lineTo(cx + boxW * 0.3, yOf(hi));
+    ctx.stroke();
+
+    // 箱体
+    const yQ3 = yOf(q3);
+    const yQ1 = yOf(q1);
+    const grad = ctx.createLinearGradient(0, yQ3, 0, yQ1);
+    grad.addColorStop(0, 'rgba(255,159,10,.55)');
+    grad.addColorStop(1, 'rgba(255,159,10,.30)');
+    ctx.fillStyle = grad;
+    ctx.fillRect(cx - boxW / 2, yQ3, boxW, yQ1 - yQ3);
+    ctx.strokeStyle = 'rgba(255,159,10,.9)';
+    ctx.lineWidth = 1.2;
+    ctx.strokeRect(cx - boxW / 2, yQ3, boxW, yQ1 - yQ3);
+
+    // 中位数
+    ctx.strokeStyle = '#FFD700';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(cx - boxW / 2, yOf(med));
+    ctx.lineTo(cx + boxW / 2, yOf(med));
+    ctx.stroke();
+  }
+}
+
+/* ============================================================
+   15 训练负荷 堆叠面积图
+   ============================================================ */
+function drawStackedLoad(cv, acts){
+  const { ctx, w, h } = prep(cv);
+
+  const years = [...new Set(acts.map(a => a.date.getFullYear()))].sort();
+  const months = [];
+  for(const y of years){
+    for(let m = 0; m < 12; m++) months.push({ y, m });
+  }
+  const nT = months.length;
+  const nTypes = TYPES.length;
+
+  const data = Array.from({ length: nT }, () => Array(nTypes).fill(0));
+  for(const a of acts){
+    const yi = years.indexOf(a.date.getFullYear());
+    if(yi < 0) continue;
+    const ti = TYPES.indexOf(a.type);
+    if(ti < 0) continue;
+    const idx = yi * 12 + a.date.getMonth();
+    data[idx][ti] += a.load;
+  }
+
+  const padL = 48, padT = 20, padR = 24, padB = 32;
+  const cw = w - padL - padR, ch = h - padT - padB;
+
+  let maxStack = 0;
+  for(const row of data){
+    const s = row.reduce((a, b) => a + b, 0);
+    if(s > maxStack) maxStack = s;
+  }
+  if(maxStack <= 0) return;
+
+  const xOf = i => padL + (i / (nT - 1 || 1)) * cw;
+  const yOf = v => padT + ch - (v / maxStack) * ch;
+
+  // 网格
+  ctx.strokeStyle = 'rgba(255,255,255,.05)';
+  for(let i = 0; i <= 4; i++){
+    const y = padT + (ch / 4) * i;
+    ctx.beginPath(); ctx.moveTo(padL, y); ctx.lineTo(padL + cw, y); ctx.stroke();
+  }
+  ctx.font = '10px -apple-system,"PingFang SC",sans-serif';
+  ctx.fillStyle = cssVar('--t3','rgba(255,255,255,.46)');
+  ctx.textAlign = 'right';
+  ctx.textBaseline = 'middle';
+  for(let i = 0; i <= 4; i++){
+    const v = lerp(maxStack, 0, i / 4);
+    ctx.fillText(Math.round(v), padL - 6, padT + (ch / 4) * i);
+  }
+
+  // 堆叠
+  const cum = new Array(nT).fill(0);
+  for(let t = 0; t < nTypes; t++){
+    const color = TYPE_META[TYPES[t]].color;
+    ctx.beginPath();
+    ctx.moveTo(xOf(0), yOf(cum[0]));
+    for(let i = 0; i < nT; i++){
+      cum[i] += data[i][t];
+      ctx.lineTo(xOf(i), yOf(cum[i]));
+    }
+    for(let i = nT - 1; i >= 0; i--){
+      cum[i] -= data[i][t];
+      ctx.lineTo(xOf(i), yOf(cum[i]));
+    }
+    ctx.closePath();
+    ctx.fillStyle = hexA(color, 0.7);
+    ctx.fill();
+    ctx.strokeStyle = hexA(color, 0.9);
+    ctx.lineWidth = 1;
+    ctx.stroke();
+  }
+
+  // 年份标签
+  ctx.fillStyle = cssVar('--t3','rgba(255,255,255,.46)');
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'top';
+  for(let yi = 0; yi < years.length; yi++){
+    const x = xOf(yi * 12 + 6);
+    ctx.fillText(String(years[yi]), x, padT + ch + 6);
+  }
+}
+
+/* ============================================================
+   16 坡度图
+   ============================================================ */
+function drawSlopegraph(cv, acts){
+  const { ctx, w, h } = prep(cv);
+
+  // 取最近 30 天 vs 前 30 天
+  const now = Date.now();
+  const D30 = 30 * 86400000;
+  const curStart = now - D30;
+  const prevStart = now - 2 * D30;
+
+  const cur = acts.filter(a => a.date.getTime() >= curStart);
+  const prev = acts.filter(a => a.date.getTime() >= prevStart && a.date.getTime() < curStart);
+
+  const metrics = [
+    { key:'count',  label:'活动次数', unit:'', get: arr => arr.length },
+    { key:'dist',   label:'总距离',   unit:'km',  get: arr => arr.reduce((s, a) => s + a.distance, 0) / 1000 },
+    { key:'dur',    label:'总时长',   unit:'h',   get: arr => arr.reduce((s, a) => s + a.duration, 0) / 3600 },
+    { key:'load',   label:'总负荷',   unit:'',    get: arr => arr.reduce((s, a) => s + a.load, 0) },
+    { key:'hr',     label:'平均心率', unit:'bpm', get: arr => {
+      const v = arr.filter(a => a.avgHR).map(a => a.avgHR);
+      return v.length ? v.reduce((s, x) => s + x, 0) / v.length : 0;
+    }},
+    { key:'elev',   label:'累计爬升', unit:'m',   get: arr => arr.reduce((s, a) => s + a.elevation, 0) },
+  ];
+
+  const padL = 120, padT = 40, padR = 120, padB = 40;
+  const cw = w - padL - padR, ch = h - padT - padB;
+  const xL = padL, xR = padL + cw;
+
+  ctx.font = '11px -apple-system,"PingFang SC",sans-serif';
+  ctx.textBaseline = 'middle';
+  ctx.textAlign = 'center';
+
+  // 两列标题
+  ctx.fillStyle = cssVar('--t3','rgba(255,255,255,.46)');
+  ctx.fillText('前 30 天', xL, padT - 18);
+  ctx.fillText('最近 30 天', xR, padT - 18);
+
+  // 竖线
+  ctx.strokeStyle = 'rgba(255,255,255,.08)';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(xL, padT);
+  ctx.lineTo(xL, padT + ch);
+  ctx.moveTo(xR, padT);
+  ctx.lineTo(xR, padT + ch);
+  ctx.stroke();
+
+  const rowH = ch / metrics.length;
+
+  metrics.forEach((m, i) => {
+    const vPrev = m.get(prev);
+    const vCur = m.get(cur);
+
+    // 归一化到该行的高度
+    const maxV = Math.max(vPrev, vCur) || 1;
+    const yL = padT + i * rowH + rowH / 2 - (vPrev / maxV) * rowH * 0.28;
+    const yR = padT + i * rowH + rowH / 2 - (vCur / maxV) * rowH * 0.28;
+
+    // 标签（中心）
+    ctx.textAlign = 'right';
+    ctx.fillStyle = cssVar('--t3','rgba(255,255,255,.46)');
+    ctx.fillText(m.label, xL - 14, padT + i * rowH + rowH / 2);
+    ctx.textAlign = 'left';
+    ctx.fillText(m.label, xR + 14, padT + i * rowH + rowH / 2);
+
+    // 左侧数值
+    ctx.textAlign = 'right';
+    ctx.fillStyle = cssVar('--t2','rgba(255,255,255,.72)');
+    ctx.fillText(formatMetric(vPrev, m), xL - 6, yL);
+
+    // 右侧数值
+    ctx.textAlign = 'left';
+    ctx.fillStyle = cssVar('--t1','#fff');
+    ctx.fillText(formatMetric(vCur, m), xR + 6, yR);
+
+    // 连线
+    const change = vPrev > 0 ? (vCur - vPrev) / vPrev : 0;
+    const up = change >= 0;
+    const color = up ? '#30D158' : '#FF453A';
+    const grad = ctx.createLinearGradient(xL, 0, xR, 0);
+    grad.addColorStop(0, hexA(color, 0.5));
+    grad.addColorStop(1, hexA(color, 0.9));
+    ctx.strokeStyle = grad;
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(xL, yL);
+    ctx.lineTo(xR, yR);
+    ctx.stroke();
+
+    // 两端圆点
+    ctx.fillStyle = cssVar('--t1','#fff');
+    ctx.beginPath(); ctx.arc(xL, yL, 3.5, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = color;
+    ctx.beginPath(); ctx.arc(xR, yR, 4, 0, Math.PI * 2); ctx.fill();
+
+    // 中间涨跌百分比
+    ctx.font = '600 11px -apple-system,"PingFang SC",sans-serif';
+    ctx.fillStyle = color;
+    ctx.textAlign = 'center';
+    const txt = (up ? '+' : '') + (change * 100).toFixed(0) + '%';
+    ctx.fillText(txt, (xL + xR) / 2, (yL + yR) / 2 - 8);
+    ctx.font = '11px -apple-system,"PingFang SC",sans-serif';
+    ctx.textAlign = 'left';
+  });
+}
+
+function formatMetric(v, m){
+  if(m.unit === 'h') return v.toFixed(1) + 'h';
+  if(m.unit === 'km') return v.toFixed(1);
+  if(m.unit === 'bpm') return v.toFixed(0) + ' bpm';
+  if(m.unit === 'm') return v.toFixed(0) + ' m';
+  return v.toFixed(v < 10 ? 1 : 0);
+}
+
+/* ============================================================
+   初始化：渲染所有
+   ============================================================ */
+function init(){
+  // 头部统计
+  const totalDist = ACTIVITIES.reduce((s, a) => s + a.distance, 0);
+  const totalDur  = ACTIVITIES.reduce((s, a) => s + a.duration, 0);
+  const dates = ACTIVITIES.map(a => a.date);
+  const minD = new Date(Math.min(...dates));
+  const maxD = new Date(Math.max(...dates));
+  document.getElementById('hdrCount').textContent = ACTIVITIES.length;
+  document.getElementById('hdrSpan').textContent = minD.getFullYear() + '–' + maxD.getFullYear();
+  document.getElementById('hdrDist').textContent = (totalDist / 1000).toFixed(0) + ' km';
+  document.getElementById('hdrDur').textContent = (totalDur / 3600).toFixed(0) + ' h';
+
+  // 渲染所有图表
+  const render = (id, fn) => {
+    const cv = document.getElementById(id);
+    if(!cv) return;
+    try { fn(cv, ACTIVITIES); }
+    catch(e){ console.error(id, e); }
+  };
+
+  render('cv-01', drawHourWeek);
+  render('cv-02', drawPaceDistance);
+  render('cv-03', drawHrPace);
+  render('cv-04', drawMonthYear);
+  render('cv-05', drawTypeMonth);
+  render('cv-06', drawZoneMonth);
+  render('cv-07', drawSpiralCalendar);
+  render('cv-08', drawRadialCalendar);
+  render('cv-09', drawRidge);
+  render('cv-10', drawStreamgraph);
+  render('cv-11', drawCorrelation);
+  render('cv-12', drawScatterPace);
+  render('cv-13', drawHrPaceRegression);
+  render('cv-14', drawBoxplot);
+  render('cv-15', drawStackedLoad);
+  render('cv-16', drawSlopegraph);
+}
+
+// resize 时重绘（节流）
+let _rt = null;
+window.addEventListener('resize', () => {
+  clearTimeout(_rt);
+  _rt = setTimeout(init, 180);
+});
+
+if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+else init();
+
+})();
+</script>
+</body>
+</html>

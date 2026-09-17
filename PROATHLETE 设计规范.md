@@ -536,6 +536,49 @@ font-variant-numeric: tabular-nums;   /* 数字等宽，对齐更稳 */
 
 ### 5.9 图标容器
 
+#### 5.9.1 线性 SVG 图标系统（全站统一）
+
+全站图标（导航 / 按钮 / 标签页 / 表头 / 状态提示 / 卡片 / 图表标注）统一使用 **Lucide 风格线性 SVG**，**禁止使用 Emoji 或文字符号**（`☰ ↑ ↓ → +` 等已全部替换）。
+
+```js
+// 1) 注册表：name → SVG innerHTML（24×24 viewBox，约 50+ 图标）
+const ICONS = {
+  run: '<path d="..."/>', bike: '...', swim: '...', hike: '...',
+  all: '...', menu: '...', plus: '...', arrowRight: '...', arrowDown: '...',
+  /* ... */
+};
+
+// 2) 运行时生成函数（动态 HTML 用）
+function ic(name, size = 18) {
+  return `<svg class="ic-svg" width="${size}" height="${size}" viewBox="0 0 24 24">${ICONS[name] || ''}</svg>`;
+}
+
+// 3) 静态 HTML 用占位符，init() 开头批量物化
+//    <span data-ic="menu" data-size="20"></span>
+function materializeIcons(root = document) {
+  root.querySelectorAll('[data-ic]').forEach(el => {
+    el.innerHTML = ic(el.dataset.ic, +el.dataset.size || 18);
+  });
+}
+```
+
+```css
+.ic-svg {
+  stroke: currentColor;                     /* 跟随主题 / hover / active 变色 */
+  fill: none;
+  stroke-width: 1.7;                        /* 统一描边粗细 */
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vertical-align: middle;
+  flex: 0 0 auto;
+}
+/* 需要实心点时用内联覆盖：style="fill:currentColor;stroke:none" */
+```
+
+**规则**：新增图标只需往 `ICONS` 加一条；静态区域用 `data-ic`，动态模板用 `ic()`；颜色只靠 `currentColor` 继承，禁止给 `stroke` 硬编码颜色。
+
+#### 5.9.2 图标容器
+
 ```css
 .r-ico {
   width: 38px; height: 38px;
@@ -596,6 +639,57 @@ font-variant-numeric: tabular-nums;   /* 数字等宽，对齐更稳 */
 }
 @keyframes tIn { from { opacity: 0; transform: translateX(50px) scale(.94); } }
 ```
+
+---
+
+### 5.13 图表组件（Chart）
+
+所有图表统一基于 **Canvas 2D** 手绘，取色跟随主题 CSS 变量（`getComputedStyle` 读取 `--blue` 等），不引入任何外部图表库。
+
+#### 5.13.1 容器与画布
+
+```css
+.chart-wrap { position: relative; width: 100%; }
+.chart-wrap canvas { width: 100%; display: block; }
+.card .chart-note {                      /* 图表下方讲解 */
+  font-size: 12px; color: var(--t3); line-height: 1.7;
+  margin-top: var(--s2);
+}
+```
+
+- 画布需按 `devicePixelRatio` 放大后 `ctx.scale(dpr, dpr)`，避免高分屏模糊。
+- 每次重绘前 `clearRect`，尺寸随容器 `ResizeObserver` 自适应。
+
+#### 5.13.2 取色与坐标轴
+
+```js
+const cssVar = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const PAL = ['--blue','--green','--orange','--purple','--teal','--pink','--indigo'];
+```
+
+- 颜色**必须**从 CSS 变量读取，禁止硬编码十六进制。
+- 网格线用 `--hairline`，刻度文字用 `--t3`（约 11px），坐标轴说明用 `--t4`。
+
+#### 5.13.3 进步可视化（分析页）
+
+「进步可视化」4 卡的专用类：
+
+```css
+.prog-intro {                            /* 方法学引言 */
+  font-size: 12.5px; color: var(--t2); line-height: 1.75;
+  padding: var(--s3) var(--s4);
+  border-left: 2px solid var(--blue);
+  background: var(--surface-a);
+  border-radius: var(--r-sm);
+}
+.prog-kpi {                              /* 指标小卡 */
+  display: flex; gap: var(--s2); align-items: baseline;
+}
+.prog-kpi b { font-size: 16px; font-variant-numeric: tabular-nums; }
+```
+
+- 4 张图：耐力趋势（散点 + OLS 回归线）、阶段能力雷达（早期 vs 近期）、稳定性演变（季度 KDE 脊线）、心肺效率 EF（月均面积线）。
+- 每卡必配 `chart-note` 或 `prog-intro` 讲解，说明指标含义与判读方式。
 
 ---
 
@@ -768,6 +862,8 @@ transition: transform .62s cubic-bezier(.22,1,.36,1), opacity .5s var(--ease);
 - ✅ **玻璃容器统一加 `.glass` 类，不重复定义**
 - ✅ **数字后面跟单位，单位用二级文字色 + 更小字号**
 - ✅ **语义色背景用 `color-mix` 生成半透明**
+- ✅ **图标必须用线性 SVG（`ic()` / `data-ic`）**，禁止 Emoji 与文字符号（`☰ ↑ ↓ → +`）
+- ✅ **图表颜色必须从 CSS 变量读取**，禁止硬编码色值；画布需按 `devicePixelRatio` 缩放
 - ❌ 禁止 `z-index: 9999` 之外的魔数（除 toast、tooltip 层）
 - ❌ 禁止使用 `!important`（除抵消内联样式的 `.tabs .tab`）
 
@@ -793,6 +889,8 @@ transition: transform .62s cubic-bezier(.22,1,.36,1), opacity .5s var(--ease);
 .seg-pb-card        分段 PB 卡片
 ```
 
+> 图表 / 图标相关可复用类：`.ic-svg`（线性图标）、`.chart-wrap`（图表容器）、`.chart-note`（图表讲解）、`.prog-intro`（方法学引言）、`.prog-kpi`（指标小卡）。
+
 ### 9.4 新增页面检查清单
 
 完成新页面后，逐项核对：
@@ -810,6 +908,9 @@ transition: transform .62s cubic-bezier(.22,1,.36,1), opacity .5s var(--ease);
 - □  移动端（≤820px）布局已测试
 - □  至少在一个深色主题 + Latte 浅色主题下视觉正常
 - □  键盘可访问（Enter/Space 触发按钮）
+- □  图标使用线性 SVG（`ic()` / `data-ic`），无 Emoji / 文字符号
+- □  图表颜色取自 CSS 变量，画布已按 `devicePixelRatio` 缩放
+- □  图表 / 进步卡片配有 `chart-note` 或 `prog-intro` 讲解
 
 ---
 
@@ -873,5 +974,5 @@ transition: transform .62s cubic-bezier(.22,1,.36,1), opacity .5s var(--ease);
 
 ---
 
-**版本**：v1.0 · 对应 PROATHLETE 当前代码库
+**版本**：v1.1 · 对应 PROATHLETE 当前代码库（新增：线性 SVG 图标系统、总次数详情页、进步可视化）
 **维护原则**：本规范随代码演进，任何新增视觉约定必须同步更新此文档，并追加到相应章节。

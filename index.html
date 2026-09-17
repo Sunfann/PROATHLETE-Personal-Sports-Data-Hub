@@ -267,7 +267,7 @@ body.has-custom-bg::before{opacity:.25;}
 .card-label{font-size:13px;font-weight:600;color:var(--t2);display:flex;align-items:center;gap:7px;}
 .card-label .dot{width:8px;height:8px;border-radius:3px;flex:0 0 8px;}
 .card-label .ic-svg{color:var(--t3);}
-.card-action{font-size:12px;font-weight:600;color:var(--blue);cursor:pointer;opacity:.9;}
+.card-action{font-size:12px;font-weight:600;color:var(--blue);cursor:pointer;opacity:.9;display:inline-flex;align-items:center;gap:3px;}
 .kpi{font-size:40px;font-weight:800;letter-spacing:-1.6px;line-height:1.05;position:relative;z-index:2;}
 .kpi .unit{font-size:15px;font-weight:600;color:var(--t2);letter-spacing:0;margin-left:3px;}
 .kpi-sm{font-size:26px;font-weight:800;letter-spacing:-1px;line-height:1.1;position:relative;z-index:2;}
@@ -414,6 +414,12 @@ body.has-custom-bg::before{opacity:.25;}
 .empty .e-t{font-size:15px;font-weight:600;color:var(--t2);}
 .empty .e-d{font-size:12.5px;max-width:340px;line-height:1.65;}
 .chart-box{width:100%;position:relative;}
+.prog-intro{font-size:12.5px;line-height:1.72;color:var(--t3);max-width:880px;margin:0 0 var(--s4);}
+.prog-kpi{display:flex;align-items:baseline;gap:8px;padding:var(--s3) 0 0;}
+.prog-kpi .v{font-size:26px;font-weight:800;line-height:1;letter-spacing:-.5px;color:var(--t1);}
+.prog-kpi .u{font-size:12px;font-weight:700;color:var(--t3);}
+.prog-kpi .l{margin-left:auto;font-size:11.5px;font-weight:600;color:var(--t3);}
+.chart-note{font-size:11.5px;line-height:1.68;color:var(--t3);padding:var(--s4) 0 0;margin:var(--s3) 0 0;border-top:1px solid rgba(255,255,255,.07);}
 .chart-box canvas{width:100%;height:100%;display:block;}
 ::-webkit-scrollbar{width:8px;height:8px;}
 ::-webkit-scrollbar-track{background:transparent;}
@@ -461,6 +467,7 @@ body.has-custom-bg::before{opacity:.25;}
 .dc-metric .v{font-size:19px;font-weight:800;letter-spacing:-.6px;line-height:1.1;font-variant-numeric:tabular-nums;white-space:nowrap;}
 .dc-metric .v .u{font-size:10px;font-weight:600;color:var(--t3);margin-left:2px;letter-spacing:0;}
 .dc-metric .d{font-size:10px;font-weight:700;color:var(--green);display:flex;align-items:center;gap:3px;line-height:1.2;}
+.dc-metric .d.up{color:var(--green);}
 .dc-metric .d.down{color:var(--red);}
 .dc-metric .d.flat{color:var(--t3);}
 .dc-tabs{display:flex;gap:4px;padding:var(--s4) var(--s5) var(--s2);flex-wrap:wrap;flex-shrink:0;position:relative;isolation:isolate;}
@@ -476,6 +483,14 @@ body.has-custom-bg::before{opacity:.25;}
 .dc-section-title{padding:var(--s5) var(--s5) var(--s3);font-size:11px;font-weight:700;color:var(--t3);letter-spacing:.8px;text-transform:uppercase;display:flex;align-items:center;gap:8px;flex-shrink:0;}
 .dc-section-title::before{content:'';width:3px;height:10px;background:var(--blue);border-radius:2px;}
 .dc-distribution{display:grid;grid-template-columns:170px minmax(0, 1fr);gap:var(--s5);padding:0 var(--s5) var(--s4);align-items:center;flex-shrink:0;}
+.detail-card.count-card .dc-scroll{gap:0;}
+.dc-idx{font:800 12px/1 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--t3);letter-spacing:.5px;padding:4px 7px;border-radius:7px;background:var(--surface-b);}
+.dc-hero{display:flex;align-items:baseline;gap:7px;padding:var(--s4) var(--s5) 0;flex-shrink:0;}
+.dc-hero .v{font-size:clamp(26px,3.4vw,34px);font-weight:800;line-height:1;letter-spacing:-1px;color:var(--t1);}
+.dc-hero .u{font-size:13px;font-weight:700;color:var(--t3);}
+.dc-hero .l{margin-left:auto;font-size:11.5px;font-weight:600;color:var(--t3);}
+.dc-count-chart{height:clamp(190px,32vh,300px);margin-top:var(--s4);}
+.dc-caption{padding:var(--s4) var(--s5) var(--s5);font-size:11.5px;line-height:1.55;color:var(--t3);flex-shrink:0;}
 .dc-donut-wrap{position:relative;width:170px;height:170px;}
 .dc-donut-wrap canvas{width:170px;height:170px;display:block;}
 .dc-donut-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none;}
@@ -737,7 +752,7 @@ body.has-custom-bg::before{opacity:.25;}
 
   <header class="header">
     <div class="header-left">
-      <button class="btn btn-ghost btn-icon" id="menuToggle" style="display:none;">☰</button>
+      <button class="btn btn-ghost btn-icon" id="menuToggle" style="display:none;"><span data-ic="menu" data-size="20"></span></button>
       <div>
         <div class="header-title" id="headerTitle">总览</div>
         <div class="header-sub" id="headerSub">全部运动数据一览</div>
@@ -754,8 +769,8 @@ body.has-custom-bg::before{opacity:.25;}
       <div class="grid" id="dashboardGrid">
         <div class="card glass shine clickable col-2" data-card="total-time" style="--card-accent:#0A84FF">
           <div class="card-figure"><div class="fig-mask"></div></div>
-          <button class="fig-upload" data-card="total-time" title="上传图标">+</button>
-          <div class="card-head"><span class="card-label"><span class="dot" style="background:var(--blue)"></span>全部运动总用时</span><span class="card-action">详情 →</span></div>
+          <button class="fig-upload" data-card="total-time" title="上传图标"><span data-ic="plus" data-size="14"></span></button>
+          <div class="card-head"><span class="card-label"><span class="dot" style="background:var(--blue)"></span>全部运动总用时</span><span class="card-action">详情<span data-ic="arrowRight" data-size="12"></span></span></div>
           <div class="kpi" id="kTotalTime">—<span class="unit">h</span></div>
           <div class="stat-row">
             <div class="stat"><span class="stat-v" id="kTTHour">—</span><span class="stat-l">小时</span></div>
@@ -765,36 +780,36 @@ body.has-custom-bg::before{opacity:.25;}
         </div>
         <div class="card glass shine clickable col-2" data-card="total-count" style="--card-accent:#BF5AF2">
           <div class="card-figure"><div class="fig-mask"></div></div>
-          <button class="fig-upload" data-card="total-count" title="上传图标">+</button>
-          <div class="card-head"><span class="card-label"><span class="dot" style="background:var(--purple)"></span>总运动次数</span><span class="card-action">详情 →</span></div>
+          <button class="fig-upload" data-card="total-count" title="上传图标"><span data-ic="plus" data-size="14"></span></button>
+          <div class="card-head"><span class="card-label"><span class="dot" style="background:var(--purple)"></span>总运动次数</span><span class="card-action">详情<span data-ic="arrowRight" data-size="12"></span></span></div>
           <div class="kpi" id="kTotalCount">—<span class="unit">次</span></div>
           <div class="stat-row" id="kTypeBreakdown"></div>
         </div>
 
         <div class="card glass shine clickable" data-card="run-today" style="--card-accent:#FF9F0A">
           <div class="card-figure"><div class="fig-mask"></div></div>
-          <button class="fig-upload" data-card="run-today" title="上传图标">+</button>
+          <button class="fig-upload" data-card="run-today" title="上传图标"><span data-ic="plus" data-size="14"></span></button>
           <div class="card-head"><span class="card-label"><span class="dot" style="background:var(--orange)"></span>当日跑步</span></div>
           <div class="kpi-sm" id="kRunToday">—<span class="unit">km</span></div>
           <div class="sub" id="kRunTodaySub">今日暂无跑步</div>
         </div>
         <div class="card glass shine clickable" data-card="run-total" style="--card-accent:#FF9F0A">
           <div class="card-figure"><div class="fig-mask"></div></div>
-          <button class="fig-upload" data-card="run-total" title="上传图标">+</button>
+          <button class="fig-upload" data-card="run-total" title="上传图标"><span data-ic="plus" data-size="14"></span></button>
           <div class="card-head"><span class="card-label"><span class="dot" style="background:var(--orange)"></span>总跑步</span></div>
           <div class="kpi-sm" id="kRunTotal">—<span class="unit">km</span></div>
           <div class="sub" id="kRunTotalSub">累计里程</div>
         </div>
         <div class="card glass shine clickable" data-card="run-outdoor" style="--card-accent:#FF9F0A">
           <div class="card-figure"><div class="fig-mask"></div></div>
-          <button class="fig-upload" data-card="run-outdoor" title="上传图标">+</button>
+          <button class="fig-upload" data-card="run-outdoor" title="上传图标"><span data-ic="plus" data-size="14"></span></button>
           <div class="card-head"><span class="card-label"><span class="dot" style="background:var(--orange)"></span>室外跑步</span></div>
           <div class="kpi-sm" id="kRunOutdoor">—<span class="unit">km</span></div>
           <div class="sub" id="kRunOutdoorSub">含 GPS 轨迹</div>
         </div>
         <div class="card glass shine clickable" data-card="run-indoor" style="--card-accent:#FF9F0A">
           <div class="card-figure"><div class="fig-mask"></div></div>
-          <button class="fig-upload" data-card="run-indoor" title="上传图标">+</button>
+          <button class="fig-upload" data-card="run-indoor" title="上传图标"><span data-ic="plus" data-size="14"></span></button>
           <div class="card-head"><span class="card-label"><span class="dot" style="background:var(--orange)"></span>室内跑步</span></div>
           <div class="kpi-sm" id="kRunIndoor">—<span class="unit">km</span></div>
           <div class="sub" id="kRunIndoorSub">跑步机 / 室内</div>
@@ -802,28 +817,28 @@ body.has-custom-bg::before{opacity:.25;}
 
         <div class="card glass shine clickable" data-card="cycle-today" style="--card-accent:#0A84FF">
           <div class="card-figure"><div class="fig-mask"></div></div>
-          <button class="fig-upload" data-card="cycle-today" title="上传图标">+</button>
+          <button class="fig-upload" data-card="cycle-today" title="上传图标"><span data-ic="plus" data-size="14"></span></button>
           <div class="card-head"><span class="card-label"><span class="dot" style="background:var(--blue)"></span>当日骑行</span></div>
           <div class="kpi-sm" id="kCycleToday">—<span class="unit">km</span></div>
           <div class="sub" id="kCycleTodaySub">今日暂无骑行</div>
         </div>
         <div class="card glass shine clickable" data-card="cycle-total" style="--card-accent:#0A84FF">
           <div class="card-figure"><div class="fig-mask"></div></div>
-          <button class="fig-upload" data-card="cycle-total" title="上传图标">+</button>
+          <button class="fig-upload" data-card="cycle-total" title="上传图标"><span data-ic="plus" data-size="14"></span></button>
           <div class="card-head"><span class="card-label"><span class="dot" style="background:var(--blue)"></span>总骑行</span></div>
           <div class="kpi-sm" id="kCycleTotal">—<span class="unit">km</span></div>
           <div class="sub" id="kCycleTotalSub">累计里程</div>
         </div>
         <div class="card glass shine clickable" data-card="cycle-outdoor" style="--card-accent:#0A84FF">
           <div class="card-figure"><div class="fig-mask"></div></div>
-          <button class="fig-upload" data-card="cycle-outdoor" title="上传图标">+</button>
+          <button class="fig-upload" data-card="cycle-outdoor" title="上传图标"><span data-ic="plus" data-size="14"></span></button>
           <div class="card-head"><span class="card-label"><span class="dot" style="background:var(--blue)"></span>室外骑行</span></div>
           <div class="kpi-sm" id="kCycleOutdoor">—<span class="unit">km</span></div>
           <div class="sub" id="kCycleOutdoorSub">含 GPS 轨迹</div>
         </div>
         <div class="card glass shine clickable" data-card="cycle-indoor" style="--card-accent:#0A84FF">
           <div class="card-figure"><div class="fig-mask"></div></div>
-          <button class="fig-upload" data-card="cycle-indoor" title="上传图标">+</button>
+          <button class="fig-upload" data-card="cycle-indoor" title="上传图标"><span data-ic="plus" data-size="14"></span></button>
           <div class="card-head"><span class="card-label"><span class="dot" style="background:var(--blue)"></span>室内骑行</span></div>
           <div class="kpi-sm" id="kCycleIndoor">—<span class="unit">km</span></div>
           <div class="sub" id="kCycleIndoorSub">骑行台 / 室内</div>
@@ -831,28 +846,28 @@ body.has-custom-bg::before{opacity:.25;}
 
         <div class="card glass shine clickable" data-card="walk-today" style="--card-accent:#30D158">
           <div class="card-figure"><div class="fig-mask"></div></div>
-          <button class="fig-upload" data-card="walk-today" title="上传图标">+</button>
+          <button class="fig-upload" data-card="walk-today" title="上传图标"><span data-ic="plus" data-size="14"></span></button>
           <div class="card-head"><span class="card-label"><span class="dot" style="background:var(--green)"></span>当日步行</span></div>
           <div class="kpi-sm" id="kWalkToday">—<span class="unit">km</span></div>
           <div class="sub" id="kWalkTodaySub">今日暂无步行</div>
         </div>
         <div class="card glass shine clickable" data-card="walk-total" style="--card-accent:#30D158">
           <div class="card-figure"><div class="fig-mask"></div></div>
-          <button class="fig-upload" data-card="walk-total" title="上传图标">+</button>
+          <button class="fig-upload" data-card="walk-total" title="上传图标"><span data-ic="plus" data-size="14"></span></button>
           <div class="card-head"><span class="card-label"><span class="dot" style="background:var(--green)"></span>总步行</span></div>
           <div class="kpi-sm" id="kWalkTotal">—<span class="unit">km</span></div>
           <div class="sub" id="kWalkTotalSub">累计里程</div>
         </div>
         <div class="card glass shine clickable" data-card="walk-outdoor" style="--card-accent:#30D158">
           <div class="card-figure"><div class="fig-mask"></div></div>
-          <button class="fig-upload" data-card="walk-outdoor" title="上传图标">+</button>
+          <button class="fig-upload" data-card="walk-outdoor" title="上传图标"><span data-ic="plus" data-size="14"></span></button>
           <div class="card-head"><span class="card-label"><span class="dot" style="background:var(--green)"></span>室外步行</span></div>
           <div class="kpi-sm" id="kWalkOutdoor">—<span class="unit">km</span></div>
           <div class="sub" id="kWalkOutdoorSub">含 GPS 轨迹</div>
         </div>
         <div class="card glass shine clickable" data-card="hike-total" style="--card-accent:#FFD60A">
           <div class="card-figure"><div class="fig-mask"></div></div>
-          <button class="fig-upload" data-card="hike-total" title="上传图标">+</button>
+          <button class="fig-upload" data-card="hike-total" title="上传图标"><span data-ic="plus" data-size="14"></span></button>
           <div class="card-head"><span class="card-label"><span class="dot" style="background:var(--yellow)"></span>徒步</span></div>
           <div class="kpi-sm" id="kHikeTotal">—<span class="unit">km</span></div>
           <div class="sub" id="kHikeTotalSub">累计徒步距离</div>
@@ -888,7 +903,7 @@ body.has-custom-bg::before{opacity:.25;}
       </div>
       <div style="margin-bottom:var(--s5);">
         <div class="tabs" id="actTabs">
-          <div class="tab active" data-filter="all">全部</div>
+          <div class="tab active" data-filter="all"><span data-ic="all" data-size="14"></span>全部</div>
           <div class="tab" data-filter="run"><span data-ic="run" data-size="14"></span>跑步</div>
           <div class="tab" data-filter="cycle"><span data-ic="bike" data-size="14"></span>骑行</div>
           <div class="tab" data-filter="swim"><span data-ic="swim" data-size="14"></span>游泳</div>
@@ -915,6 +930,38 @@ body.has-custom-bg::before{opacity:.25;}
         <div class="card glass shine col-2">
           <div class="card-head"><span class="card-label"><span data-ic="bar" data-size="14"></span>每周训练量</span></div>
           <div class="chart-box" style="height:250px;"><canvas id="chWeekly"></canvas></div>
+        </div>
+      </div>
+      <div style="margin-top:var(--s6);">
+        <div class="card-head" style="margin-bottom:var(--s3);flex-wrap:wrap;">
+          <span class="card-label"><span data-ic="trendingUp" data-size="16"></span>进步可视化 <span class="tag blue" style="font-size:10px;padding:2px 8px;">能力演变</span></span>
+        </div>
+        <p class="prog-intro">以「时间」为自变量刻画运动能力的演变过程：将全部活动按时间排序，比较早期与近期在速度、效率、负荷结构、稳定性等维度的差异，量化“进步”。所有指标均基于导入数据实时计算，样本不足时自动降级提示。</p>
+        <div class="grid">
+          <div class="card glass shine col-2">
+            <div class="card-head"><span class="card-label"><span data-ic="trendingUp" data-size="14"></span>耐力表现趋势</span><span class="tag blue" id="progTrendTag">—</span></div>
+            <div class="prog-kpi"><span class="v" id="progTrendKv">—</span><span class="u" id="progTrendKu"></span><span class="l" id="progTrendKl"></span></div>
+            <div class="chart-box" style="height:250px;"><canvas id="chProgTrend"></canvas></div>
+            <p class="chart-note" id="progTrendNote">—</p>
+          </div>
+          <div class="card glass shine col-2">
+            <div class="card-head"><span class="card-label"><span data-ic="target" data-size="14"></span>阶段能力对比</span><span class="tag blue" id="progRadarTag">早期 vs 近期</span></div>
+            <div class="prog-kpi"><span class="v" id="progRadarKv">—</span><span class="u" id="progRadarKu"></span><span class="l" id="progRadarKl"></span></div>
+            <div class="chart-box" style="height:250px;"><canvas id="chProgRadar"></canvas></div>
+            <p class="chart-note" id="progRadarNote">—</p>
+          </div>
+          <div class="card glass shine col-2">
+            <div class="card-head"><span class="card-label"><span data-ic="activity" data-size="14"></span>稳定性演变</span><span class="tag blue" id="progRidgeTag">—</span></div>
+            <div class="prog-kpi"><span class="v" id="progRidgeKv">—</span><span class="u" id="progRidgeKu"></span><span class="l" id="progRidgeKl"></span></div>
+            <div class="chart-box" style="height:250px;"><canvas id="chProgRidge"></canvas></div>
+            <p class="chart-note" id="progRidgeNote">—</p>
+          </div>
+          <div class="card glass shine col-2">
+            <div class="card-head"><span class="card-label"><span data-ic="zap" data-size="14"></span>心肺效率 EF</span><span class="tag blue" id="progEfTag">—</span></div>
+            <div class="prog-kpi"><span class="v" id="progEfKv">—</span><span class="u" id="progEfKu"></span><span class="l" id="progEfKl"></span></div>
+            <div class="chart-box" style="height:250px;"><canvas id="chProgEf"></canvas></div>
+            <p class="chart-note" id="progEfNote">—</p>
+          </div>
         </div>
       </div>
       <div style="margin-top:var(--s6);">
@@ -1014,7 +1061,7 @@ body.has-custom-bg::before{opacity:.25;}
           </div>
           <div style="display:flex;gap:var(--s2);margin-top:var(--s3);">
             <button class="btn btn-primary btn-sm" id="btnGarminSave"><span data-ic="save" data-size="14"></span>保存配置</button>
-            <button class="btn btn-ghost btn-sm" id="btnGarminCancel">取消</button>
+            <button class="btn btn-ghost btn-sm" id="btnGarminCancel"><span data-ic="x" data-size="14"></span>取消</button>
             <button class="btn btn-ghost btn-sm" id="btnGarminReset" style="margin-left:auto;"><span data-ic="trash" data-size="14"></span>清除配置</button>
           </div>
         </div>
@@ -1253,12 +1300,12 @@ const ICONS = {
   uploadCloud: '<path d="M6 18a4 4 0 0 1 0-8 5 5 0 0 1 9.6-2A3.5 3.5 0 0 1 20 11.5a3.5 3.5 0 0 1-1 6.5"/><polyline points="9 14 12 11 15 14"/><line x1="12" y1="11" x2="12" y2="19"/>',
 
   /* 运动类型 */
-  run: '<circle cx="15" cy="4" r="1.7"/><path d="m13 8-2 5 3 2 2 5"/><path d="m11 13-4 1-2 4"/><path d="m16 11 4 1"/>',
-  bike: '<circle cx="5.5" cy="17.5" r="3.5"/><circle cx="18.5" cy="17.5" r="3.5"/><path d="M5.5 17.5 10 7h5l3.5 10.5"/><path d="M10 7H7"/>',
-  swim: '<path d="M2 16c2-1.5 4-1.5 6 0s4 1.5 6 0 4-1.5 6 0"/><path d="M2 20c2-1.5 4-1.5 6 0s4 1.5 6 0 4-1.5 6 0"/><circle cx="17" cy="7" r="2"/><path d="m9 12 3-2 3 3 3-1"/>',
-  walk: '<circle cx="13" cy="4" r="1.7"/><path d="m12 8-2 5 3 3 1 5"/><path d="m10 13-2 4"/><path d="m15 16 3 5"/>',
-  hike: '<circle cx="13" cy="4" r="1.7"/><path d="m11 9-3 6 3 3 1 5"/><path d="m13 10 3 3 2 5"/><path d="M8 20V9l2-2"/>',
-  gym: '<path d="M6.5 6.5v11"/><path d="M17.5 6.5v11"/><path d="M3.5 9v6"/><path d="M20.5 9v6"/><path d="M6.5 12h11"/>',
+  run: '<path d="M11.007 5a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"/><path d="M4 17l5 1l.75 -1.5"/><path d="M15 21v-4l-4 -3l1 -6"/><path d="M7 12v-3l5 -1l3 3l3 1"/>',
+  bike: '<path d="M2 18a3 3 0 1 0 6 0a3 3 0 0 0 -6 0"/><path d="M16 18a3 3 0 1 0 6 0a3 3 0 0 0 -6 0"/><path d="M12 19v-4l-3 -3l5 -4l2 3h3"/><path d="M13.007 5a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"/>',
+  swim: '<path d="M15 9a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"/><path d="M6 11l4 -2l3.5 3l-1.5 2"/><path d="M3 16.75a2.4 2.4 0 0 0 1 .25a2.4 2.4 0 0 0 2 -1a2.4 2.4 0 0 1 2 -1a2.4 2.4 0 0 1 2 1a2.4 2.4 0 0 0 2 1a2.4 2.4 0 0 0 2 -1a2.4 2.4 0 0 1 2 -1a2.4 2.4 0 0 1 2 1a2.4 2.4 0 0 0 2 1a2.4 2.4 0 0 0 1 -.25"/>',
+  walk: '<path d="M12 4a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"/><path d="M7 21l3 -4"/><path d="M16 21l-2 -4l-3 -3l1 -6"/><path d="M6 12l2 -3l4 -1l3 3l3 1"/>',
+  hike: '<path d="M11 4a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"/><path d="M7 21l2 -4"/><path d="M13 21v-4l-3 -3l1 -6l3 4l3 2"/><path d="M10 14l-1.827 -1.218a2 2 0 0 1 -.831 -2.15l.28 -1.117a2 2 0 0 1 1.939 -1.515h1.439l4 1l3 -2"/><path d="M17 12v9"/><path d="M16 20h2"/>',
+  gym: '<path d="M7.026 9.61l-.95 -4.18a2 2 0 0 1 1.95 -2.43h8a2 2 0 0 1 2 2.43l-1 4.2"/><path d="M9.026 17.001h6"/><path d="M18.906 20.06a7.92 7.92 0 0 0 1 -5.33a8 8 0 1 0 -14.77 5.33a2 2 0 0 0 1.71 .94h10.36a2 2 0 0 0 1.7 -.94"/>',
   activity: '<polyline points="3 12 8 12 11 4 14 20 17 12 21 12"/>',
 
   /* 数据/统计 */
@@ -1304,6 +1351,13 @@ const ICONS = {
   chevronLeft: '<polyline points="15 6 9 12 15 18"/>',
   chevronRight: '<polyline points="9 6 15 12 9 18"/>',
   inbox: '<path d="M3 13h5l1 3h6l1-3h5"/><path d="M5 5h14l2 8v5a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-5z"/>',
+
+  /* 筛选 / 全站统一补充 */
+  all:        '<path d="M12 4l-8 4l8 4l8 -4l-8 -4"/><path d="M4 12l8 4l8 -4"/><path d="M4 16l8 4l8 -4"/>',
+  menu:       '<path d="M4 6h16"/><path d="M4 12h16"/><path d="M4 18h16"/>',
+  plus:       '<path d="M12 5v14"/><path d="M5 12h14"/>',
+  arrowRight: '<path d="M5 12h14"/><path d="M13 18l6 -6"/><path d="M13 6l6 6"/>',
+  arrowDown:  '<path d="M12 5v14"/><path d="M18 13l-6 6"/><path d="M6 13l6 6"/>',
 };
 
 function ic(name, size){
@@ -2517,7 +2571,7 @@ function applyCardIcons(){
       figWrap.classList.remove('has-image');
       figMask.style.webkitMaskImage = '';
       figMask.style.maskImage = '';
-      if(btn){ btn.classList.remove('has-icon'); btn.innerHTML = '+'; btn.title = '上传图标'; }
+      if(btn){ btn.classList.remove('has-icon'); btn.innerHTML = ic('plus',15); btn.title = '上传图标'; }
     }
   });
 }
@@ -3772,7 +3826,7 @@ async function importFiles(fileList){
         for(const e of entries){
           try{
             const a=parseBytes(e.bytes, e.name);
-            a.source = file.name + ' → ' + e.name;
+            a.source = file.name + ' · ' + e.name;
             pushActivity(a);
           }catch(err){ fail++; errors.push(`${e.name}: ${err.message}`); }
         }
@@ -4616,7 +4670,8 @@ function filterActivitiesForCard(cardType){
   const all=State.activities;
   const t=(a,type)=>a.type===type;
   switch(cardType){
-    case 'total-time': case 'total-count': return {category:'all',title:'全部运动',sub:'综合',list:all.slice(),filterKey:'all'};
+    case 'total-time': return {category:'all',mode:'time',title:'总用时',sub:'综合',list:all.slice(),filterKey:'all'};
+    case 'total-count': return {category:'all',mode:'count',title:'总次数',sub:'次数',list:all.slice(),filterKey:'all'};
     case 'run-total': return {category:'run',title:'总跑步',sub:'全部时间',list:all.filter(a=>t(a,'run')),filterKey:'all'};
     case 'run-outdoor': return {category:'run',title:'室外跑步',sub:'含 GPS 轨迹',list:all.filter(a=>t(a,'run')&&!a.indoor),filterKey:'outdoor'};
     case 'run-indoor': return {category:'run',title:'室内跑步',sub:'跑步机 / 室内',list:all.filter(a=>t(a,'run')&&a.indoor),filterKey:'indoor'};
@@ -4745,7 +4800,7 @@ function buildMetricGrid(stats,category){
   const mi=State.settings.unit==='mi';
   const dd=mi?1609.344:1000;
   const du=mi?'mi':'km';
-  const fmtChange=(v)=>{if(v==null)return {text:'—',cls:'flat'};return {text:`${v>=0?'↑':'↓'} ${Math.abs(v).toFixed(0)}%`,cls:v>=0?'':'down'};};
+  const fmtChange=(v)=>{if(v==null)return {text:'—',cls:'flat'};return {text:Math.abs(v).toFixed(0)+'%',cls:v>=0?'up':'down'};};
   if(category==='cycle'){
     const speed=stats.avgSpeed>0?((stats.avgSpeed*3600)/dd).toFixed(1):'—';
     return [
@@ -4811,12 +4866,241 @@ function buildDistribution(category,stats){
   return {center:{v:Math.round(total/60),l:'分钟'},
     segments:stats.zones.map((v,i)=>({value:v,color:ZONE_COLORS[i],label:ZONE_NAMES[i],pct:(v/total*100).toFixed(0)})),title:'心率区间分布'};
 }
+
+/* ============================================================
+   总次数详情页：数量向可视化（移植自《运动数据可视化样本集》）
+   5 张卡片，各含 1 张不重复的图表
+   ============================================================ */
+function _cvar(n,fb){try{const v=getComputedStyle(document.documentElement).getPropertyValue(n).trim();return v||fb;}catch(e){return fb;}}
+function _hexA(hex,a){
+  if(hex&&hex.charAt(0)==='#'){
+    let h=hex.slice(1); if(h.length===3)h=h.split('').map(c=>c+c).join('');
+    const n=parseInt(h,16);
+    return 'rgba('+((n>>16)&255)+','+((n>>8)&255)+','+(n&255)+','+a+')';
+  }
+  return hex;
+}
+function _prep(cv){
+  const dpr=window.devicePixelRatio||1;
+  const r=cv.getBoundingClientRect();
+  const w=Math.max(1,Math.round(r.width));
+  const h=Math.max(1,Math.round(r.height));
+  cv.width=Math.round(w*dpr); cv.height=Math.round(h*dpr);
+  const ctx=cv.getContext('2d');
+  ctx.setTransform(dpr,0,0,dpr,0,0); ctx.clearRect(0,0,w,h);
+  return {ctx,w,h};
+}
+function _cRR(ctx,x,y,w,h,r){
+  ctx.beginPath();
+  if(ctx.roundRect)ctx.roundRect(x,y,w,h,r);
+  else{ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath();}
+}
+function _cTx(ctx,txt,x,y,o){
+  o=o||{};
+  ctx.font=(o.weight||400)+' '+(o.size||11)+'px -apple-system,"PingFang SC",sans-serif';
+  ctx.textAlign=o.align||'center'; ctx.textBaseline=o.base||'middle';
+  ctx.fillStyle=o.color||_cvar('--t3','rgba(255,255,255,.46)');
+  ctx.fillText(txt,x,y);
+}
+function _cGrid(ctx,padL,padT,cw,ch,rows){
+  rows=rows||3;
+  ctx.strokeStyle='rgba(255,255,255,.07)'; ctx.lineWidth=1;
+  for(let i=0;i<=rows;i++){
+    const y=Math.round(padT+ch/rows*i)+.5;
+    ctx.beginPath(); ctx.moveTo(padL,y); ctx.lineTo(padL+cw,y); ctx.stroke();
+  }
+}
+function _cDate(a){ return a.date instanceof Date ? a.date : new Date(a.date); }
+const _C_ACCENT='#0A84FF';
+
+/* 1. 月度频次（近 12 个月柱状） */
+function drawCountMonthly(cv,acts){
+  const {ctx,w,h}=_prep(cv);
+  const now=new Date(); const months=[];
+  for(let i=11;i>=0;i--){const d=new Date(now.getFullYear(),now.getMonth()-i,1);months.push({y:d.getFullYear(),m:d.getMonth(),n:0});}
+  const idx=new Map(); months.forEach((mm,i)=>idx.set(mm.y+'-'+mm.m,i));
+  for(const a of acts){const d=_cDate(a); if(isNaN(d))continue; const k=d.getFullYear()+'-'+d.getMonth(); if(idx.has(k))months[idx.get(k)].n++;}
+  const padL=30,padR=12,padT=20,padB=28, cw=w-padL-padR, ch=h-padT-padB;
+  const maxV=Math.max(1,...months.map(m=>m.n));
+  _cGrid(ctx,padL,padT,cw,ch,3);
+  const step=cw/months.length, bw=Math.min(step*0.58,26);
+  months.forEach((mm,i)=>{
+    const x=padL+i*step+(step-bw)/2;
+    const bh=mm.n>0?Math.max(3,(mm.n/maxV)*ch):0;
+    if(bh>0){ ctx.fillStyle=_hexA(_C_ACCENT,.85); _cRR(ctx,x,padT+ch-bh,bw,bh,4); ctx.fill();
+      _cTx(ctx,String(mm.n),x+bw/2,padT+ch-bh-9,{size:10,weight:700,color:_cvar('--t2','rgba(255,255,255,.72)')}); }
+    else { ctx.fillStyle='rgba(255,255,255,.06)'; _cRR(ctx,x,padT+ch-3,bw,3,2); ctx.fill(); }
+    if(i%2===0||i===months.length-1) _cTx(ctx,(mm.m+1)+'月',x+bw/2,padT+ch+15,{size:8});
+  });
+}
+
+/* 2. 时段热力（星期 × 小时，次数） */
+function drawCountHourWeek(cv,acts){
+  const {ctx,w,h}=_prep(cv);
+  const grid=Array.from({length:7},()=>Array(24).fill(0));
+  for(const a of acts){const d=_cDate(a); if(isNaN(d))continue; grid[(d.getDay()+6)%7][d.getHours()]++;}
+  let maxV=1; for(const r of grid)for(const v of r)if(v>maxV)maxV=v;
+  const padL=42,padT=26,padR=12,padB=22, cw=w-padL-padR, ch=h-padT-padB;
+  const cwid=cw/24, chgt=ch/7, gap=2;
+  const wd=['一','二','三','四','五','六','日'];
+  for(let r=0;r<7;r++) _cTx(ctx,'周'+wd[r],padL-8,padT+r*chgt+chgt/2,{size:10,align:'right'});
+  for(let c=0;c<24;c+=3) _cTx(ctx,String(c).padStart(2,'0'),padL+c*cwid+cwid/2,padT-9,{size:8,base:'bottom'});
+  for(let r=0;r<7;r++)for(let c=0;c<24;c++){
+    const v=grid[r][c]; const x=padL+c*cwid+gap/2, y=padT+r*chgt+gap/2;
+    if(v<=0) ctx.fillStyle='rgba(255,255,255,.035)';
+    else{const t=Math.sqrt(v/maxV); ctx.fillStyle=_hexA(_C_ACCENT,.14+t*.8);}
+    _cRR(ctx,x,y,cwid-gap,chgt-gap,2.5); ctx.fill();
+  }
+}
+
+/* 3. 年度分布（按月玫瑰图，半径=当月次数） */
+function drawCountRadial(cv,acts){
+  const {ctx,w,h}=_prep(cv);
+  const now=new Date(); const year=now.getFullYear();
+  const months=Array(12).fill(0);
+  for(const a of acts){const d=_cDate(a); if(isNaN(d)||d.getFullYear()!==year)continue; months[d.getMonth()]++;}
+  const cx=w/2, cy=h/2+2;
+  const rMin=20, rMax=Math.min(w,h)/2-30;
+  const maxV=Math.max(1,...months);
+  const step=(rMax-rMin)/maxV, seg=Math.PI*2/12;
+  for(let m=0;m<12;m++){
+    const a0=-Math.PI/2+m*seg-seg*0.34, a1=-Math.PI/2+m*seg+seg*0.34;
+    const rr=rMin+months[m]*step;
+    ctx.beginPath();
+    ctx.arc(cx,cy,Math.max(rMin+1,rr),a0,a1);
+    ctx.arc(cx,cy,rMin,a1,a0,true);
+    ctx.closePath();
+    ctx.fillStyle=months[m]>0?_hexA(_C_ACCENT,.35+.6*(months[m]/maxV)):'rgba(255,255,255,.05)';
+    ctx.fill();
+    const am=-Math.PI/2+m*seg;
+    _cTx(ctx,(m+1)+'月',cx+Math.cos(am)*(rMax+13),cy+Math.sin(am)*(rMax+13),{size:8});
+  }
+  _cTx(ctx,String(months.reduce((a,b)=>a+b,0)),cx,cy-5,{size:20,weight:800,color:_cvar('--t1','#fff')});
+  _cTx(ctx,year+' 年',cx,cy+13,{size:9});
+}
+
+/* 4. 类型排行（横向条形，累计次数） */
+function drawCountTypeRank(cv,acts){
+  const {ctx,w,h}=_prep(cv);
+  const counts={}; for(const a of acts)counts[a.type]=(counts[a.type]||0)+1;
+  const rows=Object.keys(counts).map(t=>({t,n:counts[t]})).sort((a,b)=>b.n-a.n);
+  if(!rows.length){ _cTx(ctx,'暂无数据',w/2,h/2,{size:12}); return; }
+  const padL=52,padR=42,padT=8,padB=8, cw=w-padL-padR, ch=h-padT-padB;
+  const maxV=Math.max(1,...rows.map(r=>r.n));
+  const rowH=Math.min(ch/rows.length,32), startY=padT+(ch-rowH*rows.length)/2;
+  rows.forEach((r,i)=>{
+    const meta=(typeof TYPE_META!=='undefined'&&TYPE_META[r.t])||{label:r.t,color:'#8E8E93'};
+    const y=startY+i*rowH+rowH/2, bh=Math.min(13,rowH-9);
+    _cTx(ctx,meta.label,padL-8,y,{size:11,align:'right',color:_cvar('--t2','rgba(255,255,255,.72)')});
+    ctx.fillStyle='rgba(255,255,255,.06)'; _cRR(ctx,padL,y-bh/2,cw,bh,bh/2); ctx.fill();
+    const bw=Math.max(3,(r.n/maxV)*cw);
+    ctx.fillStyle=_hexA(meta.color,.92); _cRR(ctx,padL,y-bh/2,bw,bh,bh/2); ctx.fill();
+    _cTx(ctx,String(r.n),padL+cw+8,y,{size:11,weight:700,align:'left',color:_cvar('--t1','#fff')});
+  });
+}
+
+/* 5. 累计增长（按时间累计折线 + 面积） */
+function drawCountCumulative(cv,acts){
+  const {ctx,w,h}=_prep(cv);
+  const ds=acts.map(_cDate).filter(d=>!isNaN(d)).sort((a,b)=>a-b);
+  if(!ds.length){ _cTx(ctx,'暂无数据',w/2,h/2,{size:12}); return; }
+  const first=ds[0].getTime(), last=ds[ds.length-1].getTime(), span=Math.max(1,last-first);
+  const padL=30,padR=14,padT=18,padB=26, cw=w-padL-padR, ch=h-padT-padB;
+  _cGrid(ctx,padL,padT,cw,ch,3);
+  const pts=ds.map((d,i)=>[padL+((d.getTime()-first)/span)*cw, padT+ch-((i+1)/ds.length)*ch]);
+  const grad=ctx.createLinearGradient(0,padT,0,padT+ch);
+  grad.addColorStop(0,_hexA(_C_ACCENT,.30)); grad.addColorStop(1,_hexA(_C_ACCENT,0));
+  ctx.beginPath(); ctx.moveTo(padL,padT+ch);
+  pts.forEach(p=>ctx.lineTo(p[0],p[1]));
+  ctx.lineTo(padL+cw,padT+ch); ctx.closePath(); ctx.fillStyle=grad; ctx.fill();
+  ctx.beginPath(); pts.forEach((p,i)=>i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]));
+  ctx.strokeStyle=_C_ACCENT; ctx.lineWidth=2; ctx.lineJoin='round'; ctx.stroke();
+  _cTx(ctx,'0',padL-6,padT+ch,{size:9,align:'right'});
+  _cTx(ctx,String(ds.length),padL-6,padT,{size:9,align:'right'});
+  const fmtY=d=>d.getFullYear()+'.'+(d.getMonth()+1);
+  _cTx(ctx,fmtY(ds[0]),padL,padT+ch+14,{size:9,align:'left'});
+  _cTx(ctx,fmtY(ds[ds.length-1]),padL+cw,padT+ch+14,{size:9,align:'right'});
+}
+
+function _cntPeakHour(list){
+  const hh=Array(24).fill(0);
+  for(const a of list){const d=_cDate(a); if(isNaN(d))continue; hh[d.getHours()]++;}
+  let bi=0; for(let i=1;i<24;i++)if(hh[i]>hh[bi])bi=i;
+  return hh[bi]?String(bi).padStart(2,'0')+':00':'—';
+}
+function _cntActiveDays(list){
+  const st=new Set();
+  for(const a of list){const d=_cDate(a); if(isNaN(d))continue; st.add(d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate());}
+  return st.size;
+}
+const COUNT_CARDS=[
+  {key:'monthly',    title:'月度频次', sub:'近 12 个月',      draw:drawCountMonthly},
+  {key:'hourweek',   title:'时段热力', sub:'星期 × 小时',      draw:drawCountHourWeek},
+  {key:'radial',     title:'年度分布', sub:'按月玫瑰图',        draw:drawCountRadial},
+  {key:'typerank',   title:'类型排行', sub:'各运动累计次数',    draw:drawCountTypeRank},
+  {key:'cumulative', title:'累计增长', sub:'按时间累计',        draw:drawCountCumulative},
+];
+const COUNT_CAPTION={
+  monthly:'按自然月统计活动次数，识别训练节奏的季节性波动。',
+  hourweek:'横轴为 0–24 时、纵轴为星期；颜色越亮表示该时段累计运动次数越多，可定位最活跃的训练时段。',
+  radial:'以 12 个月为扇区，半径长度代表当月运动次数，圆心为全年合计次数。',
+  typerank:'按运动类型汇总累计次数，横向条形长度表示相对占比，右侧为具体次数。',
+  cumulative:'以时间为横轴绘制累计次数增长曲线，斜率越大代表该阶段训练越频繁。',
+};
+function buildCountCards(list){
+  const total=list.length;
+  const counts={}; list.forEach(a=>counts[a.type]=(counts[a.type]||0)+1);
+  const top=Object.keys(counts).map(t=>({t,n:counts[t]})).sort((a,b)=>b.n-a.n)[0];
+  const topMeta=top?((typeof TYPE_META!=='undefined'&&TYPE_META[top.t])||{label:top.t}):null;
+  const y=new Date().getFullYear();
+  let yearN=0; for(const a of list){const d=_cDate(a); if(!isNaN(d)&&d.getFullYear()===y)yearN++;}
+  const HERO={
+    monthly:   {v:String(total),u:'次',l:'累计'},
+    hourweek:  {v:_cntPeakHour(list),u:'',l:'最活跃时段'},
+    radial:    {v:String(yearN),u:'次',l:y+' 年'},
+    typerank:  {v:topMeta?topMeta.label:'—',u:'',l:top?top.n+' 次':'—'},
+    cumulative:{v:String(_cntActiveDays(list)),u:'天',l:'有记录'},
+  };
+  return COUNT_CARDS.map(c=>({mode:'count',key:c.key,title:c.title,sub:c.sub,draw:c.draw,hero:HERO[c.key]}));
+}
+function buildCountCardEl(cardData,index){
+  const card=document.createElement('div');
+  card.className='detail-card count-card';
+  card.dataset.index=index;
+  const hero=cardData.hero||{v:'—',u:'',l:''};
+  card.innerHTML=
+    '<div class="dc-scroll">'+
+      '<div class="dc-head"><div class="dc-title"><span class="dc-idx">'+String(index+1).padStart(2,'0')+'</span><span>'+cardData.title+'</span></div>'+
+        '<div class="dc-period">'+cardData.sub+'</div></div>'+
+      '<div class="dc-hero"><span class="v">'+hero.v+'</span>'+(hero.u?'<span class="u">'+hero.u+'</span>':'')+'<span class="l">'+hero.l+'</span></div>'+
+      '<div class="dc-chart dc-count-chart"><canvas id="dc-canvas-'+index+'"></canvas></div>'+
+      '<div class="dc-caption">'+(COUNT_CAPTION[cardData.key]||'')+'</div>'+
+    '</div>';
+  requestAnimationFrame(()=>renderCardChart(index,cardData,cardData.key));
+  return card;
+}
+
 function openDetail(cardType){
   const info=filterActivitiesForCard(cardType);
   Detail.cardType=cardType;
   Detail.category=info.category;
   Detail.filterKey=info.filterKey;
   Detail.activities=info.list;
+  const _pt=document.getElementById('detailPeriodTabs');
+  if(info.mode==='count'){
+    Detail.mode='count';
+    Detail.cards=buildCountCards(info.list);
+    Detail.activeChartTab={};
+    Detail.index=0;
+    $('#detailTitle').textContent=info.title;
+    $('#detailSub').textContent='共 '+info.list.length+' 次记录';
+    if(_pt)_pt.style.display='none';
+    State.prevView=State.view;
+    switchView('detail');
+    requestAnimationFrame(()=>renderDetailStage());
+    return;
+  }
+  Detail.mode='time';
   Detail.cards=Detail.periods.map(period=>{
     const stats=buildPeriodStats(info.list,period,info.category);
     const buckets=buildChartBuckets(info.list,period);
@@ -4826,11 +5110,15 @@ function openDetail(cardType){
   Detail.index=0;
   $('#detailTitle').textContent=info.title;
   $('#detailSub').textContent=info.sub;
+  if(_pt)_pt.style.display='';
   State.prevView=State.view;
   switchView('detail');
   requestAnimationFrame(()=>renderDetailStage());
 }
 function updateDetailHeader(){
+  const _pt=document.getElementById('detailPeriodTabs');
+  if(Detail.mode==='count'){ if(_pt)_pt.style.display='none'; return; }
+  if(_pt)_pt.style.display='';
   const cur=Detail.cards[Detail.index];
   if(!cur)return;
   const stats=cur.stats;
@@ -4878,6 +5166,7 @@ function goDetail(delta){
   layoutDetailCards();updateDetailHeader();
 }
 function buildDetailCardEl(cardData,index){
+  if(Detail.mode==='count')return buildCountCardEl(cardData,index);
   const {period,stats}=cardData;
   const category=Detail.category;
   const meta=TYPE_META[category]||TYPE_META.other;
@@ -4899,7 +5188,7 @@ function buildDetailCardEl(cardData,index){
     <div class="dc-metric">
       <div class="l">${m.l}</div>
       <div class="v">${m.v}${m.u?`<span class="u">${m.u}</span>`:''}</div>
-      <div class="d ${m.change.cls}">${m.change.text==='—'?'—':`<span class="arrow">${m.change.text[0]}</span>${m.change.text.slice(1)}`}</div>
+      <div class="d ${m.change.cls}">${m.change.text==='—'?'—':`${ic(m.change.cls==='down'?'arrowDown':'arrowUp',11)}${m.change.text}`}</div>
     </div>
   `).join('');
   const tabsHTML=chartTabs.map(t=>`<div class="dc-tab ${t.key===activeKey?'active':''}" data-tab="${t.key}">${t.label}</div>`).join('');
@@ -4987,6 +5276,11 @@ function buildDetailCardEl(cardData,index){
   return card;
 }
 function renderCardChart(cardIndex,cardData,tabKey){
+  if(Detail.mode==='count'){
+    const ccv=document.getElementById(`dc-canvas-${cardIndex}`);
+    if(ccv&&cardData&&cardData.draw)cardData.draw(ccv,Detail.activities);
+    return;
+  }
   const cv=document.getElementById(`dc-canvas-${cardIndex}`);
   if(!cv)return;
   const hint=document.getElementById(`dc-hint-${cardIndex}`);
@@ -5348,6 +5642,186 @@ function openActivityDetail(id){
 function closeActivityModal(){$('#activityModal').classList.remove('open');}
 
 /* ============ 数据分析 ============ */
+/* ============================================================
+   进步可视化：以时间为自变量的能力演变分析
+   ============================================================ */
+function _pgSpeed(a){ if(!a.distance||!a.duration)return null; return (a.distance/1000)/(a.duration/3600); }
+function _pgMean(arr){ return arr&&arr.length? arr.reduce((x,y)=>x+y,0)/arr.length : 0; }
+function _pgStd(arr){ if(!arr||arr.length<2)return 0; const m=_pgMean(arr); return Math.sqrt(arr.reduce((s,v)=>s+(v-m)*(v-m),0)/arr.length); }
+function _pgDominant(list){
+  const c={}; list.filter(a=>a.distance>0).forEach(a=>c[a.type]=(c[a.type]||0)+1);
+  const ks=Object.keys(c).sort((x,y)=>c[y]-c[x]); return ks[0]||null;
+}
+function _pgSpanWeeks(band){
+  const ds=band.map(a=>_cDate(a)).filter(d=>!isNaN(d));
+  if(ds.length<2)return 1;
+  return Math.max(1,(Math.max.apply(null,ds)-Math.min.apply(null,ds))/86400000/7);
+}
+function _pgBands(list){
+  const arr=list.slice().sort((a,b)=>_cDate(a)-_cDate(b));
+  const k=Math.max(1,Math.round(arr.length/3));
+  return {early:arr.slice(0,k), late:arr.slice(-k)};
+}
+function _pgAxes(acts){
+  const weeks=_pgSpanWeeks(acts);
+  const distKm=acts.reduce((s,a)=>s+(a.distance||0),0)/1000;
+  const durMin=acts.reduce((s,a)=>s+(a.duration||0),0)/60;
+  const maxD=acts.reduce((m,a)=>Math.max(m,(a.distance||0)/1000),0);
+  const sp=acts.map(_pgSpeed).filter(v=>v!=null);
+  return {
+    '周里程': distKm/weeks,
+    '单次里程': acts.length? distKm/acts.length : 0,
+    '周频次': acts.length/weeks,
+    '单次时长': acts.length? durMin/acts.length : 0,
+    '平均速度': sp.length? _pgMean(sp) : 0,
+    '最长单次': maxD,
+  };
+}
+function drawProgTrend(cv,list,type){
+  const {ctx,w,h}=_prep(cv);
+  const pts=list.filter(a=>a.type===type).map(a=>({d:_cDate(a),v:_pgSpeed(a)})).filter(p=>p.v!=null&&!isNaN(p.d)).sort((a,b)=>a.d-b.d);
+  if(pts.length<4){ _cTx(ctx,'样本不足',w/2,h/2,{size:12}); return null; }
+  const t0=pts[0].d.getTime(), t1=pts[pts.length-1].d.getTime(), span=Math.max(1,t1-t0);
+  const xs=pts.map(p=>(p.d.getTime()-t0)/span), ys=pts.map(p=>p.v);
+  const n=xs.length, sx=xs.reduce((a,b)=>a+b,0), sy=ys.reduce((a,b)=>a+b,0);
+  const sxx=xs.reduce((a,b)=>a+b*b,0), sxy=xs.reduce((a,x,i)=>a+x*ys[i],0), syy=ys.reduce((a,b)=>a+b*b,0);
+  const den=n*sxx-sx*sx;
+  let slope=den? (n*sxy-sx*sy)/den : 0, intercept=(sy-slope*sx)/n, r2=0;
+  const rden=Math.sqrt((n*sxx-sx*sx)*(n*syy-sy*sy));
+  if(rden) r2=Math.pow((n*sxy-sx*sy)/rden,2);
+  const padL=40,padR=14,padT=16,padB=26, cw=w-padL-padR, ch=h-padT-padB;
+  const yMin=Math.max(0,Math.min.apply(null,ys)*0.9), yMax=Math.max.apply(null,ys)*1.08;
+  const X=x=>padL+x*cw, Y=y=>padT+ch-((y-yMin)/((yMax-yMin)||1))*ch;
+  _cGrid(ctx,padL,padT,cw,ch,3);
+  for(let i=0;i<=3;i++){const v=yMin+(yMax-yMin)*i/3; _cTx(ctx,num(v,1),padL-6,padT+ch-ch/3*i,{size:9,align:'right'});}
+  pts.forEach((p,i)=>{ ctx.beginPath(); ctx.arc(X(xs[i]),Y(ys[i]),2.1,0,7); ctx.fillStyle=_hexA('#0A84FF',.5); ctx.fill(); });
+  ctx.beginPath(); ctx.moveTo(X(0),Y(intercept)); ctx.lineTo(X(1),Y(intercept+slope)); ctx.strokeStyle='#FF9F0A'; ctx.lineWidth=2; ctx.stroke();
+  const third=Math.max(1,Math.floor(n/3));
+  const eM=_pgMean(ys.slice(0,third)), lM=_pgMean(ys.slice(-third));
+  [[0.14,eM,'#30D158'],[0.86,lM,'#FF453A']].forEach(a=>{ctx.strokeStyle=a[2];ctx.setLineDash([4,4]);ctx.beginPath();ctx.moveTo(X(a[0])-16,Y(a[1]));ctx.lineTo(X(a[0])+16,Y(a[1]));ctx.stroke();ctx.setLineDash([]);});
+  _cTx(ctx,'km/h',padL-6,padT-5,{size:9,align:'right'});
+  const dl=d=>(d.getFullYear()%100)+'.'+(d.getMonth()+1);
+  _cTx(ctx,dl(pts[0].d),padL,padT+ch+14,{size:9,align:'left'});
+  _cTx(ctx,dl(pts[pts.length-1].d),padL+cw,padT+ch+14,{size:9,align:'right'});
+  const days=span/86400000;
+  const slopePerMonth=slope*(30.44/days);
+  return {n:n, r2:r2, slopePerMonth:slopePerMonth, eM:eM, lM:lM, pct:eM?(lM-eM)/eM*100:0, type:type};
+}
+function drawProgRadar(cv,list){
+  const {ctx,w,h}=_prep(cv);
+  const bands=_pgBands(list.filter(a=>a.distance>0));
+  if(bands.early.length<2||bands.late.length<2){ _cTx(ctx,'样本不足',w/2,h/2,{size:12}); return null; }
+  const A=_pgAxes(bands.early), B=_pgAxes(bands.late), axes=Object.keys(A);
+  const cx=w/2, cy=h/2+2, R=Math.min(w,h)/2-36;
+  const maxOf={}; axes.forEach(k=>maxOf[k]=Math.max(A[k],B[k],1e-9));
+  const ang=i=>-Math.PI/2+i*2*Math.PI/axes.length;
+  [0.25,0.5,0.75,1].forEach(f=>{ctx.beginPath();axes.forEach((_,i)=>{const rr=R*f,x=cx+Math.cos(ang(i))*rr,y=cy+Math.sin(ang(i))*rr;i?ctx.lineTo(x,y):ctx.moveTo(x,y);});ctx.closePath();ctx.strokeStyle='rgba(255,255,255,.08)';ctx.lineWidth=1;ctx.stroke();});
+  axes.forEach((k,i)=>{const x=cx+Math.cos(ang(i))*R,y=cy+Math.sin(ang(i))*R;ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(x,y);ctx.strokeStyle='rgba(255,255,255,.06)';ctx.stroke();
+    _cTx(ctx,k,cx+Math.cos(ang(i))*(R+14),cy+Math.sin(ang(i))*(R+14),{size:9,color:_cvar('--t2','rgba(255,255,255,.72)')});});
+  const poly=(set,color)=>{ctx.beginPath();axes.forEach((k,i)=>{const rr=R*clamp(set[k]/maxOf[k],0,1),x=cx+Math.cos(ang(i))*rr,y=cy+Math.sin(ang(i))*rr;i?ctx.lineTo(x,y):ctx.moveTo(x,y);});ctx.closePath();ctx.fillStyle=_hexA(color,.20);ctx.fill();ctx.strokeStyle=color;ctx.lineWidth=2;ctx.stroke();};
+  poly(A,'#30D158'); poly(B,'#0A84FF');
+  let imp=0; axes.forEach(k=>{if(B[k]>A[k])imp++;});
+  const best=axes.slice().sort((x,y)=>(B[y]/maxOf[y]-A[y]/maxOf[y])-(B[x]/maxOf[x]-A[x]/maxOf[x]))[0];
+  return {imp:imp, total:axes.length, best:best};
+}
+function drawProgRidge(cv,list,type){
+  const {ctx,w,h}=_prep(cv);
+  const arr=list.filter(a=>a.type===type).map(a=>({d:_cDate(a),v:_pgSpeed(a)})).filter(p=>p.v!=null&&!isNaN(p.d));
+  if(arr.length<8){ _cTx(ctx,'样本不足',w/2,h/2,{size:12}); return null; }
+  const g={}; arr.forEach(p=>{const q=Math.floor(p.d.getMonth()/3)+1,k=p.d.getFullYear()+'Q'+q;(g[k]=g[k]||[]).push(p.v);});
+  const keys=Object.keys(g).sort(), use=keys.slice(-8);
+  const allv=[].concat.apply([],use.map(k=>g[k]));
+  const lo=Math.min.apply(null,allv), hi=Math.max.apply(null,allv), span=Math.max(0.001,hi-lo);
+  const padL=14,padR=56,padT=14,padB=20, cw=w-padL-padR, ch=h-padT-padB;
+  const NX=64, xs=[]; for(let i=0;i<NX;i++)xs.push(lo+span*i/(NX-1));
+  const bw=span/10;
+  const dens=use.map(k=>xs.map(x=>{let s=0;for(const v of g[k]){const z=(x-v)/bw;s+=Math.exp(-0.5*z*z);}return s/(g[k].length*bw*2.5066);}));
+  let dmax=1e-9; dens.forEach(d=>d.forEach(v=>{if(v>dmax)dmax=v;}));
+  const bandH=ch/use.length, xPix=xx=>padL+((xx-lo)/span)*cw;
+  const colors=['#1E6FD9','#2E7DE6','#3F8BF0','#4F99F5','#5FA7F7','#6FB5F7','#7FC3F5','#8FD1F0'];
+  use.forEach((k,row)=>{
+    const base=padT+bandH*(row+1), amp=bandH*0.92, c=colors[Math.min(row,colors.length-1)];
+    ctx.beginPath(); ctx.moveTo(xPix(lo),base);
+    xs.forEach((x,i)=>ctx.lineTo(xPix(x),base-(dens[row][i]/dmax)*amp));
+    ctx.lineTo(xPix(hi),base); ctx.closePath();
+    const grd=ctx.createLinearGradient(0,base-amp,0,base); grd.addColorStop(0,_hexA(c,.55)); grd.addColorStop(1,_hexA(c,.06));
+    ctx.fillStyle=grd; ctx.fill();
+    ctx.strokeStyle=_hexA(c,.9); ctx.lineWidth=1.4; ctx.stroke();
+    _cTx(ctx,k.slice(-2),padL+cw+6,base-bandH*0.42,{size:9,align:'left',color:_cvar('--t3','rgba(255,255,255,.5)')});
+  });
+  _cTx(ctx,num(lo,1),padL,padT+ch+10,{size:9,align:'left'});
+  _cTx(ctx,num(hi,1),padL+cw,padT+ch+10,{size:9,align:'right'});
+  _cTx(ctx,'km/h',padL-2,padT-4,{size:9,align:'left'});
+  const fN=_pgMean(g[use[0]]), lN=_pgMean(g[use[use.length-1]]);
+  return {quarters:use.length, first:fN, last:lN, d:lN-fN, sE:_pgStd(g[use[0]]), sL:_pgStd(g[use[use.length-1]]), type:type};
+}
+function drawProgEF(cv,list){
+  const {ctx,w,h}=_prep(cv);
+  const arr=list.filter(a=>a.avgHR>0&&a.distance>0&&a.duration>0).map(a=>({d:_cDate(a),ef:(a.distance/(a.duration/60))/a.avgHR})).filter(p=>!isNaN(p.d)&&isFinite(p.ef)&&p.ef>0);
+  if(arr.length<4){ _cTx(ctx,'暂无足够心率数据',w/2,h/2,{size:12}); return null; }
+  const m={}; arr.forEach(p=>{const k=p.d.getFullYear()+'-'+p.d.getMonth();(m[k]=m[k]||[]).push(p.ef);});
+  const keys=Object.keys(m).sort(), use=keys.slice(-12), vals=use.map(k=>_pgMean(m[k]));
+  const padL=42,padR=16,padT=16,padB=26, cw=w-padL-padR, ch=h-padT-padB;
+  const vMin=Math.min.apply(null,vals)*0.94, vMax=Math.max.apply(null,vals)*1.06;
+  const X=i=>padL+(vals.length>1? i/(vals.length-1):0)*cw, Y=v=>padT+ch-((v-vMin)/((vMax-vMin)||1))*ch;
+  _cGrid(ctx,padL,padT,cw,ch,3);
+  for(let i=0;i<=3;i++){const v=vMin+(vMax-vMin)*i/3; _cTx(ctx,num(v,2),padL-6,padT+ch-ch/3*i,{size:9,align:'right'});}
+  const grd=ctx.createLinearGradient(0,padT,0,padT+ch); grd.addColorStop(0,_hexA('#0A84FF',.30)); grd.addColorStop(1,_hexA('#0A84FF',0));
+  ctx.beginPath(); ctx.moveTo(X(0),padT+ch); vals.forEach((v,i)=>ctx.lineTo(X(i),Y(v))); ctx.lineTo(X(vals.length-1),padT+ch); ctx.closePath(); ctx.fillStyle=grd; ctx.fill();
+  ctx.beginPath(); vals.forEach((v,i)=>i?ctx.lineTo(X(i),Y(v)):ctx.moveTo(X(i),Y(v))); ctx.strokeStyle='#0A84FF'; ctx.lineWidth=2; ctx.lineJoin='round'; ctx.stroke();
+  vals.forEach((v,i)=>{ctx.beginPath();ctx.arc(X(i),Y(v),2.2,0,7);ctx.fillStyle='#0A84FF';ctx.fill();});
+  _cTx(ctx,'m/次心跳',padL-6,padT-5,{size:9,align:'right'});
+  const every=Math.max(1,Math.ceil(use.length/6));
+  use.forEach((k,i)=>{if(i%every===0||i===use.length-1){_cTx(ctx,(+k.split('-')[1]+1)+'月',X(i),padT+ch+13,{size:8});}});
+  const k1=Math.max(1,Math.floor(vals.length/3));
+  const eM=_pgMean(vals.slice(0,k1)), lM=_pgMean(vals.slice(-k1));
+  return {n:arr.length, months:use.length, first:eM, last:lM, pct:eM?(lM-eM)/eM*100:0};
+}
+function renderProgress(){
+  const list=(State.activities||[]).filter(a=>a&&a.date);
+  const cvId=id=>document.getElementById(id);
+  const _txt=(id,v)=>{const el=cvId(id); if(el)el.textContent=v;};
+  if(list.length<4){
+    ['chProgTrend','chProgRadar','chProgRidge','chProgEf'].forEach(id=>{const c=cvId(id); if(c){const r=_prep(c);_cTx(r.ctx,r.w/2,r.h/2,'暂无数据',{size:12});}});
+    return;
+  }
+  const type=_pgDominant(list)||'run';
+  const label=t=>((typeof TYPE_META!=='undefined'&&TYPE_META[t])?TYPE_META[t].label:t);
+  const s1=drawProgTrend(cvId('chProgTrend'),list,type);
+  if(s1){
+    _txt('progTrendKv',(s1.pct>=0?'+':'')+num(s1.pct,0)+'%');
+    _txt('progTrendKu','速度');
+    _txt('progTrendKl',label(type)+' · n='+s1.n);
+    const tg=cvId('progTrendTag'); if(tg){tg.textContent='R² '+num(s1.r2,2); tg.className='tag '+(s1.slopePerMonth>=0?'green':'red');}
+    _txt('progTrendNote','方法：对「'+label(type)+'」单次均速 (km/h) 随日期做最小二乘线性回归。斜率 = '+(s1.slopePerMonth>=0?'+':'')+num(s1.slopePerMonth,3)+' km/h/月，拟合优度 R² = '+num(s1.r2,2)+'（n='+s1.n+'）。早期（前 1/3 时段）均值 '+num(s1.eM,2)+' → 近期 '+num(s1.lM,2)+' km/h，变化 '+(s1.pct>=0?'+':'')+num(s1.pct,0)+'%。斜率表征有氧能力的长期提升速率；R² 越接近 1，说明进步是持续趋势而非偶发波动。若斜率为负，应结合负荷与恢复排查过度训练或伤病影响。');
+  }
+  const r=drawProgRadar(cvId('chProgRadar'),list);
+  if(r){
+    _txt('progRadarKv',r.imp+'/'+r.total);
+    _txt('progRadarKu','维度提升');
+    _txt('progRadarKl','早期 vs 近期');
+    _txt('progRadarNote','方法：将含距离的活动按时间排序，前 1/3 记为「早期」、后 1/3 记为「近期」，对 '+r.total+' 个能力维度做同尺度归一化后叠加对比（绿=早期，蓝=近期）。近期在 '+r.imp+'/'+r.total+' 个维度高于早期，提升最显著的是「'+r.best+'」。多边形整体外扩代表综合能力增强；若个别维度向内收缩，说明该能力被相对牺牲，可据此调整训练结构（如增加长距离或频次）。');
+  }
+  const g=drawProgRidge(cvId('chProgRidge'),list,type);
+  if(g){
+    _txt('progRidgeKv',(g.d>=0?'+':'')+num(g.d,2));
+    _txt('progRidgeKu','km/h');
+    _txt('progRidgeKl','首季 → 末季');
+    const tg=cvId('progRidgeTag'); if(tg){tg.textContent=g.quarters+' 个季度'; tg.className='tag blue';}
+    _txt('progRidgeNote','方法：按季度对「'+label(type)+'」单次速度做核密度估计（KDE），自下而上为时间顺序，曲线越靠上代表越近期。波峰整体右移表示持续提速：首季均值 '+num(g.first,2)+' → 末季 '+num(g.last,2)+' km/h（'+(g.d>=0?'+':'')+num(g.d,2)+'）。分布宽度（标准差）由 '+num(g.sE,2)+' 变为 '+num(g.sL,2)+'，越窄说明配速越稳定、节奏控制越好；分布右移且收窄是最理想的进步形态。');
+  }
+  const e=drawProgEF(cvId('chProgEf'),list);
+  if(e){
+    _txt('progEfKv',(e.pct>=0?'+':'')+num(e.pct,0)+'%');
+    _txt('progEfKu','效率');
+    _txt('progEfKl',e.months+' 个月 · n='+e.n);
+    const tg=cvId('progEfTag'); if(tg){tg.textContent=(e.pct>=0?'提升':'下降'); tg.className='tag '+(e.pct>=0?'green':'red');}
+    _txt('progEfNote','方法：效率因子 EF = 速度(m/min) ÷ 平均心率(bpm)，即每搏心率所能维持的输出，是衡量有氧效率的核心指标。月均 EF 由 '+num(e.first,2)+' 升至 '+num(e.last,2)+' m/次心跳（'+(e.pct>=0?'+':'')+num(e.pct,0)+'%，基于 '+e.months+' 个月、n='+e.n+' 条含心率记录）。在训练负荷相对平稳的阶段内 EF 上升，通常代表心肺适应与有氧效率改善；若同期心率或负荷显著波动，应排除疲劳、高温、脱水等干扰后再解读。');
+  }else{
+    const tg=cvId('progEfTag'); if(tg){tg.textContent='需心率'; tg.className='tag';}
+    _txt('progEfNote','当活动记录包含平均心率时，此处以效率因子 EF = 速度 ÷ 心率 衡量单位心率输出；当前含心率的记录不足，导入含心率的跑步/骑行数据后将自动生成该进步曲线。');
+  }
+}
 function renderAnalysis(){
   const acts=State.activities;
   const series=buildAcwrSeries(60);
@@ -5396,6 +5870,7 @@ function renderAnalysis(){
   ctx2.fillStyle=dimColor();ctx2.font='10px -apple-system,"PingFang SC",sans-serif';
   ctx2.textAlign='center';ctx2.textBaseline='top';
   weekly.forEach((d,i)=>ctx2.fillText(d.label,padL+step*i+step/2,h2-padB+5));
+  renderProgress();
 }
 function dailyLoadMap(){
   const map=new Map();
@@ -5441,7 +5916,7 @@ function renderImported(){
         <div class="r-name">${escapeHtml(a.name)}${a.indoor?' <span style="color:var(--t3);font-size:11px;">·室内</span>':''}</div>
         <div class="r-meta">${fmtDate(a.date)} · ${a.distance>0?num(a.distance/dd,2)+' '+du:fmtHM(a.duration)} · 负荷 ${a.load} · ${a.source}</div>
       </div>
-      <button class="btn btn-ghost btn-sm" data-del="${a.id}">删除</button>
+      <button class="btn btn-ghost btn-sm" data-del="${a.id}">${ic('trash',14)}删除</button>
     </div>`;
   }).join('');
   $$('.row',box).forEach(el=>{el.addEventListener('click',e=>{if(e.target.dataset.del)return;openActivityDetail(el.dataset.id);});});
@@ -5952,6 +6427,7 @@ async function init(){
   });
   $$('#detailPeriodTabs .tab').forEach(t=>{
     t.addEventListener('click',()=>{
+      if(Detail.mode==='count')return;
       const period=t.dataset.period;
       const idx=Detail.periods.indexOf(period);
       if(idx>=0){Detail.index=idx;layoutDetailCards();updateDetailHeader();}
