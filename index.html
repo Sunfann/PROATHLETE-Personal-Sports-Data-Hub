@@ -295,6 +295,10 @@ body.has-custom-bg::before{opacity:.25;}
 .card:hover .fig-upload{opacity:1;transform:translateY(0);}
 .fig-upload:hover{background:var(--surface-c);color:var(--t1);}
 .fig-upload.has-icon{color:var(--red);border-color:color-mix(in srgb, var(--red) 42%, transparent);background:color-mix(in srgb, var(--red) 14%, transparent);}
+.fig-share{position:absolute;left:12px;bottom:12px;width:28px;height:28px;padding:0;border-radius:50%;display:flex;align-items:center;justify-content:center;border:1px solid var(--hairline);background:var(--surface-b);color:var(--t2);opacity:0;transform:translateY(6px);transition:opacity .2s var(--ease),transform .2s var(--ease),background .2s var(--ease),color .2s var(--ease);z-index:3;cursor:pointer;}
+.card:hover .fig-share{opacity:1;transform:translateY(0);}
+.fig-share:hover{background:var(--surface-c);color:var(--t1);}
+@media (hover:none){.fig-share{opacity:.85;transform:none;}}
 .tag{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:700;white-space:nowrap;}
 .tag.green{background:color-mix(in srgb, var(--green) 18%, transparent);color:var(--green);}
 .tag.blue{background:color-mix(in srgb, var(--blue) 18%, transparent);color:var(--blue);}
@@ -414,6 +418,21 @@ body.has-custom-bg::before{opacity:.25;}
 .empty .e-t{font-size:15px;font-weight:600;color:var(--t2);}
 .empty .e-d{font-size:12.5px;max-width:340px;line-height:1.65;}
 .chart-box{width:100%;position:relative;}
+/* ===== 距离/条件筛选 chips ===== */
+.subfilters{display:flex;flex-wrap:wrap;gap:6px;margin-top:var(--s3);align-items:center;}
+.subfilters .chip{padding:5px 12px;border-radius:999px;font-size:12.5px;font-weight:600;color:var(--t2);background:var(--surface-b);border:1px solid var(--hairline);cursor:pointer;transition:color .2s var(--ease),background .2s var(--ease),border-color .2s var(--ease);display:inline-flex;align-items:center;gap:5px;}
+.subfilters .chip:hover{color:var(--t1);}
+.subfilters .chip.active{color:#fff;background:var(--blue);border-color:transparent;}
+.subfilters .chip .cnt{font-size:11px;opacity:.7;font-variant-numeric:tabular-nums;}
+/* ===== 分享海报 ===== */
+.poster-modal .modal-box{max-width:520px;}
+.poster-stage{display:flex;justify-content:center;padding:var(--s3) 0;}
+.poster-stage canvas{width:100%;max-width:360px;height:auto;border-radius:var(--r-md);box-shadow:0 14px 44px rgba(0,0,0,.4);}
+.share-actions{display:flex;flex-wrap:wrap;gap:var(--s2);margin-top:var(--s3);}
+.share-hint{font-size:12px;color:var(--t3);line-height:1.75;margin-top:var(--s3);padding-left:var(--s3);border-left:2px solid var(--blue);}
+/* ===== 备份卡片 ===== */
+.backup-actions{display:flex;flex-wrap:wrap;gap:var(--s2);margin-top:var(--s3);}
+.backup-meta{font-size:12.5px;color:var(--t3);line-height:1.7;font-variant-numeric:tabular-nums;}
 .prog-intro{font-size:12.5px;line-height:1.72;color:var(--t3);max-width:880px;margin:0 0 var(--s4);}
 .prog-kpi{display:flex;align-items:baseline;gap:8px;padding:var(--s3) 0 0;}
 .prog-kpi .v{font-size:26px;font-weight:800;line-height:1;letter-spacing:-.5px;color:var(--t1);}
@@ -759,6 +778,8 @@ body.has-custom-bg::before{opacity:.25;}
       </div>
     </div>
     <div class="header-actions">
+      <button class="btn btn-ghost btn-sm" id="btnShareOverview"><span data-ic="share" data-size="14"></span>分享海报</button>
+      <button class="btn btn-ghost btn-sm" id="btnShareSummary"><span data-ic="share" data-size="14"></span>汇总分享</button>
       <button class="btn btn-ghost btn-sm" id="btnQuickImport"><span data-ic="folder" data-size="14"></span>导入数据</button>
       <button class="btn btn-primary btn-sm" id="btnDemoTop"><span data-ic="sparkle" data-size="14"></span>演示数据</button>
     </div>
@@ -911,6 +932,7 @@ body.has-custom-bg::before{opacity:.25;}
           <div class="tab" data-filter="hike"><span data-ic="hike" data-size="14"></span>徒步</div>
           <div class="tab" data-filter="gym"><span data-ic="gym" data-size="14"></span>力量</div>
         </div>
+        <div class="subfilters" id="actDistFilters"></div>
       </div>
       <div class="card glass" style="padding:var(--s3);">
         <div class="list" id="activityList"></div>
@@ -1074,6 +1096,20 @@ body.has-custom-bg::before{opacity:.25;}
         <div class="drop-desc">支持 .fit（Garmin 二进制）/ .gpx / .tcx / .zip / .xlsx / .csv（Garmin 官方导出）· 自动跳过重复活动</div>
       </div>
 
+      <div class="card glass" style="margin-top:var(--s5);padding:var(--s4) var(--s5);">
+        <div class="card-head"><span class="card-label"><span data-ic="archive" data-size="14"></span>原始数据备份与导出</span></div>
+        <div class="backup-meta" id="backupMeta">—</div>
+        <div class="backup-actions">
+          <button class="btn btn-primary btn-sm" id="btnBackupRaw"><span data-ic="archive" data-size="14"></span>备份原始数据（ZIP）</button>
+          <button class="btn btn-ghost btn-sm" id="btnExportAllCsv"><span data-ic="download" data-size="14"></span>导出活动（CSV）</button>
+          <button class="btn btn-ghost btn-sm" id="btnExportJson"><span data-ic="download" data-size="14"></span>导出全量（JSON）</button>
+          <button class="btn btn-ghost btn-sm" id="btnImportBackup"><span data-ic="uploadCloud" data-size="14"></span>导入备份（JSON）</button>
+          <button class="btn btn-ghost btn-sm" id="btnClearRaw" style="margin-left:auto;"><span data-ic="trash" data-size="14"></span>清空原始备份</button>
+        </div>
+        <input type="file" id="backupFileInput" accept=".json" style="display:none;">
+        <div class="share-hint">每次通过 Garmin 同步或文件导入时，原始文件（FIT / GPX / TCX / ZIP / CSV / XLSX）都会自动备份到浏览器本地库，可随时导出归档或迁移到其他设备。</div>
+      </div>
+
       <div style="margin-top:var(--s6);">
         <div style="display:flex;justify-content:space-between;margin-bottom:var(--s4);">
           <h2 style="font-size:17px;font-weight:700;">已导入记录</h2>
@@ -1229,7 +1265,10 @@ body.has-custom-bg::before{opacity:.25;}
         <div class="header-sub" id="aSub">—</div>
         <div id="aPBBadges" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;"></div>
       </div>
-      <button class="btn btn-ghost btn-icon" id="aClose"><span data-ic="x" data-size="16"></span></button>
+      <div style="display:flex;gap:var(--s2);align-items:flex-start;flex-shrink:0;">
+        <button class="btn btn-ghost btn-sm" id="aShare"><span data-ic="share" data-size="14"></span>分享</button>
+        <button class="btn btn-ghost btn-icon" id="aClose"><span data-ic="x" data-size="16"></span></button>
+      </div>
     </div>
     <div class="metric-grid" id="aMetrics"></div>
     <div style="border-radius:var(--r-md);background:var(--surface-a);border:1px solid var(--hairline);padding:var(--s3) var(--s4);" id="aTrackSection">
@@ -1266,6 +1305,25 @@ body.has-custom-bg::before{opacity:.25;}
       <div style="font-size:12.5px;font-weight:700;color:var(--t2);margin-bottom:var(--s3);"><span data-ic="bar" data-size="14"></span> 统计信息</div>
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:var(--s2) var(--s6);" id="aStats"></div>
     </div>
+  </div>
+</div>
+
+<div class="modal poster-modal" id="posterModal">
+  <div class="modal-box glass">
+    <div class="modal-head">
+      <div style="min-width:0;">
+        <div class="header-title" id="posterTitle" style="font-size:20px;">分享海报</div>
+        <div class="header-sub" id="posterSub">—</div>
+      </div>
+      <button class="btn btn-ghost btn-icon" id="posterClose"><span data-ic="x" data-size="16"></span></button>
+    </div>
+    <div class="poster-stage"><canvas id="posterCanvas"></canvas></div>
+    <div class="share-actions">
+      <button class="btn btn-primary btn-sm" id="posterDownload"><span data-ic="download" data-size="14"></span>保存图片</button>
+      <button class="btn btn-ghost btn-sm" id="posterCopy"><span data-ic="copy" data-size="14"></span>复制图片</button>
+      <button class="btn btn-ghost btn-sm" id="posterShare"><span data-ic="share" data-size="14"></span>分享到…</button>
+    </div>
+    <div class="share-hint">「分享到…」会调用系统分享面板（移动端可直接选择微信朋友圈）。若浏览器不支持，可先保存图片再手动分享到朋友圈。</div>
   </div>
 </div>
 
@@ -1358,6 +1416,10 @@ const ICONS = {
   plus:       '<path d="M12 5v14"/><path d="M5 12h14"/>',
   arrowRight: '<path d="M5 12h14"/><path d="M13 18l6 -6"/><path d="M13 6l6 6"/>',
   arrowDown:  '<path d="M12 5v14"/><path d="M18 13l-6 6"/><path d="M6 13l6 6"/>',
+  share:      '<circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4"/><path d="M15.4 6.5l-6.8 4"/>',
+  download:   '<path d="M12 3v12"/><path d="M7 11l5 5 5-5"/><path d="M5 21h14"/>',
+  archive:    '<rect x="3" y="4" width="18" height="4" rx="1"/><path d="M5 8v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8"/><path d="M10 12h4"/>',
+  copy:       '<rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/>',
 };
 
 function ic(name, size){
@@ -1399,8 +1461,8 @@ function genId(prefix){
    IndexedDB 存储层
    ============================================================ */
 const IDB = {
-  db: null, DB_NAME: 'proathlete_db', DB_VERSION: 1,
-  STORE_ACTIVITIES: 'activities', STORE_KV: 'kv',
+  db: null, DB_NAME: 'proathlete_db', DB_VERSION: 2,
+  STORE_ACTIVITIES: 'activities', STORE_KV: 'kv', STORE_RAW: 'raw',
   async open() {
     if (this.db) return this.db;
     return new Promise((resolve, reject) => {
@@ -1414,6 +1476,7 @@ const IDB = {
           store.createIndex('type', 'type', { unique: false });
         }
         if (!db.objectStoreNames.contains(this.STORE_KV)) db.createObjectStore(this.STORE_KV);
+        if (!db.objectStoreNames.contains(this.STORE_RAW)) db.createObjectStore(this.STORE_RAW, { keyPath: 'id' });
       };
       req.onsuccess = e => { this.db = e.target.result; resolve(this.db); };
       req.onerror = e => reject(e.target.error);
@@ -1465,6 +1528,35 @@ const IDB = {
     return new Promise((resolve, reject) => {
       const tx = this.db.transaction(this.STORE_ACTIVITIES, 'readwrite');
       tx.objectStore(this.STORE_ACTIVITIES).clear();
+      tx.oncomplete = () => resolve();
+      tx.onerror = () => reject(tx.error);
+    });
+  },
+  async putRawFiles(records) {
+    await this.open();
+    if (!records || !records.length) return;
+    return new Promise((resolve, reject) => {
+      const tx = this.db.transaction(this.STORE_RAW, 'readwrite');
+      const store = tx.objectStore(this.STORE_RAW);
+      for (const r of records) { try { store.put(r); } catch(e) {} }
+      tx.oncomplete = () => resolve();
+      tx.onerror = () => reject(tx.error);
+    });
+  },
+  async getAllRaw() {
+    await this.open();
+    return new Promise((resolve, reject) => {
+      const tx = this.db.transaction(this.STORE_RAW, 'readonly');
+      const req = tx.objectStore(this.STORE_RAW).getAll();
+      req.onsuccess = () => resolve(req.result || []);
+      req.onerror = () => reject(req.error);
+    });
+  },
+  async clearRaw() {
+    await this.open();
+    return new Promise((resolve, reject) => {
+      const tx = this.db.transaction(this.STORE_RAW, 'readwrite');
+      tx.objectStore(this.STORE_RAW).clear();
       tx.oncomplete = () => resolve();
       tx.onerror = () => reject(tx.error);
     });
@@ -2013,7 +2105,7 @@ const WEEKDAY_NAMES = ['一','二','三','四','五','六','日'];
 
 const DEFAULTS = {glassOpacity:45,glassBlur:40,glassSaturation:170,maxHR:189,restHR:50,weight:63.9,unit:'km',autoSave:true,theme:'default'};
 const State = {
-  activities:[], settings:Object.assign({},DEFAULTS), view:'dashboard', filter:'all', prevView:'dashboard',
+  activities:[], settings:Object.assign({},DEFAULTS), view:'dashboard', filter:'all', distFilter:null, prevView:'dashboard',
   iconMap:{}, bgImage:null,
   pbCache: { byType:{}, byDay:new Map(), byActivity:new Map() },
   segPBCache: null,
@@ -3023,6 +3115,26 @@ function parseFIT(buffer){
   return records;
 }
 const FIT_SPORT_MAP={0:'other',1:'run',2:'cycle',3:'other',4:'gym',5:'swim',6:'other',11:'walk',17:'hike',18:'other',19:'other'};
+/* 统一室内/室外判定：
+   ① 文本线索（室内/跑步机/骑行台/泳池…）；② FIT subSport（跑步机=1、室内跑=9、室内骑行=5、划船=8…）；
+   ③ 轨迹有无 GPS（室外=含 GPS 轨迹）。无轨迹时按运动类型推断。 */
+function indoorByText(type, rawText){
+  const s=((rawText||'')+'').toLowerCase();
+  if(/室内|跑步机|骑行台|泳池|力量|划船机|滚轴|椭圆|treadmill|indoor|trainer|pool/.test(s)) return true;
+  if(/虚拟|virtual|\berg\b/.test(s)) return true;
+  return type==='gym';
+}
+function detectIndoor(type, points, subSport, rawText, opts){
+  if(indoorByText(type, rawText)) return true;
+  const INDOOR_SUB=[1,5,8,9,10,11,32];
+  if(subSport!=null && INDOOR_SUB.indexOf(subSport)>=0) return true;
+  const pts=points||[];
+  if(!pts.length) return (type==='gym'||type==='swim');
+  if(opts && opts.noTrack) return (type==='swim');
+  let gps=0; for(const p of pts){ if(p.lat!=null&&p.lon!=null) gps++; }
+  return !(gps>pts.length*0.3);
+}
+window.detectIndoor=detectIndoor; window.indoorByText=indoorByText;
 
 function fitRecordsToActivity(records,filename){
   const fileIds=records.filter(r=>r.globalMsgNum===0);
@@ -3042,8 +3154,9 @@ function fitRecordsToActivity(records,filename){
   const points=[];
   for(const r of recs){
     const v=r.values;
-    const lat=v[0]!=null?v[0]*(180/2147483648):null;
-    const lon=v[1]!=null?v[1]*(180/2147483648):null;
+    const rlat=v[0],rlon=v[1];
+    const lat=(rlat!=null&&rlat!==0x7FFFFFFF&&rlat!==-2147483648)?rlat*(180/2147483648):null;
+    const lon=(rlon!=null&&rlon!==0x7FFFFFFF&&rlon!==-2147483648)?rlon*(180/2147483648):null;
     const ts=v[253]!=null?v[253]*1000+GARMIN_EPOCH_MS:null;
     let ele=null;
     if(v[73]!=null)ele=v[73]/5-500;
@@ -3068,14 +3181,7 @@ function fitRecordsToActivity(records,filename){
   const avgCad=session[13]!=null?session[13]:null;
   const avgTemp=session[132]!=null?session[132]:null;
   const startTimeStr=startTime.toISOString();
-  const gpsCount=points.filter(p=>p.lat!=null&&p.lon!=null).length;
-  let indoor;
-  if(points.length===0){
-    indoor=[5,6,58].indexOf(subSport)>=0;
-  }else{
-    const hasGPS=gpsCount>points.length*0.3;
-    indoor=(!hasGPS)||[5,6,58].indexOf(subSport)>=0;
-  }
+  const indoor=detectIndoor(type, points, subSport, (fileId[8]||'')+' '+filename);
   const rawName = fileId[8] || '';
   let name = (rawName || '').replace(/\.fit$/i,'');
   if(!name) name = filename.replace(/\.fit$/i,'');
@@ -3119,7 +3225,7 @@ function parseGPX(doc,filename){
     points.push({lat,lon,ele:fnum(getTag(n,'ele')),t:isFinite(t)?t:null,hr:fnum(getTagNS(n,'hr')),cad:fnum(getTagNS(n,'cad'))});
   }
   if(points.length<2)throw new Error('有效轨迹点不足');
-  return buildActivity({name,type:guessType(rawType,name),indoor:false,points,source:filename});
+  return buildActivity({name,type:guessType(rawType,name),indoor:detectIndoor(guessType(rawType,name),points,null,name+' '+rawType),points,source:filename});
 }
 function parseTCX(doc,filename){
   const actEl=doc.getElementsByTagName('Activity')[0];
@@ -3149,7 +3255,7 @@ function parseTCX(doc,filename){
   }
   if(points.length<2)throw new Error('轨迹点不足（<2）');
   const name=filename.replace(/\.tcx$/i,'');
-  return buildActivity({name,type:guessType(sport,name),indoor:false,points,source:filename,presetDuration:lapTime,presetDistance:lapDist,presetCalories:lapCal});
+  return buildActivity({name,type:guessType(sport,name),indoor:detectIndoor(guessType(sport,name),points,null,sport+' '+name),points,source:filename,presetDuration:lapTime,presetDistance:lapDist,presetCalories:lapCal});
 }
 function synthesizePoints(opt){
   const N=120;
@@ -3449,7 +3555,7 @@ function xlsxRowsToActivities(rows, filename){
     const nm = `${meta.label} · ${dObj.getMonth()+1}月${dObj.getDate()}日`;
     try{
       const a = buildActivity({
-        name: nm, type, indoor: false,
+        name: nm, type, indoor: indoorByText(type, typeRaw+' '+nm),
         date: startMs? new Date(startMs).toISOString() : new Date().toISOString(),
         points, presetDuration: duration, presetDistance: distance,
         calories, avgHR: avgHRv, maxHR: maxHRv,
@@ -3573,6 +3679,13 @@ function parsePaceStr(s){
 
 function normalizeGarminType(s){
   const t = String(s || '').trim();
+  if(/室内跑步|室内跑|室内骑行|室内单车|跑步机|treadmill|indoor|trainer|骑行台|泳池|pool|虚拟|virtual/i.test(t)){
+    if(/跑|run|jog/i.test(t)) return { type:'run', indoor:true };
+    if(/骑|单车|自行|cycl|bik|ride|trainer/i.test(t)) return { type:'cycle', indoor:true };
+    if(/泳|swim|pool/i.test(t)) return { type:'swim', indoor:true };
+    if(/力量|健身|器械|strength|gym|weight/i.test(t)) return { type:'gym', indoor:true };
+    return { type:'other', indoor:true };
+  }
   if(/跑步机|treadmill/i.test(t)) return { type:'run',   indoor:true  };
   if(/跑步|run|jog|慢跑/i.test(t)) return { type:'run',   indoor:false };
   if(/骑行|单车|自行车|cycl|bik|ride/i.test(t)) return { type:'cycle', indoor:false };
@@ -3809,6 +3922,14 @@ async function importFiles(fileList){
   const newActivities=[];
   const dupWithExisting=[];
   const dupInBatch=[];
+  const rawRecords=[];
+  for(const file of files){
+    try{
+      const buf=await file.arrayBuffer();
+      rawRecords.push({ id: file.name+'::'+(file.lastModified||0)+'::'+file.size, name:file.name, size:file.size, type:file.type||'', lastModified:file.lastModified||0, ts:Date.now(), data:buf });
+    }catch(e){}
+  }
+  try{ if(rawRecords.length) await IDB.putRawFiles(rawRecords); }catch(e){ console.error('原始数据备份失败', e); }
   const pushActivity = (a) => {
     const dupOld = isDuplicate(a, State.activities);
     if(dupOld){ dupWithExisting.push({a, old:dupOld}); return false; }
@@ -3868,6 +3989,7 @@ async function importFiles(fileList){
     try { await IDB.putActivities(newActivities); }
     catch(e){ console.error('写入失败，回退全量', e); await flushPersist(); persistActivities(); }
     renderAll();
+    if(typeof window.refreshBackupMeta==='function') window.refreshBackupMeta();
     let msg = `成功导入 ${ok} 条活动`;
     if(dupTotal > 0) msg += `，跳过 ${dupTotal} 条重复`;
     if(fail > 0) msg += `，${fail} 条失败`;
@@ -5493,9 +5615,11 @@ function initDetailDrag(){
 
 /* ============ 活动列表 ============ */
 function renderActivities(){
+  if(window.renderDistFilters) window.renderDistFilters();
   const box=$('#activityList');
   let list=State.activities;
   if(State.filter!=='all')list=list.filter(a=>a.type===State.filter);
+  if(State.distFilter){ const _dp=(window.distPredicate?window.distPredicate(State.filter, State.distFilter):null); if(_dp) list=list.filter(_dp); }
   $('#actCount').textContent=State.activities.length;
   $('#navCount').textContent=State.activities.length;
   if(!list.length){
@@ -5536,6 +5660,7 @@ function openActivityDetail(id){
   const mi=State.settings.unit==='mi';
   const dd=mi?1609.344:1000;
   const du=mi?'mi':'km';
+  const _am=$('#activityModal'); if(_am) _am.dataset.aid=id;
   $('#aTitle').textContent=a.name;
   $('#aSub').textContent=`${meta.label}${a.indoor?' · 室内':''} · ${fmtDate(a.date)} · 来源 ${a.source||'未知'}`;
   const pbs = State.pbCache.byActivity.get(a.id) || [];
@@ -6127,7 +6252,7 @@ const GarminSync = {
       const r1 = await fetch(`${backend}/api/garmin/sync`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: this.config.email, password: password, last_sync: lastSync, days_back: lastSync ? 0 : daysBack }),
+        body: JSON.stringify({ email: this.config.email, password: password, last_sync: lastSync, days_back: daysBack }),
       });
       if(!r1.ok){ const errText = await r1.text().catch(()=> ''); throw new Error(`后端返回 ${r1.status}${errText?': '+errText.slice(0,200):''}`); }
       const d1 = await r1.json();
@@ -6137,7 +6262,7 @@ const GarminSync = {
       const start = Date.now();
       let finished = false, result = null;
       while(!finished){
-        if(Date.now() - start > 20 * 60 * 1000) throw new Error('同步超时（超过 20 分钟）');
+        if(Date.now() - start > 90 * 60 * 1000) throw new Error('同步超时（超过 90 分钟）');
         await new Promise(r => setTimeout(r, 1500));
         const r2 = await fetch(`${backend}/api/garmin/sync/${taskId}`);
         if(!r2.ok) throw new Error('查询进度失败');
@@ -6456,7 +6581,9 @@ async function init(){
   $$('#actTabs .tab').forEach(t=>{
     t.addEventListener('click',()=>{
       State.filter=t.dataset.filter;
+      State.distFilter=null;
       $$('#actTabs .tab').forEach(x=>x.classList.toggle('active',x===t));
+      renderDistFilters();
       renderActivities();
     });
   });
@@ -6523,12 +6650,348 @@ async function init(){
     },180);
   });
 
+  /* ============================================================
+     距离 / 条件筛选（按运动类型）
+     ============================================================ */
+  const DIST_FILTERS = {
+    run: { items:[
+      {k:'r5',   t:'5K',   test:a=>a.distance>=4500 && a.distance<7500},
+      {k:'r10',  t:'10K',  test:a=>a.distance>=7500 && a.distance<12500},
+      {k:'r15',  t:'15K',  test:a=>a.distance>=12500 && a.distance<18500},
+      {k:'half', t:'半马', test:a=>a.distance>=18500 && a.distance<27500},
+      {k:'full', t:'全马', test:a=>a.distance>=40000 && a.distance<44000},
+      {k:'ultra',t:'超马', test:a=>a.distance>=44000},
+    ]},
+    cycle: { items:[
+      {k:'c20', t:'20K',   test:a=>a.distance>=15000 && a.distance<30000},
+      {k:'c40', t:'40K',   test:a=>a.distance>=30000 && a.distance<60000},
+      {k:'c80', t:'80K',   test:a=>a.distance>=60000 && a.distance<110000},
+      {k:'c120',t:'120K+', test:a=>a.distance>=110000},
+    ]},
+    swim: { items:[
+      {k:'s500', t:'500m',   test:a=>a.distance>=300 && a.distance<750},
+      {k:'s1000',t:'1000m',  test:a=>a.distance>=750 && a.distance<1500},
+      {k:'s1500',t:'1500m',  test:a=>a.distance>=1500 && a.distance<2250},
+      {k:'s3000',t:'3000m+', test:a=>a.distance>=2250},
+    ]},
+    hike: { items:[
+      {k:'h5', t:'5K',   test:a=>a.distance>=3500 && a.distance<7500},
+      {k:'h10',t:'10K',  test:a=>a.distance>=7500 && a.distance<15000},
+      {k:'h20',t:'20K',  test:a=>a.distance>=15000 && a.distance<30000},
+      {k:'h30',t:'30K+', test:a=>a.distance>=30000},
+    ]},
+    walk: { items:[
+      {k:'w3', t:'3K',   test:a=>a.distance>=2000 && a.distance<5000},
+      {k:'w5', t:'5K',   test:a=>a.distance>=5000 && a.distance<8000},
+      {k:'w10',t:'10K+', test:a=>a.distance>=8000},
+    ]},
+    gym: { items:[
+      {k:'g30', t:'≤30min',   test:a=>a.duration>0 && a.duration<=1800},
+      {k:'g60', t:'30–60min', test:a=>a.duration>1800 && a.duration<=3600},
+      {k:'g90', t:'60–90min', test:a=>a.duration>3600 && a.duration<=5400},
+      {k:'g120',t:'90min+',   test:a=>a.duration>5400},
+    ]},
+  };
+  function distPredicate(type, key){
+    const cfg = DIST_FILTERS[type]; if(!cfg) return null;
+    const it = cfg.items.find(x=>x.k===key); if(!it) return null;
+    return a=>it.test(a);
+  }
+  function renderDistFilters(){
+    const host = $('#actDistFilters'); if(!host) return;
+    const cfg = DIST_FILTERS[State.filter];
+    if(!cfg){ host.innerHTML=''; return; }
+    const acts = State.activities.filter(a=>a.type===State.filter);
+    let html = `<span class="chip ${!State.distFilter?'active':''}" data-dist="">全部<span class="cnt">${acts.length}</span></span>`;
+    cfg.items.forEach(it=>{
+      const n = acts.filter(it.test).length;
+      html += `<span class="chip ${State.distFilter===it.k?'active':''}" data-dist="${it.k}">${it.t}<span class="cnt">${n}</span></span>`;
+    });
+    host.innerHTML = html;
+    host.querySelectorAll('.chip').forEach(ch=>{
+      ch.addEventListener('click',()=>{ State.distFilter = ch.dataset.dist || null; renderActivities(); });
+    });
+  }
+  window.distPredicate = distPredicate;
+  window.renderDistFilters = renderDistFilters;
+
+  /* ============================================================
+     分享海报（运动数据图表）
+     ============================================================ */
+  const _CRC_TABLE = (()=>{ const t=new Uint32Array(256); for(let n=0;n<256;n++){ let c=n; for(let k=0;k<8;k++) c = (c&1) ? (0xEDB88320 ^ (c>>>1)) : (c>>>1); t[n]=c>>>0; } return t; })();
+  function _crc32(u8){ let c=0xFFFFFFFF; for(let i=0;i<u8.length;i++) c=_CRC_TABLE[(c ^ u8[i]) & 0xFF] ^ (c>>>8); return (c ^ 0xFFFFFFFF)>>>0; }
+  function _rgba(c, a){
+    c=(c||'#4f8cff').trim(); let r=79,g=140,b=255;
+    if(c[0]==='#'){ const h=c.slice(1); if(h.length===3){ r=parseInt(h.slice(0,1).repeat(2),16); g=parseInt(h.slice(1,2).repeat(2),16); b=parseInt(h.slice(2,3).repeat(2),16);} else { r=parseInt(h.slice(0,2),16); g=parseInt(h.slice(2,4),16); b=parseInt(h.slice(4,6),16);} }
+    else { const m=c.match(/[\\d.]+/g); if(m&&m.length>=3){ r=+m[0]; g=+m[1]; b=+m[2]; } }
+    if(isNaN(r))r=79; if(isNaN(g))g=140; if(isNaN(b))b=255;
+    return 'rgba('+r+','+g+','+b+','+a+')';
+  }
+  function _rr(ctx,x,y,w,h,r){ ctx.beginPath(); ctx.moveTo(x+r,y); ctx.arcTo(x+w,y,x+w,y+h,r); ctx.arcTo(x+w,y+h,x,y+h,r); ctx.arcTo(x,y+h,x,y,r); ctx.arcTo(x,y,x+w,y,r); ctx.closePath(); }
+  function _posterCtx(cv,w,h){ const dpr=Math.min(window.devicePixelRatio||1,2); cv.width=w*dpr; cv.height=h*dpr; const ctx=cv.getContext('2d'); ctx.setTransform(dpr,0,0,dpr,0,0); ctx.clearRect(0,0,w,h); return ctx; }
+  function _paceStr(durSec, distM, mi){ if(!(distM>0)||!(durSec>0)) return '—'; const unit=mi?1609.344:1000; const secPer=(durSec/(distM/unit)); const m=Math.floor(secPer/60), s=Math.round(secPer%60); return (m<10?'0':'')+m+':'+(s<10?'0':'')+s+(mi?' /mi':' /km'); }
+  function _posterSeries(a){
+    const pts=a.points||[]; if(!pts.length) return [];
+    const hr=pts.map(p=>p.hr).filter(v=>v!=null&&isFinite(v)); if(hr.length>=2) return hr;
+    const ele=pts.map(p=>p.ele).filter(v=>v!=null&&isFinite(v)); if(ele.length>=2) return ele;
+    return pts.map((p,i)=>i);
+  }
+  function drawPosterSeries(ctx, series, x, y, w, h){
+    const ac=cssVar('--blue','#4f8cff');
+    if(!series || series.length<2){ ctx.fillStyle='rgba(255,255,255,.3)'; ctx.font='400 15px system-ui,-apple-system,sans-serif'; ctx.fillText('暂无曲线数据', x, y+h/2); return; }
+    let mn=Math.min.apply(null,series), mx=Math.max.apply(null,series); if(mx===mn) mx=mn+1;
+    const stepX=w/(series.length-1); const py=v=>y+h-((v-mn)/(mx-mn))*h;
+    const ag=ctx.createLinearGradient(0,y,0,y+h); ag.addColorStop(0,_rgba(ac,0.35)); ag.addColorStop(1,_rgba(ac,0));
+    ctx.beginPath(); ctx.moveTo(x,y+h); series.forEach((v,i)=>ctx.lineTo(x+i*stepX,py(v))); ctx.lineTo(x+w,y+h); ctx.closePath(); ctx.fillStyle=ag; ctx.fill();
+    ctx.beginPath(); series.forEach((v,i)=>{ const _x=x+i*stepX,_y=py(v); if(i)ctx.lineTo(_x,_y); else ctx.moveTo(_x,_y); }); ctx.strokeStyle=ac; ctx.lineWidth=2.5; ctx.lineJoin='round'; ctx.stroke();
+  }
+  function _posterBg(ctx,W,H){
+    const g=ctx.createLinearGradient(0,0,W,H); g.addColorStop(0,'#0b1220'); g.addColorStop(1,'#141d33');
+    ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
+    ctx.fillStyle=cssVar('--blue','#4f8cff'); ctx.fillRect(0,0,W,6);
+    ctx.textBaseline='top'; ctx.textAlign='left';
+    ctx.fillStyle='rgba(255,255,255,.5)'; ctx.font='700 20px system-ui,-apple-system,sans-serif'; ctx.fillText('PROATHLETE', 44, 46);
+  }
+  function renderActivityPoster(a){
+    const W=660,H=900; const cv=$('#posterCanvas'); const ctx=_posterCtx(cv,W,H); _posterBg(ctx,W,H);
+    const label=(TYPE_META[a.type]||TYPE_META.other).label;
+    ctx.fillStyle='#fff'; ctx.font='800 40px system-ui,-apple-system,sans-serif'; ctx.fillText(String(a.name||label).slice(0,16),44,86);
+    ctx.fillStyle='rgba(255,255,255,.6)'; ctx.font='400 20px system-ui,-apple-system,sans-serif'; ctx.fillText(fmtDate(a.date)+' · '+label,44,140);
+    const mi=State.settings && State.settings.unit==='mi'; const dd=mi?1609.344:1000;
+    const cells=[
+      {t:'距离', v:a.distance>0?(a.distance/dd).toFixed(2)+(mi?' mi':' km'):'—'},
+      {t:'时长', v:fmtHM(a.duration)},
+      {t:a.type==='cycle'?'均速':'配速', v:_paceStr(a.duration,a.distance,mi)},
+      {t:'平均心率', v:a.avgHR?a.avgHR+' bpm':'—'},
+    ];
+    let cy=192; ctx.fillStyle='rgba(255,255,255,.05)'; _rr(ctx,44,cy,W-88,168,18); ctx.fill(); ctx.strokeStyle='rgba(255,255,255,.08)'; ctx.stroke();
+    cells.forEach((c,i)=>{ const col=i%2,row=(i/2)|0; const x=80+col*((W-88-72)/2); const y=cy+34+row*76;
+      ctx.fillStyle='rgba(255,255,255,.55)'; ctx.font='400 16px system-ui,-apple-system,sans-serif'; ctx.fillText(c.t,x,y);
+      ctx.fillStyle='#fff'; ctx.font='800 30px system-ui,-apple-system,sans-serif'; ctx.fillText(c.v,x,y+26); });
+    cy=396; ctx.fillStyle='rgba(255,255,255,.05)'; _rr(ctx,44,cy,W-88,300,18); ctx.fill(); ctx.strokeStyle='rgba(255,255,255,.08)'; ctx.stroke();
+    ctx.fillStyle='rgba(255,255,255,.7)'; ctx.font='600 16px system-ui,-apple-system,sans-serif'; ctx.fillText('心率 / 海拔曲线',72,cy+22);
+    drawPosterSeries(ctx,_posterSeries(a),72,cy+58,W-88-56,208);
+    ctx.fillStyle='rgba(255,255,255,.4)'; ctx.font='400 15px system-ui,-apple-system,sans-serif'; ctx.fillText(new Date().toLocaleString('zh-CN'),44,H-56);
+    ctx.fillStyle=cssVar('--blue','#4f8cff'); ctx.font='700 15px system-ui,-apple-system,sans-serif'; ctx.textAlign='right'; ctx.fillText('由 PROATHLETE 生成',W-44,H-56); ctx.textAlign='left';
+  }
+  function renderOverviewPoster(){
+    const W=660,H=900; const cv=$('#posterCanvas'); const ctx=_posterCtx(cv,W,H); _posterBg(ctx,W,H);
+    ctx.fillStyle='#fff'; ctx.font='800 40px system-ui,-apple-system,sans-serif'; ctx.fillText('近 7 天训练概览',44,86);
+    ctx.fillStyle='rgba(255,255,255,.6)'; ctx.font='400 20px system-ui,-apple-system,sans-serif'; ctx.fillText('PROATHLETE · 运动数据中枢',44,140);
+    const mi=State.settings && State.settings.unit==='mi'; const dd=mi?1609.344:1000;
+    const days=[]; for(let i=6;i>=0;i--){ const d=new Date(); d.setDate(d.getDate()-i); days.push({d,dist:0,dur:0,cnt:0}); }
+    const map={}; days.forEach(x=>map[dayKey(x.d)]=x);
+    State.activities.forEach(a=>{ const k=dayKey(new Date(a.date)); const t=map[k]; if(t){ t.dist+=a.distance||0; t.dur+=a.duration||0; t.cnt++; } });
+    const totDist=days.reduce((s,x)=>s+x.dist,0)/dd; const totDur=days.reduce((s,x)=>s+x.dur,0); const totCnt=days.reduce((s,x)=>s+x.cnt,0);
+    const cells=[ {t:'总距离',v:totDist.toFixed(1)+(mi?' mi':' km')}, {t:'总时长',v:fmtHM(totDur)}, {t:'活动次数',v:String(totCnt)} ];
+    let cy=192; ctx.fillStyle='rgba(255,255,255,.05)'; _rr(ctx,44,cy,W-88,120,18); ctx.fill(); ctx.strokeStyle='rgba(255,255,255,.08)'; ctx.stroke();
+    cells.forEach((c,i)=>{ const x=80+i*((W-88-72)/3); ctx.fillStyle='rgba(255,255,255,.55)'; ctx.font='400 15px system-ui,-apple-system,sans-serif'; ctx.fillText(c.t,x,cy+28); ctx.fillStyle='#fff'; ctx.font='800 26px system-ui,-apple-system,sans-serif'; ctx.fillText(c.v,x,cy+54); });
+    cy=348; ctx.fillStyle='rgba(255,255,255,.05)'; _rr(ctx,44,cy,W-88,344,18); ctx.fill(); ctx.strokeStyle='rgba(255,255,255,.08)'; ctx.stroke();
+    ctx.fillStyle='rgba(255,255,255,.7)'; ctx.font='600 16px system-ui,-apple-system,sans-serif'; ctx.fillText('每日距离 ('+(mi?'mi':'km')+')',72,cy+22);
+    const bx=72, by=cy+70, bw=W-88-56, bh=230; const maxD=Math.max.apply(null, days.map(x=>x.dist/dd).concat([1]));
+    const ac=cssVar('--blue','#4f8cff'); const gap=bw/days.length; const bwid=gap*0.56;
+    days.forEach((x,i)=>{ const v=x.dist/dd; const hh=Math.max(2,(v/maxD)*bh); const _x=bx+i*gap+(gap-bwid)/2; const _y=by+bh-hh;
+      ctx.fillStyle=_rgba(ac,v>0?0.9:0.15); _rr(ctx,_x,_y,bwid,hh,6); ctx.fill();
+      ctx.fillStyle='rgba(255,255,255,.5)'; ctx.font='400 13px system-ui,-apple-system,sans-serif'; ctx.textAlign='center'; ctx.fillText(['日','一','二','三','四','五','六'][x.d.getDay()],_x+bwid/2,by+bh+12); ctx.textAlign='left';
+    });
+    ctx.fillStyle='rgba(255,255,255,.4)'; ctx.font='400 15px system-ui,-apple-system,sans-serif'; ctx.fillText(new Date().toLocaleString('zh-CN'),44,H-56);
+    ctx.fillStyle=ac; ctx.font='700 15px system-ui,-apple-system,sans-serif'; ctx.textAlign='right'; ctx.fillText('由 PROATHLETE 生成',W-44,H-56); ctx.textAlign='left';
+  }
+  function showPoster(sub){
+    const m=$('#posterModal'); if(!m) return;
+    if($('#posterSub')) $('#posterSub').textContent=sub||'';
+    m.classList.add('open');
+  }
+  function _posterBlob(){ const cv=$('#posterCanvas'); return new Promise(res=>{ try{ cv.toBlob(b=>res(b),'image/png'); }catch(e){ res(null); } }); }
+  function _downloadBlob(blob,name){ const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download=name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(url),4000); }
+  function _b64(ab){ if(!ab) return ''; const u8=new Uint8Array(ab); let s=''; const CH=0x8000; for(let i=0;i<u8.length;i+=CH){ s+=String.fromCharCode.apply(null,u8.subarray(i,i+CH)); } return btoa(s); }
+  function _unb64(b64){ const bin=atob(b64); const u8=new Uint8Array(bin.length); for(let i=0;i<bin.length;i++) u8[i]=bin.charCodeAt(i); return u8.buffer; }
+  function buildZip(files){
+    const enc=new TextEncoder(); const parts=[]; const central=[]; let offset=0;
+    const now=new Date(); const time=((now.getHours()<<11)|(now.getMinutes()<<5)|(now.getSeconds()>>1))&0xFFFF;
+    const date=(((now.getFullYear()-1980)<<9)|((now.getMonth()+1)<<5)|now.getDate())&0xFFFF;
+    files.forEach((f,idx)=>{
+      const nameB=enc.encode(f.name); const data=f.data||new Uint8Array(0); const crc=_crc32(data);
+      const lh=new DataView(new ArrayBuffer(30));
+      lh.setUint32(0,0x04034b50,true); lh.setUint16(4,20,true); lh.setUint16(6,0x0800,true); lh.setUint16(8,0,true);
+      lh.setUint16(10,time,true); lh.setUint16(12,date,true); lh.setUint32(14,crc,true);
+      lh.setUint32(18,data.length,true); lh.setUint32(22,data.length,true); lh.setUint16(26,nameB.length,true); lh.setUint16(28,0,true);
+      parts.push(new Uint8Array(lh.buffer)); parts.push(nameB); parts.push(data);
+      const ch=new DataView(new ArrayBuffer(46));
+      ch.setUint32(0,0x02014b50,true); ch.setUint16(4,20,true); ch.setUint16(6,20,true); ch.setUint16(8,0x0800,true); ch.setUint16(10,0,true);
+      ch.setUint16(12,time,true); ch.setUint16(14,date,true); ch.setUint32(16,crc,true);
+      ch.setUint32(20,data.length,true); ch.setUint32(24,data.length,true); ch.setUint16(28,nameB.length,true);
+      ch.setUint16(30,0,true); ch.setUint16(32,0,true); ch.setUint16(34,0,true); ch.setUint16(36,0,true); ch.setUint32(38,0,true); ch.setUint32(42,offset,true);
+      central.push(new Uint8Array(ch.buffer)); central.push(nameB);
+      offset += 30 + nameB.length + data.length;
+    });
+    let cdSize=0; central.forEach(c=>cdSize+=c.length);
+    const eocd=new DataView(new ArrayBuffer(22));
+    eocd.setUint32(0,0x06054b50,true); eocd.setUint16(4,0,true); eocd.setUint16(6,0,true);
+    eocd.setUint16(8,files.length,true); eocd.setUint16(10,files.length,true);
+    eocd.setUint32(12,cdSize,true); eocd.setUint32(16,offset,true); eocd.setUint16(20,0,true);
+    const all=parts.concat(central,[new Uint8Array(eocd.buffer)]);
+    let total=0; all.forEach(c=>total+=c.length); const out=new Uint8Array(total); let p=0;
+    all.forEach(c=>{ out.set(c,p); p+=c.length; }); return out;
+  }
+  async function refreshBackupMeta(){
+    const el=$('#backupMeta'); if(!el) return;
+    try{
+      const raw=await IDB.getAllRaw();
+      const bytes=raw.reduce((s,r)=>s+((r.data&&r.data.byteLength)||r.size||0),0);
+      if(!raw.length){ el.textContent='暂无原始备份（导入或 Garmin 同步后自动生成）'; return; }
+      const last=Math.max.apply(null, raw.map(r=>r.ts||0));
+      el.textContent = raw.length+' 个原始文件 · 共 '+fmtBytes(bytes)+' · 最近备份 '+new Date(last).toLocaleString('zh-CN');
+    }catch(e){ el.textContent='原始备份信息读取失败'; }
+  }
+  window.refreshBackupMeta = refreshBackupMeta;
+
+  $('#posterClose') && $('#posterClose').addEventListener('click',()=>$('#posterModal').classList.remove('open'));
+  $('#posterModal') && $('#posterModal').addEventListener('click',e=>{ if(e.target.id==='posterModal') e.currentTarget.classList.remove('open'); });
+  /* ---- 卡片 / 汇总分享海报 ---- */
+  function renderTextPoster(title, value, sub){
+    const W=660,H=900; const cv=$('#posterCanvas'); const ctx=_posterCtx(cv,W,H); _posterBg(ctx,W,H);
+    const ac=cssVar('--blue','#4f8cff');
+    ctx.textAlign='left';
+    ctx.fillStyle='#fff'; ctx.font='800 40px system-ui,-apple-system,sans-serif'; ctx.fillText(String(title||'运动数据').slice(0,16),44,86);
+    ctx.fillStyle='rgba(255,255,255,.6)'; ctx.font='400 20px system-ui,-apple-system,sans-serif'; ctx.fillText('PROATHLETE · 运动数据中枢',44,140);
+    ctx.fillStyle='rgba(255,255,255,.05)'; _rr(ctx,44,204,W-88,352,20); ctx.fill(); ctx.strokeStyle='rgba(255,255,255,.08)'; ctx.stroke();
+    ctx.textAlign='center';
+    ctx.fillStyle=ac; ctx.font='800 118px system-ui,-apple-system,sans-serif'; ctx.fillText(String(value||'—').slice(0,12),W/2,296);
+    ctx.fillStyle='rgba(255,255,255,.78)'; ctx.font='400 22px system-ui,-apple-system,sans-serif'; ctx.fillText(String(sub||'').slice(0,32),W/2,444);
+    ctx.textAlign='left';
+    ctx.fillStyle='rgba(255,255,255,.4)'; ctx.font='400 15px system-ui,-apple-system,sans-serif'; ctx.fillText(new Date().toLocaleString('zh-CN'),44,H-56);
+    ctx.fillStyle=ac; ctx.font='700 15px system-ui,-apple-system,sans-serif'; ctx.textAlign='right'; ctx.fillText('由 PROATHLETE 生成',W-44,H-56); ctx.textAlign='left';
+  }
+  function renderSummaryPoster(){
+    const W=660,H=900; const cv=$('#posterCanvas'); const ctx=_posterCtx(cv,W,H); _posterBg(ctx,W,H);
+    const mi=State.settings && State.settings.unit==='mi'; const dd=mi?1609.344:1000;
+    const acts=State.activities||[];
+    const totDist=acts.reduce((s,a)=>s+(a.distance||0),0)/dd;
+    const totDur=acts.reduce((s,a)=>s+(a.duration||0),0);
+    const totCnt=acts.length;
+    const byType={}; acts.forEach(a=>{ const t=a.type||'other'; (byType[t]=byType[t]||{d:0}).d+=(a.distance||0); });
+    ctx.textAlign='left';
+    ctx.fillStyle='#fff'; ctx.font='800 40px system-ui,-apple-system,sans-serif'; ctx.fillText('全部运动汇总',44,86);
+    ctx.fillStyle='rgba(255,255,255,.6)'; ctx.font='400 20px system-ui,-apple-system,sans-serif'; ctx.fillText('PROATHLETE · 累计数据总览',44,140);
+    const cells=[{t:'总距离',v:totDist.toFixed(1)+(mi?' mi':' km')},{t:'总时长',v:fmtHM(totDur)},{t:'总次数',v:String(totCnt)+' 次'}];
+    let cy=192; ctx.fillStyle='rgba(255,255,255,.05)'; _rr(ctx,44,cy,W-88,132,18); ctx.fill(); ctx.strokeStyle='rgba(255,255,255,.08)'; ctx.stroke();
+    cells.forEach((c,i)=>{ const x=72+i*((W-88-56)/3); ctx.fillStyle='rgba(255,255,255,.55)'; ctx.font='400 15px system-ui,-apple-system,sans-serif'; ctx.fillText(c.t,x,cy+30); ctx.fillStyle='#fff'; ctx.font='800 30px system-ui,-apple-system,sans-serif'; ctx.fillText(c.v,x,cy+58); });
+    cy=356; ctx.fillStyle='rgba(255,255,255,.05)'; _rr(ctx,44,cy,W-88,360,18); ctx.fill(); ctx.strokeStyle='rgba(255,255,255,.08)'; ctx.stroke();
+    ctx.fillStyle='rgba(255,255,255,.7)'; ctx.font='600 16px system-ui,-apple-system,sans-serif'; ctx.fillText('各运动类型累计距离',72,cy+22);
+    const order=['run','cycle','swim','walk','hike','gym','other'].filter(t=>byType[t]&&byType[t].d>0);
+    const maxD=Math.max.apply(null, order.map(t=>byType[t].d).concat([1]));
+    const ac=cssVar('--blue','#4f8cff'); let ry=cy+64;
+    order.slice(0,6).forEach(t=>{
+      const d=byType[t].d/dd, w=(byType[t].d/maxD)*(W-88-56-140);
+      ctx.fillStyle='rgba(255,255,255,.75)'; ctx.font='500 15px system-ui,-apple-system,sans-serif'; ctx.textAlign='left'; ctx.fillText((TYPE_META[t]||TYPE_META.other).label,72,ry);
+      ctx.fillStyle=_rgba(ac,0.85); _rr(ctx,180,ry-3,Math.max(4,w),22,6); ctx.fill();
+      ctx.fillStyle='rgba(255,255,255,.85)'; ctx.font='600 14px system-ui,-apple-system,sans-serif'; ctx.fillText(d.toFixed(1)+(mi?' mi':' km'),186+Math.max(4,w),ry);
+      ry+=46;
+    });
+    ctx.fillStyle='rgba(255,255,255,.4)'; ctx.font='400 15px system-ui,-apple-system,sans-serif'; ctx.textAlign='left'; ctx.fillText(new Date().toLocaleString('zh-CN'),44,H-56);
+    ctx.fillStyle=ac; ctx.font='700 15px system-ui,-apple-system,sans-serif'; ctx.textAlign='right'; ctx.fillText('由 PROATHLETE 生成',W-44,H-56); ctx.textAlign='left';
+  }
+  function shareCard(card){
+    const labelEl=card.querySelector('.card-label');
+    let label=labelEl?labelEl.textContent.trim():'运动数据';
+    label=label.replace(/详情\s*$/,'').trim();
+    const kpiEl=card.querySelector('.kpi,.kpi-sm');
+    const val=kpiEl?kpiEl.textContent.trim():'—';
+    const subEl=card.querySelector('.sub'); const sub=subEl?subEl.textContent.trim():'';
+    renderTextPoster(label, val, sub); showPoster(label);
+  }
+  $$('.card.clickable[data-card]').forEach(card=>{
+    if(card.querySelector('.fig-share')) return;
+    const b=document.createElement('button');
+    b.type='button'; b.className='fig-share'; b.title='分享此卡片';
+    b.innerHTML=(typeof ic==='function')?ic('share',14):'';
+    card.appendChild(b);
+    b.addEventListener('click', ev=>{ ev.stopPropagation(); ev.preventDefault(); shareCard(card); });
+  });
+  $('#btnShareSummary') && $('#btnShareSummary').addEventListener('click',()=>{
+    if(!State.activities.length){ toast('暂无数据可分享','warn'); return; }
+    renderSummaryPoster(); showPoster('全部运动汇总');
+  });
+  $('#posterDownload') && $('#posterDownload').addEventListener('click', async ()=>{ const b=await _posterBlob(); if(b){ _downloadBlob(b,'proathlete_poster_'+dayKey(new Date())+'.png'); toast('海报已保存','success'); } });
+  $('#posterCopy') && $('#posterCopy').addEventListener('click', async ()=>{
+    try{ const b=await _posterBlob(); if(!navigator.clipboard || typeof ClipboardItem==='undefined') throw new Error('浏览器不支持复制图片'); await navigator.clipboard.write([new ClipboardItem({'image/png':b})]); toast('海报已复制到剪贴板','success'); }
+    catch(e){ toast('复制失败，可先保存图片：'+e.message,'warn'); }
+  });
+  $('#posterShare') && $('#posterShare').addEventListener('click', async ()=>{
+    try{ const b=await _posterBlob(); const file=new File([b],'proathlete_poster_'+dayKey(new Date())+'.png',{type:'image/png'});
+      if(navigator.canShare && navigator.canShare({files:[file]})){ await navigator.share({files:[file],title:'我的运动数据',text:'来自 PROATHLETE 的运动数据'}); }
+      else { _downloadBlob(b,'proathlete_poster_'+dayKey(new Date())+'.png'); toast('当前浏览器不支持系统分享，已改为保存图片','info'); }
+    }catch(e){ if(e && e.name==='AbortError') return; toast('分享失败：'+e.message,'warn'); }
+  });
+  $('#btnShareOverview') && $('#btnShareOverview').addEventListener('click',()=>{
+    if(!State.activities.length){ toast('暂无数据可分享','warn'); return; }
+    renderOverviewPoster(); showPoster('近 7 天训练概览');
+  });
+  $('#aShare') && $('#aShare').addEventListener('click',()=>{
+    const aid=$('#activityModal') && $('#activityModal').dataset.aid;
+    const a=State.activities.find(x=>String(x.id)===String(aid));
+    if(!a){ toast('未找到活动数据','warn'); return; }
+    renderActivityPoster(a); showPoster(a.name||'活动海报');
+  });
+
+  $('#btnBackupRaw') && $('#btnBackupRaw').addEventListener('click', async ()=>{
+    const btn=$('#btnBackupRaw'); const old=btn.innerHTML; btn.disabled=true;
+    try{
+      const raw=await IDB.getAllRaw();
+      if(!raw.length){ toast('暂无原始数据可备份，请先导入或同步','warn'); return; }
+      const files=raw.map((r,i)=>({ name:(String(i+1).padStart(3,'0')+'_')+(r.name||('raw'+i)), data:new Uint8Array(r.data||new ArrayBuffer(0)) }));
+      const z=buildZip(files);
+      _downloadBlob(new Blob([z],{type:'application/zip'}),'proathlete_raw_backup_'+dayKey(new Date())+'.zip');
+      toast('已备份 '+raw.length+' 个原始文件','success');
+    }catch(e){ console.error(e); toast('备份失败：'+e.message,'error'); }
+    finally{ btn.disabled=false; btn.innerHTML=old; }
+  });
+  $('#btnExportAllCsv') && $('#btnExportAllCsv').addEventListener('click',()=>{ const b=$('#btnExportCSV'); if(b) b.click(); });
+  $('#btnExportJson') && $('#btnExportJson').addEventListener('click', async ()=>{
+    try{
+      const raw=await IDB.getAllRaw();
+      const payload={ app:'PROATHLETE', schema:2, exportedAt:new Date().toISOString(), settings:State.settings, activities:State.activities,
+        raw: raw.map(r=>({ name:r.name, size:r.size, type:r.type, lastModified:r.lastModified, ts:r.ts, data:_b64(r.data) })) };
+      _downloadBlob(new Blob([JSON.stringify(payload)],{type:'application/json'}),'proathlete_full_'+dayKey(new Date())+'.json');
+      toast('全量数据已导出','success');
+    }catch(e){ toast('导出失败：'+e.message,'error'); }
+  });
+  $('#btnImportBackup') && $('#btnImportBackup').addEventListener('click',()=>$('#backupFileInput').click());
+  $('#backupFileInput') && $('#backupFileInput').addEventListener('change', async (e)=>{
+    const f=e.target.files && e.target.files[0]; if(!f) return;
+    try{
+      const payload=JSON.parse(await f.text());
+      if(!payload || !Array.isArray(payload.activities)) throw new Error('不是有效的备份文件');
+      if(!confirm('导入备份将覆盖当前 '+State.activities.length+' 条活动，并恢复 '+((payload.raw||[]).length)+' 个原始文件，是否继续？')) return;
+      State.activities=payload.activities;
+      if(payload.settings) State.settings=Object.assign(State.settings,payload.settings);
+      await IDB.replaceAllActivities(State.activities);
+      if(payload.raw && payload.raw.length){
+        try{ await IDB.clearRaw(); }catch(err){}
+        const recs=payload.raw.map((r,i)=>({ id:(r.name||('raw'+i))+'::'+(r.lastModified||0)+'::'+(r.size||0), name:r.name||('raw'+i), size:r.size||0, type:r.type||'', lastModified:r.lastModified||0, ts:r.ts||Date.now(), data:_unb64(r.data||'') }));
+        await IDB.putRawFiles(recs);
+      }
+      renderAll(); updateStorageInfo(); refreshBackupMeta();
+      toast('备份已导入','success');
+    }catch(err){ console.error(err); toast('导入失败：'+err.message,'error'); }
+    finally{ e.target.value=''; }
+  });
+  $('#btnClearRaw') && $('#btnClearRaw').addEventListener('click', async ()=>{
+    try{ const raw=await IDB.getAllRaw();
+      if(!raw.length){ toast('暂无原始备份','warn'); return; }
+      if(!confirm('确定清空 '+raw.length+' 个原始文件备份？（不影响已导入的活动数据）')) return;
+      await IDB.clearRaw(); refreshBackupMeta(); toast('原始备份已清空','success');
+    }catch(e){ toast('清空失败：'+e.message,'error'); }
+  });
+
   GarminSync.init();
 
   setLoadingStatus('正在渲染界面...');
   switchView('dashboard');
   renderAll();
   updateStorageInfo();
+  refreshBackupMeta();
 
   requestAnimationFrame(() => {
     setTimeout(() => hideLoading(), 200);

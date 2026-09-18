@@ -691,6 +691,61 @@ const PAL = ['--blue','--green','--orange','--purple','--teal','--pink','--indig
 - 4 张图：耐力趋势（散点 + OLS 回归线）、阶段能力雷达（早期 vs 近期）、稳定性演变（季度 KDE 脊线）、心肺效率 EF（月均面积线）。
 - 每卡必配 `chart-note` 或 `prog-intro` 讲解，说明指标含义与判读方式。
 
+#### 5.13.4 分享海报（Poster）
+
+分享海报同样基于 Canvas 2D 手绘，输出 660×900 的固定比例，供保存 / 复制 / 系统分享（移动端可进朋友圈）。
+
+```css
+.poster-modal .modal-box { max-width: 520px; }
+.poster-stage { display:flex; justify-content:center; padding: var(--s3) 0; }
+.poster-stage canvas { width:100%; max-width:360px; height:auto;
+  border-radius: var(--r-md); box-shadow: 0 14px 44px rgba(0,0,0,.4); }
+.share-actions { display:flex; flex-wrap:wrap; gap:var(--s2); margin-top:var(--s3); }
+.share-hint { font-size:12px; color:var(--t3); line-height:1.75;
+  margin-top:var(--s3); padding-left:var(--s3); border-left:2px solid var(--blue); }
+```
+
+- 统一用 `_posterBg(ctx,W,H)` 铺底色与品牌头，`_posterCtx(cv,W,H)` 按 `devicePixelRatio` 建画布。
+- 海报类型：`renderTextPoster`（单指标大字）、`renderSummaryPoster`（全部运动汇总：总距离/总时长/总次数 + 各类型分布）、`renderActivityPoster`（单次活动：指标 + 心率/海拔曲线）、`renderOverviewPoster`（近 7 天概览）。
+- 导出与分享：`_posterBlob()` 生成 PNG，`_downloadBlob()` 保存，`navigator.clipboard` 复制，`navigator.share({files})` 系统分享（不支持时回退为保存）。
+
+### 5.14 筛选 Chips 与数据卡片操作
+
+**筛选 chips**（各运动按类型距离/条件筛选）：
+
+```css
+.subfilters { display:flex; flex-wrap:wrap; gap:6px; margin-top:var(--s3); align-items:center; }
+.subfilters .chip { padding:5px 12px; border-radius:999px; font-size:12.5px; font-weight:600;
+  color:var(--t2); background:var(--surface-b); border:1px solid var(--hairline); cursor:pointer;
+  transition: color .2s var(--ease), background .2s var(--ease), border-color .2s var(--ease);
+  display:inline-flex; align-items:center; gap:5px; }
+.subfilters .chip:hover { color:var(--t1); }
+.subfilters .chip.active { color:#fff; background:var(--blue); border-color:transparent; }
+.subfilters .chip .cnt { font-size:11px; opacity:.7; font-variant-numeric:tabular-nums; }
+```
+
+- 筛选集合由 `DIST_FILTERS`（按运动类型）驱动，`distPredicate(type,key)` 产出过滤函数，`renderDistFilters()` 渲染带实时数量的 chips。
+- 运动分档要**贴合运动实际**：跑步 5/10/15/半马/全马/超马，骑行 20/40/80/120K，游泳 500/1000/1500/3000m，徒步 5/10/20/30K，步行 3/5/10K，力量按 ≤30/30–60/60–90/90min+。
+
+**数据卡片分享按钮**（每卡可单独分享）：
+
+```css
+.fig-share { position:absolute; left:12px; bottom:12px; width:28px; height:28px; padding:0;
+  border-radius:50%; display:flex; align-items:center; justify-content:center;
+  border:1px solid var(--hairline); background:var(--surface-b); color:var(--t2);
+  opacity:0; transform:translateY(6px);
+  transition: opacity .2s var(--ease), transform .2s var(--ease), background .2s var(--ease), color .2s var(--ease); z-index:3; cursor:pointer; }
+.card:hover .fig-share { opacity:1; transform:translateY(0); }
+@media (hover:none){ .fig-share { opacity:.85; transform:none; } }
+```
+
+**备份 / 导出卡片**：
+
+```css
+.backup-actions { display:flex; flex-wrap:wrap; gap:var(--s2); margin-top:var(--s3); }
+.backup-meta { font-size:12.5px; color:var(--t3); line-height:1.7; font-variant-numeric:tabular-nums; }
+```
+
 ---
 
 ## 6. 动效系统
@@ -890,6 +945,7 @@ transition: transform .62s cubic-bezier(.22,1,.36,1), opacity .5s var(--ease);
 ```
 
 > 图表 / 图标相关可复用类：`.ic-svg`（线性图标）、`.chart-wrap`（图表容器）、`.chart-note`（图表讲解）、`.prog-intro`（方法学引言）、`.prog-kpi`（指标小卡）。
+> 筛选 / 分享 / 备份相关可复用类：`.subfilters .chip`（筛选 chip，`active` 高亮）、`.fig-share`（卡片分享按钮）、`.poster-stage`（海报画布容器）、`.share-actions` / `.share-hint`（分享操作与提示）、`.backup-actions` / `.backup-meta`（备份操作与信息）。
 
 ### 9.4 新增页面检查清单
 
@@ -911,6 +967,9 @@ transition: transform .62s cubic-bezier(.22,1,.36,1), opacity .5s var(--ease);
 - □  图标使用线性 SVG（`ic()` / `data-ic`），无 Emoji / 文字符号
 - □  图表颜色取自 CSS 变量，画布已按 `devicePixelRatio` 缩放
 - □  图表 / 进步卡片配有 `chart-note` 或 `prog-intro` 讲解
+- □  可筛选列表使用 `.subfilters .chip`，选中态用 `.active`，chip 内数量用 `.cnt`
+- □  可分享的数据卡片带 `.fig-share` 按钮，悬停浮现，移动端常显
+- □  海报固定 660×900，统一经 `_posterBg` / `_posterCtx` 绘制，颜色取自 CSS 变量
 
 ---
 
@@ -974,5 +1033,5 @@ transition: transform .62s cubic-bezier(.22,1,.36,1), opacity .5s var(--ease);
 
 ---
 
-**版本**：v1.1 · 对应 PROATHLETE 当前代码库（新增：线性 SVG 图标系统、总次数详情页、进步可视化）
+**版本**：v1.2 · 对应 PROATHLETE 当前代码库（新增：线性 SVG 图标系统、总次数详情页、进步可视化、分类型筛选 Chips、分享海报、卡片分享、原始数据备份/导出）
 **维护原则**：本规范随代码演进，任何新增视觉约定必须同步更新此文档，并追加到相应章节。

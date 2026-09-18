@@ -280,30 +280,73 @@ def _sync_worker(
         _update_task(task_id, message="登录成功，正在获取活动列表...")
 
         today = datetime.now().date()
-        if last_sync:
+        try:
+            db = int(days_back)
+        except Exception:
+            db = 30
+        # days_back > 0 时始终以用户配置的天数为准（避免增量同步被压缩成最近一天）
+        if db > 0:
+            start_date = today - timedelta(days=db)
+        elif last_sync:
             try:
                 start_date = datetime.strptime(last_sync, "%Y-%m-%d").date() - timedelta(days=1)
             except Exception:
-                start_date = today - timedelta(days=days_back)
+                start_date = today - timedelta(days=30)
         else:
-            start_date = today - timedelta(days=days_back)
+            start_date = today - timedelta(days=30)
 
         start_str = start_date.isoformat()
         end_str = today.isoformat()
+        span_days = (today - start_date).days
 
-        _update_task(task_id, message=f"获取 {start_str} 至 {end_str} 的活动...")
+        _update_task(task_id, message=f"获取 {start_str} 至 {end_str} 的活动（共 {span_days} 天）...")
 
-        # ---- 获取活动列表 ----
+        # ---- 获取活动列表（按 60 天分块，避免大范围一次性拉取失败）----
         activities: List[Dict[str, Any]] = []
+        seen_ids = set()
         try:
             if hasattr(client, "get_activities_by_date"):
-                activities = client.get_activities_by_date(start_str, end_str) or []
-            elif hasattr(client, "get_activities"):
-                all_acts = client.get_activities(0, 200) or []
-                for a in all_acts:
-                    act_date = (a.get("startTimeLocal") or "")[:10]
-                    if start_str <= act_date <= end_str:
+                CHUNK = 60
+                cur = start_date
+                while cur <= today:
+                    seg_end = min(cur + timedelta(days=CHUNK - 1), today)
+                    part = None
+                    try:
+                        part = client.get_activities_by_date(cur.isoformat(), seg_end.isoformat()) or []
+                    except Exception as seg_err:
+                        print(f"[Sync] 分段 {cur}~{seg_end} 获取失败: {seg_err}", file=sys.stderr)
+                        part = []
+                    for a in part:
+                        aid = a.get("activityId")
+                        if aid is not None and aid in seen_ids:
+                            continue
+                        if aid is not None:
+                            seen_ids.add(aid)
                         activities.append(a)
+                    _update_task(
+                        task_id,
+                        message=f"已获取 {cur.isoformat()}~{seg_end.isoformat()} 的活动，累计 {len(activities)} 条",
+                    )
+                    cur = seg_end + timedelta(days=1)
+                    time.sleep(0.3)
+            elif hasattr(client, "get_activities"):
+                offset = 0
+                while True:
+                    batch = client.get_activities(offset, 200) or []
+                    if not batch:
+                        break
+                    for a in batch:
+                        act_date = (a.get("startTimeLocal") or "")[:10]
+                        if start_str <= act_date <= end_str:
+                            aid = a.get("activityId")
+                            if aid is not None and aid in seen_ids:
+                                continue
+                            if aid is not None:
+                                seen_ids.add(aid)
+                            activities.append(a)
+                    offset += 200
+                    if len(batch) < 200:
+                        break
         except Exception as e:
             raise RuntimeError(f"获取活动列表失败: {e}") from e
 
