@@ -693,7 +693,9 @@ const PAL = ['--blue','--green','--orange','--purple','--teal','--pink','--indig
 
 #### 5.13.4 分享海报（Poster）
 
-分享海报同样基于 Canvas 2D 手绘，输出 660×900 的固定比例，供保存 / 复制 / 系统分享（移动端可进朋友圈）。
+分享海报基于 Canvas 2D 手绘，输出 **680×1000** 的固定比例，供保存 / 复制 / 系统分享（移动端可进月友圈）。
+
+**v2.8 重制为「Sigma 风」**：暗底绿渐变 + 细网格纹理 + 品牌头，结构为「大字累计值 → 轨迹剪影网格 → 底部「相当于」趣味对比」三段式。
 
 ```css
 .poster-modal .modal-box { max-width: 520px; }
@@ -705,9 +707,14 @@ const PAL = ['--blue','--green','--orange','--purple','--teal','--pink','--indig
   margin-top:var(--s3); padding-left:var(--s3); border-left:2px solid var(--blue); }
 ```
 
-- 统一用 `_posterBg(ctx,W,H)` 铺底色与品牌头，`_posterCtx(cv,W,H)` 按 `devicePixelRatio` 建画布。
-- 海报类型：`renderTextPoster`（单指标大字）、`renderSummaryPoster`（全部运动汇总：总距离/总时长/总次数 + 各类型分布）、`renderActivityPoster`（单次活动：指标 + 心率/海拔曲线）、`renderOverviewPoster`（近 7 天概览）。
+- 统一走 `renderSigmaPoster(opts)`：由配色常量 `POSTER_UI`（暗绿渐变、网格纹理、品牌头）控制视觉；`_posterBg(ctx,W,H)` 铺底 + 网格 + 品牌头，`_posterCtx(cv,W,H)` 按 `devicePixelRatio` 建画布。
+- **防溢出**：所有文本先经 `_fitFont(ctx,text,maxW,startPx,weight)` 自动缩小字号，超长再经 `_ellipsis(ctx,text,maxW,weight,px)` 截断加省略号，严禁固定字号硬画。
+- **轨迹剪影**：`_drawTrackBox()` 单条轨迹等比缩放绘制（保持宽高比、居中），`_drawTrackGrid()` 将多条轨迹排成网格；`_collectTracks()` 从最近活动里抽取最多 15 条有 GPS 的轨迹。
+- **趣味对比**：`funComparisons(totals)` 输出「北京→上海 N 次 / 绕上海外环 N 圈 / 马拉松 N 个 / 累计爬升 ≈ 珠峰 N 座 / 消耗 ≈ 米饭 N 碗」等行，常量集中在 `FUN`，统一由 `_drawCompare()` 绘制。
+- 海报类型：`renderActivityPoster`（单次活动，含本次轨迹）、`renderSummaryPoster`（全部运动汇总 + 轨迹剪影网格）、`renderOverviewPoster`（近 7 天概览）、`renderTextPoster`（单卡片指标）、`renderHeatmapPoster`（热力图）、`renderPBPoster`（生涯 PB）。
 - 导出与分享：`_posterBlob()` 生成 PNG，`_downloadBlob()` 保存，`navigator.clipboard` 复制，`navigator.share({files})` 系统分享（不支持时回退为保存）。
+
+**分享入口**：`#btnShareOverview`（近 7 天）、`#btnShareSummary`（全部汇总）、`#aShare`（单次活动）、`#btnShareHeatmap`（热力图）、`#btnSharePB`（生涯 PB）。
 
 ### 5.14 筛选 Chips 与数据卡片操作
 
@@ -747,6 +754,19 @@ const PAL = ['--blue','--green','--orange','--purple','--teal','--pink','--indig
 ```
 
 ---
+
+### 5.15 运动详情轨迹缩略图
+
+单次运动详情弹窗将指标与轨迹并排：`.a-hero` 左侧为指标网格（`#aMetrics`），右侧为轨迹缩略卡片 `.a-track-mini`（`#aTrackMini`）。轨迹复用 `drawTrackMini()` 绘制，无 GPS 时 `#aTrackMiniWrap` 自动隐藏；小屏（≤640px）改为纵向堆叠。
+
+```css
+.a-hero { display:flex; gap:var(--s4); align-items:flex-start; }
+.a-track-mini { flex:0 0 200px; border-radius:var(--r-md); background:var(--surface-a);
+  border:1px solid var(--hairline); padding:var(--s3); }
+.a-track-mini canvas { width:100%; height:auto; display:block; border-radius:10px; background:rgba(0,0,0,.22); }
+.a-track-mini-cap { font-size:11.5px; font-weight:700; color:var(--t3); text-align:center; margin-top:6px; }
+@media (max-width:640px){ .a-hero{ flex-direction:column; } .a-track-mini{ flex:none; width:100%; } }
+```
 
 ## 6. 动效系统
 
@@ -945,7 +965,8 @@ transition: transform .62s cubic-bezier(.22,1,.36,1), opacity .5s var(--ease);
 ```
 
 > 图表 / 图标相关可复用类：`.ic-svg`（线性图标）、`.chart-wrap`（图表容器）、`.chart-note`（图表讲解）、`.prog-intro`（方法学引言）、`.prog-kpi`（指标小卡）。
-> 筛选 / 分享 / 备份相关可复用类：`.subfilters .chip`（筛选 chip，`active` 高亮）、`.fig-share`（卡片分享按钮）、`.poster-stage`（海报画布容器）、`.share-actions` / `.share-hint`（分享操作与提示）、`.backup-actions` / `.backup-meta`（备份操作与信息）。
+> 筛选 / 分享 / 备份相关可复用类：`.subfilters .chip`（筛选 chip，`active` 高亮）、`.fig-share`（卡片分享按钮）、`.poster-stage`（海报画布容器）、`.share-actions` / `.share-hint`（分享操作与提示）、。`.backup-actions` / `.backup-meta`（备份操作与信息）。
+> 详情 / 海报相关可复用类：`.a-hero`（指标 + 轨迹并排）、`.a-track-mini` / `.a-track-mini-cap`（轨迹缩略与图注）、`POSTER_UI`（海报配色常量）、`renderSigmaPoster` / `_drawTrackGrid` / `funComparisons` / `_fitFont` / `_ellipsis`（海报绘制与防溢出工具）。
 
 ### 9.4 新增页面检查清单
 
@@ -969,7 +990,11 @@ transition: transform .62s cubic-bezier(.22,1,.36,1), opacity .5s var(--ease);
 - □  图表 / 进步卡片配有 `chart-note` 或 `prog-intro` 讲解
 - □  可筛选列表使用 `.subfilters .chip`，选中态用 `.active`，chip 内数量用 `.cnt`
 - □  可分享的数据卡片带 `.fig-share` 按钮，悬停浮现，移动端常显
-- □  海报固定 660×900，统一经 `_posterBg` / `_posterCtx` 绘制，颜色取自 CSS 变量
+- □  海报固定 680×1000，统一走 `renderSigmaPoster` + `_posterBg` / `_posterCtx`；海报内色取自 `POSTER_UI`（独立图片，不受主题变量驱动）
+- □  海报所有文本经 `_fitFont` 自适应 + `_ellipsis` 截断，无固定字号直接 `fillText` 长文本
+- □  海报含「相当于」趣味对比区（`funComparisons`）与轨迹剪影（`_drawTrackGrid`）
+- □  运动详情使用 `.a-hero` 并排指标与轨迹缩略，无 GPS 时隐藏轨迹卡片
+- □  热力图 / 生涯 PB 区均提供分享入口（`#btnShareHeatmap` / `#btnSharePB`）
 
 ---
 
@@ -1033,5 +1058,5 @@ transition: transform .62s cubic-bezier(.22,1,.36,1), opacity .5s var(--ease);
 
 ---
 
-**版本**：v1.2 · 对应 PROATHLETE 当前代码库（新增：线性 SVG 图标系统、总次数详情页、进步可视化、分类型筛选 Chips、分享海报、卡片分享、原始数据备份/导出）
+**版本**：v1.3 · 对应 PROATHLETE 当前代码库（新增：线性 SVG 图标系统、总次数详情页、进步可视化、分类型筛选 Chips、原始数据备份/导出、**Sigma 风分享海报（680×1000）**、**趣味对比**、**轨迹剪影**、**热力图 / 生涯 PB 分享**、**该与详情轨迹缩略图**）
 **维护原则**：本规范随代码演进，任何新增视觉约定必须同步更新此文档，并追加到相应章节。

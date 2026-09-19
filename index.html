@@ -338,6 +338,9 @@ body.has-custom-bg::before{opacity:.25;}
 .row:hover{background:var(--surface-b);}
 .row-activities{grid-template-columns:40px 1fr auto auto auto auto;}
 .row-mini{grid-template-columns:38px 1fr auto;}
+/* 已导入记录：图标 + 信息 + 轨迹缩略图 + 删除按钮 */
+.row-import{grid-template-columns:38px minmax(0, 1fr) 76px auto;}
+.row-track{width:76px;height:46px;border-radius:10px;background:var(--surface-a);border:1px solid var(--hairline);display:block;flex-shrink:0;}
 .r-ico{width:38px;height:38px;border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;font-size:18px;flex:0 0 38px;}
 .r-ico.run{background:color-mix(in srgb, var(--orange) 20%, transparent);color:var(--orange);}
 .r-ico.cycle{background:color-mix(in srgb, var(--blue) 20%, transparent);color:var(--blue);}
@@ -428,6 +431,8 @@ body.has-custom-bg::before{opacity:.25;}
 .poster-modal .modal-box{max-width:520px;}
 .poster-stage{display:flex;justify-content:center;padding:var(--s3) 0;}
 .poster-stage canvas{width:100%;max-width:360px;height:auto;border-radius:var(--r-md);box-shadow:0 14px 44px rgba(0,0,0,.4);}
+.a-hero{display:flex;gap:var(--s4);align-items:flex-start;}
+@media(max-width:640px){.a-hero{flex-direction:column;}}
 .share-actions{display:flex;flex-wrap:wrap;gap:var(--s2);margin-top:var(--s3);}
 .share-hint{font-size:12px;color:var(--t3);line-height:1.75;margin-top:var(--s3);padding-left:var(--s3);border-left:2px solid var(--blue);}
 /* ===== 备份卡片 ===== */
@@ -711,6 +716,8 @@ body.has-custom-bg::before{opacity:.25;}
   .seg-pb-grid.run, .seg-pb-grid.cycle, .seg-pb-grid.hike { grid-template-columns:repeat(2, 1fr); }
   .seg-pb-grid.swim { grid-template-columns:repeat(2, 1fr); }
   .seg-pb-card-value { font-size:18px; }
+  .row-import{grid-template-columns:38px minmax(0, 1fr) 68px auto;}
+  .row-track{width:68px;height:42px;}
 }
 </style>
 </head>
@@ -901,7 +908,10 @@ body.has-custom-bg::before{opacity:.25;}
               年度运动热力图
               <span style="font-size:11px;color:var(--t3);font-weight:500;margin-left:6px;">最近 365 天</span>
             </span>
-            <span class="tag gray" id="heatmapSummary">—</span>
+            <span style="display:flex;align-items:center;gap:var(--s2);">
+              <span class="tag gray" id="heatmapSummary">—</span>
+              <button class="btn btn-ghost btn-sm" id="btnShareHeatmap" title="分享热力图"><span data-ic="share" data-size="14"></span>分享</button>
+            </span>
           </div>
           <div class="heatmap-wrap" id="heatmapWrap">
             <canvas id="heatmapCanvas"></canvas>
@@ -993,6 +1003,7 @@ body.has-custom-bg::before{opacity:.25;}
             个人最佳纪录
             <span class="tag gold" style="font-size:10px;padding:2px 8px;">全部时间</span>
           </span>
+          <button class="btn btn-ghost btn-sm" id="btnSharePB" title="分享生涯 PB"><span data-ic="share" data-size="14"></span>分享 PB</button>
         </div>
         <div id="pbContainer"></div>
       </div>
@@ -1003,6 +1014,7 @@ body.has-custom-bg::before{opacity:.25;}
             分段最佳时间
             <span class="tag gold" style="font-size:10px;padding:2px 8px;">全部时间</span>
           </span>
+          <button class="btn btn-ghost btn-sm" id="btnShareSegPB" title="分享分段最佳"><span data-ic="share" data-size="14"></span>分享</button>
         </div>
         <div id="segPBContainer"></div>
       </div>
@@ -1270,7 +1282,9 @@ body.has-custom-bg::before{opacity:.25;}
         <button class="btn btn-ghost btn-icon" id="aClose"><span data-ic="x" data-size="16"></span></button>
       </div>
     </div>
-    <div class="metric-grid" id="aMetrics"></div>
+    <div class="a-hero">
+      <div class="metric-grid" id="aMetrics" style="flex:1;min-width:0;"></div>
+    </div>
     <div style="border-radius:var(--r-md);background:var(--surface-a);border:1px solid var(--hairline);padding:var(--s3) var(--s4);" id="aTrackSection">
       <div style="font-size:12.5px;font-weight:700;color:var(--t2);margin-bottom:var(--s3);"><span data-ic="route" data-size="14"></span> 轨迹</div>
       <div class="chart-box" style="height:240px;" id="aTrackChartBox"><canvas id="aTrack"></canvas></div>
@@ -1343,7 +1357,6 @@ const DAY = 86400000;
    全站 SVG 图标系统
    ============================================================ */
 const ICONS = {
-  /* 导航 */
   grid: '<rect x="3" y="3" width="7.5" height="7.5" rx="1.6"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="1.6"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="1.6"/><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="1.6"/>',
   list: '<line x1="9.5" y1="6" x2="20.5" y2="6"/><line x1="9.5" y1="12" x2="20.5" y2="12"/><line x1="9.5" y1="18" x2="20.5" y2="18"/><circle cx="4.5" cy="6" r="1.5" style="fill:currentColor;stroke:none"/><circle cx="4.5" cy="12" r="1.5" style="fill:currentColor;stroke:none"/><circle cx="4.5" cy="18" r="1.5" style="fill:currentColor;stroke:none"/>',
   bar: '<line x1="6" y1="20" x2="6" y2="13"/><line x1="12" y1="20" x2="12" y2="9"/><line x1="18" y1="20" x2="18" y2="4"/>',
@@ -1351,13 +1364,9 @@ const ICONS = {
   upload: '<path d="M12 16V5"/><path d="m7.5 9.5 4.5-4.5 4.5 4.5"/><path d="M4.5 20h15"/>',
   sliders: '<line x1="4" y1="20.5" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3.5"/><line x1="12" y1="20.5" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3.5"/><line x1="20" y1="20.5" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3.5"/><line x1="2" y1="14" x2="6" y2="14"/><line x1="10" y1="8" x2="14" y2="8"/><line x1="18" y1="16" x2="22" y2="16"/>',
   sparkle: '<path d="M12 3.5v3"/><path d="M12 17.5v3"/><path d="M3.5 12h3"/><path d="M17.5 12h3"/><path d="m6.2 6.2 2.1 2.1"/><path d="m15.7 15.7 2.1 2.1"/><path d="m6.2 17.8 2.1-2.1"/><path d="m15.7 8.3 2.1-2.1"/><circle cx="12" cy="12" r="2.2"/>',
-
-  /* 文件/上传 */
   folder: '<path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>',
   file: '<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><polyline points="14 3 14 8 19 8"/>',
   uploadCloud: '<path d="M6 18a4 4 0 0 1 0-8 5 5 0 0 1 9.6-2A3.5 3.5 0 0 1 20 11.5a3.5 3.5 0 0 1-1 6.5"/><polyline points="9 14 12 11 15 14"/><line x1="12" y1="11" x2="12" y2="19"/>',
-
-  /* 运动类型 */
   run: '<path d="M11.007 5a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"/><path d="M4 17l5 1l.75 -1.5"/><path d="M15 21v-4l-4 -3l1 -6"/><path d="M7 12v-3l5 -1l3 3l3 1"/>',
   bike: '<path d="M2 18a3 3 0 1 0 6 0a3 3 0 0 0 -6 0"/><path d="M16 18a3 3 0 1 0 6 0a3 3 0 0 0 -6 0"/><path d="M12 19v-4l-3 -3l5 -4l2 3h3"/><path d="M13.007 5a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"/>',
   swim: '<path d="M15 9a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"/><path d="M6 11l4 -2l3.5 3l-1.5 2"/><path d="M3 16.75a2.4 2.4 0 0 0 1 .25a2.4 2.4 0 0 0 2 -1a2.4 2.4 0 0 1 2 -1a2.4 2.4 0 0 1 2 1a2.4 2.4 0 0 0 2 1a2.4 2.4 0 0 0 2 -1a2.4 2.4 0 0 1 2 -1a2.4 2.4 0 0 1 2 1a2.4 2.4 0 0 0 2 1a2.4 2.4 0 0 0 1 -.25"/>',
@@ -1365,8 +1374,6 @@ const ICONS = {
   hike: '<path d="M11 4a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"/><path d="M7 21l2 -4"/><path d="M13 21v-4l-3 -3l1 -6l3 4l3 2"/><path d="M10 14l-1.827 -1.218a2 2 0 0 1 -.831 -2.15l.28 -1.117a2 2 0 0 1 1.939 -1.515h1.439l4 1l3 -2"/><path d="M17 12v9"/><path d="M16 20h2"/>',
   gym: '<path d="M7.026 9.61l-.95 -4.18a2 2 0 0 1 1.95 -2.43h8a2 2 0 0 1 2 2.43l-1 4.2"/><path d="M9.026 17.001h6"/><path d="M18.906 20.06a7.92 7.92 0 0 0 1 -5.33a8 8 0 1 0 -14.77 5.33a2 2 0 0 0 1.71 .94h10.36a2 2 0 0 0 1.7 -.94"/>',
   activity: '<polyline points="3 12 8 12 11 4 14 20 17 12 21 12"/>',
-
-  /* 数据/统计 */
   trophy: '<path d="M6 3h12v5a6 6 0 0 1-12 0z"/><path d="M6 5H3v2a3 3 0 0 0 3 3"/><path d="M18 5h3v2a3 3 0 0 1-3 3"/><path d="M9 20h6"/><path d="M12 14v6"/>',
   timer: '<circle cx="12" cy="13" r="8"/><path d="M12 9v4l3 2"/><path d="M9 2h6"/>',
   trendingUp: '<polyline points="3 17 9 11 13 15 21 7"/><polyline points="15 7 21 7 21 13"/>',
@@ -1380,16 +1387,12 @@ const ICONS = {
   clock: '<circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 16 14"/>',
   calendar: '<rect x="3" y="5" width="18" height="16" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="8" y1="3" x2="8" y2="7"/><line x1="16" y1="3" x2="16" y2="7"/>',
   flame: '<path d="M12 3c1 3 4 5 4 9a4 4 0 0 1-8 0c0-2 1-3 1-3s0 2 1 2c0-3 2-4 2-8z"/>',
-
-  /* 提示/状态 */
   info: '<circle cx="12" cy="12" r="9"/><line x1="12" y1="10" x2="12" y2="16"/><circle cx="12" cy="7.5" r=".9" style="fill:currentColor;stroke:none"/>',
   check: '<circle cx="12" cy="12" r="9"/><polyline points="8 12 11 15 16 9"/>',
   warning: '<path d="M12 3 2 20h20z"/><line x1="12" y1="9" x2="12" y2="14"/><circle cx="12" cy="17" r=".9" style="fill:currentColor;stroke:none"/>',
   bell: '<path d="M6 8a6 6 0 1 1 12 0c0 5 2 6 2 6H4s2-1 2-6"/><path d="M10 18a2 2 0 1 0 4 0"/>',
   shield: '<path d="M12 3 4 6v6c0 5 3.5 8.5 8 9.5 4.5-1 8-4.5 8-9.5V6z"/><polyline points="9 12 11 14 15 10"/>',
   key: '<circle cx="8" cy="15" r="3.5"/><path d="m10.5 12.5 8-8"/><path d="m15 8 3 3"/><path d="m17 5 2 2"/>',
-
-  /* 设备/操作 */
   plug: '<line x1="9" y1="3" x2="9" y2="8"/><line x1="15" y1="3" x2="15" y2="8"/><path d="M6 8h12v3a6 6 0 0 1-6 6 6 6 0 0 1-6-6z"/><line x1="12" y1="17" x2="12" y2="21"/>',
   cog: '<circle cx="12" cy="12" r="3.2"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/>',
   refresh: '<path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><polyline points="21 3 21 8 16 8"/>',
@@ -1401,23 +1404,18 @@ const ICONS = {
   search: '<circle cx="11" cy="11" r="6"/><line x1="20" y1="20" x2="15.5" y2="15.5"/>',
   trash: '<path d="M4 6h16"/><path d="M9 6V4h6v2"/><path d="M6 6v14a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V6"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/>',
   trash2: '<polyline points="3 6 5 6 21 6"/><path d="M19 6 18 20a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/><path d="M9 6V4h6v2"/>',
-
-  /* UI 通用 */
   x: '<line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/>',
   arrowLeft: '<line x1="20" y1="12" x2="4" y2="12"/><polyline points="10 6 4 12 10 18"/>',
   arrowUp: '<line x1="12" y1="20" x2="12" y2="4"/><polyline points="6 10 12 4 18 10"/>',
   chevronLeft: '<polyline points="15 6 9 12 15 18"/>',
   chevronRight: '<polyline points="9 6 15 12 9 18"/>',
   inbox: '<path d="M3 13h5l1 3h6l1-3h5"/><path d="M5 5h14l2 8v5a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-5z"/>',
-
-  /* 筛选 / 全站统一补充 */
   all:        '<path d="M12 4l-8 4l8 4l8 -4l-8 -4"/><path d="M4 12l8 4l8 -4"/><path d="M4 16l8 4l8 -4"/>',
   menu:       '<path d="M4 6h16"/><path d="M4 12h16"/><path d="M4 18h16"/>',
   plus:       '<path d="M12 5v14"/><path d="M5 12h14"/>',
   arrowRight: '<path d="M5 12h14"/><path d="M13 18l6 -6"/><path d="M13 6l6 6"/>',
   arrowDown:  '<path d="M12 5v14"/><path d="M18 13l-6 6"/><path d="M6 13l6 6"/>',
   share:      '<circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4"/><path d="M15.4 6.5l-6.8 4"/>',
-  download:   '<path d="M12 3v12"/><path d="M7 11l5 5 5-5"/><path d="M5 21h14"/>',
   archive:    '<rect x="3" y="4" width="18" height="4" rx="1"/><path d="M5 8v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8"/><path d="M10 12h4"/>',
   copy:       '<rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/>',
 };
@@ -1442,7 +1440,7 @@ function materializeIcons(root){
 }
 
 /* ============================================================
-   P0-5：稳健 ID 生成器
+   稳健 ID 生成器
    ============================================================ */
 let _idSeq = 0;
 function genId(prefix){
@@ -1920,7 +1918,7 @@ function refreshPBCache() {
 }
 
 /* ============================================================
-   P1：心率漂移 (HR Drift)
+   心率漂移 (HR Drift)
    ============================================================ */
 function computeHrDrift(points) {
   if (!points || points.length < 20) return null;
@@ -2043,7 +2041,7 @@ function fmtBytes(bytes){
 }
 
 /* ============================================================
-   P0-4：查重 - 按运动类型分层容差
+   查重 - 按运动类型分层容差
    ============================================================ */
 const DUP_TOLERANCE = {
   run:   { timeMs: 3*60*1000, absDist: 300, relDist: 0.08, absDur: 120, relDur: 0.08 },
@@ -2089,7 +2087,6 @@ function isDuplicate(newAct, list){
   return null;
 }
 
-/* TYPE_META 现在存储图标名（SVG name）而非 Emoji */
 const TYPE_META = {
   run:{icon:'run',label:'跑步',color:'#FF9F0A'},
   cycle:{icon:'bike',label:'骑行',color:'#0A84FF'},
@@ -2111,7 +2108,6 @@ const State = {
   segPBCache: null,
 };
 
-/* Toast：使用 SVG 图标 */
 const TOAST_ICON = { info:'info', success:'check', error:'warning', warn:'bell' };
 function toast(msg,type){
   type=type||'info';
@@ -2839,6 +2835,71 @@ function drawTrackMini(cv,points,color){
   ctx.fillText('终点',ex,ey+10);
 }
 
+/* ============================================================
+   纯轨迹缩略（无文字、无起终点标记）— 用于「已导入记录」行内
+   ============================================================ */
+function drawTrackPlain(cv, points, color){
+  if(!cv) return;
+  const dpr = window.devicePixelRatio || 1;
+  const rect = cv.getBoundingClientRect();
+  let w = Math.max(1, Math.round(rect.width));
+  let h = Math.max(1, Math.round(rect.height));
+  if(w < 2 || h < 2){ w = 76; h = 46; }
+  cv.width = Math.round(w * dpr);
+  cv.height = Math.round(h * dpr);
+  const ctx = cv.getContext('2d');
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  ctx.clearRect(0, 0, w, h);
+  const gps = (points || []).filter(p => p.lat != null && p.lon != null && isFinite(p.lat) && isFinite(p.lon));
+  if(gps.length < 2){
+    ctx.strokeStyle = 'rgba(128,128,128,.22)';
+    ctx.lineWidth = 1.4;
+    ctx.setLineDash([3, 4]);
+    ctx.beginPath();
+    ctx.moveTo(10, h/2);
+    ctx.lineTo(w - 10, h/2);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    return;
+  }
+  let mnLa = Infinity, mxLa = -Infinity, mnLo = Infinity, mxLo = -Infinity;
+  for(const p of gps){
+    if(p.lat < mnLa) mnLa = p.lat;
+    if(p.lat > mxLa) mxLa = p.lat;
+    if(p.lon < mnLo) mnLo = p.lon;
+    if(p.lon > mxLo) mxLo = p.lon;
+  }
+  const pad = 6;
+  const cw = w - pad * 2, ch = h - pad * 2;
+  const rLa = (mxLa - mnLa) || 1e-6;
+  const rLo = (mxLo - mnLo) || 1e-6;
+  const sc = Math.min(cw / rLo, ch / rLa);
+  const ox = pad + (cw - rLo * sc) / 2;
+  const oy = pad + (ch - rLa * sc) / 2;
+  // 弱底影
+  ctx.strokeStyle = hexA(color || '#0A84FF', .28);
+  ctx.lineWidth = 4.5;
+  ctx.lineJoin = 'round';
+  ctx.lineCap = 'round';
+  ctx.beginPath();
+  for(let i = 0; i < gps.length; i++){
+    const px = ox + (gps[i].lon - mnLo) * sc;
+    const py = oy + (mxLa - gps[i].lat) * sc;
+    if(i) ctx.lineTo(px, py); else ctx.moveTo(px, py);
+  }
+  ctx.stroke();
+  // 主线
+  ctx.strokeStyle = color || '#0A84FF';
+  ctx.lineWidth = 1.6;
+  ctx.beginPath();
+  for(let i = 0; i < gps.length; i++){
+    const px = ox + (gps[i].lon - mnLo) * sc;
+    const py = oy + (mxLa - gps[i].lat) * sc;
+    if(i) ctx.lineTo(px, py); else ctx.moveTo(px, py);
+  }
+  ctx.stroke();
+}
+
 function drawAxisChart(cv, cfg){
   const {ctx,w,h} = prepCanvas(cv);
   const data = cfg.data || [];
@@ -3115,9 +3176,6 @@ function parseFIT(buffer){
   return records;
 }
 const FIT_SPORT_MAP={0:'other',1:'run',2:'cycle',3:'other',4:'gym',5:'swim',6:'other',11:'walk',17:'hike',18:'other',19:'other'};
-/* 统一室内/室外判定：
-   ① 文本线索（室内/跑步机/骑行台/泳池…）；② FIT subSport（跑步机=1、室内跑=9、室内骑行=5、划船=8…）；
-   ③ 轨迹有无 GPS（室外=含 GPS 轨迹）。无轨迹时按运动类型推断。 */
 function indoorByText(type, rawText){
   const s=((rawText||'')+'').toLowerCase();
   if(/室内|跑步机|骑行台|泳池|力量|划船机|滚轴|椭圆|treadmill|indoor|trainer|pool/.test(s)) return true;
@@ -3711,7 +3769,6 @@ function parseGarminDate(s){
   return new Date().toISOString();
 }
 
-/* Garmin Activities.csv */
 function garminActivitiesRowsToActivities(rows, filename){
   if(!rows || rows.length < 2) return [];
   const header = (rows[0] || []).map(h => String(h || '').trim());
@@ -3807,7 +3864,6 @@ function garminActivitiesRowsToActivities(rows, filename){
   return acts;
 }
 
-/* Garmin activity_*.csv */
 function garminLapRowsToActivity(rows, filename, fallbackDateMs){
   if(!rows || rows.length < 2) return null;
   let summaryRow = null;
@@ -4782,7 +4838,7 @@ const TodayDetail = {
 
 /* ============ 详情视图（周期卡片） ============ */
 const Detail = {
-  cardType:null, category:'all', filterKey:'all',
+  cardType:null, category:'all', filterKey:'all', mode:'time',
   activities:[], cards:[], index:0,
   periods:['week','month','year','all'],
   activeChartTab:{},
@@ -4794,16 +4850,16 @@ function filterActivitiesForCard(cardType){
   switch(cardType){
     case 'total-time': return {category:'all',mode:'time',title:'总用时',sub:'综合',list:all.slice(),filterKey:'all'};
     case 'total-count': return {category:'all',mode:'count',title:'总次数',sub:'次数',list:all.slice(),filterKey:'all'};
-    case 'run-total': return {category:'run',title:'总跑步',sub:'全部时间',list:all.filter(a=>t(a,'run')),filterKey:'all'};
-    case 'run-outdoor': return {category:'run',title:'室外跑步',sub:'含 GPS 轨迹',list:all.filter(a=>t(a,'run')&&!a.indoor),filterKey:'outdoor'};
-    case 'run-indoor': return {category:'run',title:'室内跑步',sub:'跑步机 / 室内',list:all.filter(a=>t(a,'run')&&a.indoor),filterKey:'indoor'};
-    case 'cycle-total': return {category:'cycle',title:'总骑行',sub:'全部时间',list:all.filter(a=>t(a,'cycle')),filterKey:'all'};
-    case 'cycle-outdoor': return {category:'cycle',title:'室外骑行',sub:'含 GPS 轨迹',list:all.filter(a=>t(a,'cycle')&&!a.indoor),filterKey:'outdoor'};
-    case 'cycle-indoor': return {category:'cycle',title:'室内骑行',sub:'骑行台 / 室内',list:all.filter(a=>t(a,'cycle')&&a.indoor),filterKey:'indoor'};
-    case 'walk-total': return {category:'walk',title:'总步行',sub:'全部时间',list:all.filter(a=>t(a,'walk')),filterKey:'all'};
-    case 'walk-outdoor': return {category:'walk',title:'室外步行',sub:'含 GPS 轨迹',list:all.filter(a=>t(a,'walk')&&!a.indoor),filterKey:'outdoor'};
-    case 'hike-total': return {category:'hike',title:'徒步',sub:'全部时间',list:all.filter(a=>t(a,'hike')),filterKey:'all'};
-    default: return {category:'all',title:'详情',sub:'',list:all.slice(),filterKey:'all'};
+    case 'run-total': return {category:'run',mode:'time',title:'总跑步',sub:'全部时间',list:all.filter(a=>t(a,'run')),filterKey:'all'};
+    case 'run-outdoor': return {category:'run',mode:'time',title:'室外跑步',sub:'含 GPS 轨迹',list:all.filter(a=>t(a,'run')&&!a.indoor),filterKey:'outdoor'};
+    case 'run-indoor': return {category:'run',mode:'time',title:'室内跑步',sub:'跑步机 / 室内',list:all.filter(a=>t(a,'run')&&a.indoor),filterKey:'indoor'};
+    case 'cycle-total': return {category:'cycle',mode:'time',title:'总骑行',sub:'全部时间',list:all.filter(a=>t(a,'cycle')),filterKey:'all'};
+    case 'cycle-outdoor': return {category:'cycle',mode:'time',title:'室外骑行',sub:'含 GPS 轨迹',list:all.filter(a=>t(a,'cycle')&&!a.indoor),filterKey:'outdoor'};
+    case 'cycle-indoor': return {category:'cycle',mode:'time',title:'室内骑行',sub:'骑行台 / 室内',list:all.filter(a=>t(a,'cycle')&&a.indoor),filterKey:'indoor'};
+    case 'walk-total': return {category:'walk',mode:'time',title:'总步行',sub:'全部时间',list:all.filter(a=>t(a,'walk')),filterKey:'all'};
+    case 'walk-outdoor': return {category:'walk',mode:'time',title:'室外步行',sub:'含 GPS 轨迹',list:all.filter(a=>t(a,'walk')&&!a.indoor),filterKey:'outdoor'};
+    case 'hike-total': return {category:'hike',mode:'time',title:'徒步',sub:'全部时间',list:all.filter(a=>t(a,'hike')),filterKey:'all'};
+    default: return {category:'all',mode:'time',title:'详情',sub:'',list:all.slice(),filterKey:'all'};
   }
 }
 function getPeriodRange(period){
@@ -4990,8 +5046,7 @@ function buildDistribution(category,stats){
 }
 
 /* ============================================================
-   总次数详情页：数量向可视化（移植自《运动数据可视化样本集》）
-   5 张卡片，各含 1 张不重复的图表
+   总次数详情页：数量向可视化
    ============================================================ */
 function _cvar(n,fb){try{const v=getComputedStyle(document.documentElement).getPropertyValue(n).trim();return v||fb;}catch(e){return fb;}}
 function _hexA(hex,a){
@@ -5035,7 +5090,6 @@ function _cGrid(ctx,padL,padT,cw,ch,rows){
 function _cDate(a){ return a.date instanceof Date ? a.date : new Date(a.date); }
 const _C_ACCENT='#0A84FF';
 
-/* 1. 月度频次（近 12 个月柱状） */
 function drawCountMonthly(cv,acts){
   const {ctx,w,h}=_prep(cv);
   const now=new Date(); const months=[];
@@ -5056,7 +5110,6 @@ function drawCountMonthly(cv,acts){
   });
 }
 
-/* 2. 时段热力（星期 × 小时，次数） */
 function drawCountHourWeek(cv,acts){
   const {ctx,w,h}=_prep(cv);
   const grid=Array.from({length:7},()=>Array(24).fill(0));
@@ -5075,7 +5128,6 @@ function drawCountHourWeek(cv,acts){
   }
 }
 
-/* 3. 年度分布（按月玫瑰图，半径=当月次数） */
 function drawCountRadial(cv,acts){
   const {ctx,w,h}=_prep(cv);
   const now=new Date(); const year=now.getFullYear();
@@ -5101,7 +5153,6 @@ function drawCountRadial(cv,acts){
   _cTx(ctx,year+' 年',cx,cy+13,{size:9});
 }
 
-/* 4. 类型排行（横向条形，累计次数） */
 function drawCountTypeRank(cv,acts){
   const {ctx,w,h}=_prep(cv);
   const counts={}; for(const a of acts)counts[a.type]=(counts[a.type]||0)+1;
@@ -5121,7 +5172,6 @@ function drawCountTypeRank(cv,acts){
   });
 }
 
-/* 5. 累计增长（按时间累计折线 + 面积） */
 function drawCountCumulative(cv,acts){
   const {ctx,w,h}=_prep(cv);
   const ds=acts.map(_cDate).filter(d=>!isNaN(d)).sort((a,b)=>a-b);
@@ -5767,9 +5817,6 @@ function openActivityDetail(id){
 function closeActivityModal(){$('#activityModal').classList.remove('open');}
 
 /* ============ 数据分析 ============ */
-/* ============================================================
-   进步可视化：以时间为自变量的能力演变分析
-   ============================================================ */
 function _pgSpeed(a){ if(!a.distance||!a.duration)return null; return (a.distance/1000)/(a.duration/3600); }
 function _pgMean(arr){ return arr&&arr.length? arr.reduce((x,y)=>x+y,0)/arr.length : 0; }
 function _pgStd(arr){ if(!arr||arr.length<2)return 0; const m=_pgMean(arr); return Math.sqrt(arr.reduce((s,v)=>s+(v-m)*(v-m),0)/arr.length); }
@@ -6035,16 +6082,27 @@ function renderImported(){
   const du=mi?'mi':'km';
   box.innerHTML=list.slice(0,60).map(a=>{
     const meta=TYPE_META[a.type]||TYPE_META.other;
-    return `<div class="row row-mini" data-id="${a.id}">
+    return `<div class="row row-mini row-import" data-id="${a.id}">
       <div class="r-ico ${a.type}">${ic(meta.icon,18)}</div>
       <div>
         <div class="r-name">${escapeHtml(a.name)}${a.indoor?' <span style="color:var(--t3);font-size:11px;">·室内</span>':''}</div>
         <div class="r-meta">${fmtDate(a.date)} · ${a.distance>0?num(a.distance/dd,2)+' '+du:fmtHM(a.duration)} · 负荷 ${a.load} · ${a.source}</div>
       </div>
+      <canvas class="row-track" data-track-id="${a.id}"></canvas>
       <button class="btn btn-ghost btn-sm" data-del="${a.id}">${ic('trash',14)}删除</button>
     </div>`;
   }).join('');
-  $$('.row',box).forEach(el=>{el.addEventListener('click',e=>{if(e.target.dataset.del)return;openActivityDetail(el.dataset.id);});});
+  // 行内轨迹缩略（纯图形，无文字、无起终点标记）
+  requestAnimationFrame(()=>{
+    box.querySelectorAll('canvas.row-track').forEach(cv=>{
+      const id = cv.dataset.trackId;
+      const a = list.find(x=>x.id===id);
+      if(!a) return;
+      const meta = TYPE_META[a.type] || TYPE_META.other;
+      drawTrackPlain(cv, a.points, meta.color);
+    });
+  });
+  $$('.row',box).forEach(el=>{el.addEventListener('click',e=>{if(e.target.closest('[data-del]'))return;openActivityDetail(el.dataset.id);});});
   $$('[data-del]',box).forEach(btn=>{
     btn.addEventListener('click', async e=>{
       e.stopPropagation();
@@ -6423,11 +6481,15 @@ function renderAll(){
   if(State.view==='detail'){
     const info=filterActivitiesForCard(Detail.cardType);
     Detail.activities=info.list;
-    Detail.cards=Detail.periods.map(period=>{
-      const stats=buildPeriodStats(info.list,period,info.category);
-      const buckets=buildChartBuckets(info.list,period);
-      return {period,stats,buckets};
-    });
+    if(Detail.mode==='count'){
+      Detail.cards=buildCountCards(info.list);
+    } else {
+      Detail.cards=Detail.periods.map(period=>{
+        const stats=buildPeriodStats(info.list,period,info.category);
+        const buckets=buildChartBuckets(info.list,period);
+        return {period,stats,buckets};
+      });
+    }
     renderDetailStage();updateDetailHeader();
   } else if(State.view==='today'){
     TodayDetail.renderStage();
@@ -6452,7 +6514,6 @@ function hideLoading(){
 }
 
 async function init(){
-  /* 首先替换所有 data-ic 占位符，避免闪烁 */
   materializeIcons();
 
   setLoadingStatus('正在初始化数据库...');
@@ -6716,7 +6777,7 @@ async function init(){
   window.renderDistFilters = renderDistFilters;
 
   /* ============================================================
-     分享海报（运动数据图表）
+     分享海报
      ============================================================ */
   const _CRC_TABLE = (()=>{ const t=new Uint32Array(256); for(let n=0;n<256;n++){ let c=n; for(let k=0;k<8;k++) c = (c&1) ? (0xEDB88320 ^ (c>>>1)) : (c>>>1); t[n]=c>>>0; } return t; })();
   function _crc32(u8){ let c=0xFFFFFFFF; for(let i=0;i<u8.length;i++) c=_CRC_TABLE[(c ^ u8[i]) & 0xFF] ^ (c>>>8); return (c ^ 0xFFFFFFFF)>>>0; }
@@ -6728,75 +6789,316 @@ async function init(){
     return 'rgba('+r+','+g+','+b+','+a+')';
   }
   function _rr(ctx,x,y,w,h,r){ ctx.beginPath(); ctx.moveTo(x+r,y); ctx.arcTo(x+w,y,x+w,y+h,r); ctx.arcTo(x+w,y+h,x,y+h,r); ctx.arcTo(x,y+h,x,y,r); ctx.arcTo(x,y,x+w,y,r); ctx.closePath(); }
-  function _posterCtx(cv,w,h){ const dpr=Math.min(window.devicePixelRatio||1,2); cv.width=w*dpr; cv.height=h*dpr; const ctx=cv.getContext('2d'); ctx.setTransform(dpr,0,0,dpr,0,0); ctx.clearRect(0,0,w,h); return ctx; }
+  function _posterCtx(cv,w,h){ const dpr=Math.min(window.devicePixelRatio||1,2); cv.width=w*dpr; cv.height=h*dpr; cv.style.aspectRatio = w+' / '+h; const ctx=cv.getContext('2d'); ctx.setTransform(dpr,0,0,dpr,0,0); ctx.clearRect(0,0,w,h); return ctx; }
   function _paceStr(durSec, distM, mi){ if(!(distM>0)||!(durSec>0)) return '—'; const unit=mi?1609.344:1000; const secPer=(durSec/(distM/unit)); const m=Math.floor(secPer/60), s=Math.round(secPer%60); return (m<10?'0':'')+m+':'+(s<10?'0':'')+s+(mi?' /mi':' /km'); }
-  function _posterSeries(a){
-    const pts=a.points||[]; if(!pts.length) return [];
-    const hr=pts.map(p=>p.hr).filter(v=>v!=null&&isFinite(v)); if(hr.length>=2) return hr;
-    const ele=pts.map(p=>p.ele).filter(v=>v!=null&&isFinite(v)); if(ele.length>=2) return ele;
-    return pts.map((p,i)=>i);
+
+  /* ============================================================
+     分享海报 v3 视觉系统（暗底绿渐变 / 动态高度 / 波浪装饰）
+     ============================================================ */
+  const POSTER_UI = {
+    bgTop:'#123a2b', bgMid:'#08160f', bgBot:'#04090a',
+    green:'#3ddc84', greenDeep:'#12b981', lime:'#a3e635',
+    ink:'#eafff5', dim:'rgba(233,255,245,.60)', dim2:'rgba(233,255,245,.34)',
+    card:'rgba(255,255,255,.045)', cardLine:'rgba(163,230,53,.14)',
+  };
+  const _P_FONT = 'system-ui,-apple-system,"PingFang SC","Microsoft YaHei",sans-serif';
+  function _pFont(w,px){ return w+' '+px+'px '+_P_FONT; }
+  const FUN = {
+    BJ_SH:1080, MARATHON:42.195, SH_LOOP:99, EARTH:40075,
+    EVEREST:8848.86, SH_TOWER:632, RICE:200, BURGER:500,
+  };
+  function _f1(x){ return (Math.round(x*10)/10).toString(); }
+  function _f2(x){ return (Math.round(x*100)/100).toString(); }
+
+  function posterTotals(filterType){
+    const acts=(State.activities||[]).filter(a=>!filterType||a.type===filterType);
+    const o={ dist:0, dur:0, cnt:acts.length, elev:0, cal:0, acts };
+    acts.forEach(a=>{ o.dist+=(a.distance||0); o.dur+=(a.duration||0); o.elev+=(a.elevation||0); o.cal+=(a.calories||0); });
+    return o;
   }
-  function drawPosterSeries(ctx, series, x, y, w, h){
-    const ac=cssVar('--blue','#4f8cff');
-    if(!series || series.length<2){ ctx.fillStyle='rgba(255,255,255,.3)'; ctx.font='400 15px system-ui,-apple-system,sans-serif'; ctx.fillText('暂无曲线数据', x, y+h/2); return; }
-    let mn=Math.min.apply(null,series), mx=Math.max.apply(null,series); if(mx===mn) mx=mn+1;
-    const stepX=w/(series.length-1); const py=v=>y+h-((v-mn)/(mx-mn))*h;
-    const ag=ctx.createLinearGradient(0,y,0,y+h); ag.addColorStop(0,_rgba(ac,0.35)); ag.addColorStop(1,_rgba(ac,0));
-    ctx.beginPath(); ctx.moveTo(x,y+h); series.forEach((v,i)=>ctx.lineTo(x+i*stepX,py(v))); ctx.lineTo(x+w,y+h); ctx.closePath(); ctx.fillStyle=ag; ctx.fill();
-    ctx.beginPath(); series.forEach((v,i)=>{ const _x=x+i*stepX,_y=py(v); if(i)ctx.lineTo(_x,_y); else ctx.moveTo(_x,_y); }); ctx.strokeStyle=ac; ctx.lineWidth=2.5; ctx.lineJoin='round'; ctx.stroke();
+
+  /* 按类别各取一项最优的对比，最多返回 3 项，避免堆砌 */
+  function funComparisons(o){
+    const km=(o.dist||0)/1000, el=o.elev||0, cal=o.cal||0;
+
+    /* 距离类候选 */
+    const distCands = [];
+    if(km >= 5)  distCands.push({c:'#3ddc84', t:'\u5168\u7a0b\u9a6c\u62c9\u677e', v:_f1(km/FUN.MARATHON)+' \u4e2a', s:km/FUN.MARATHON});
+    if(km >= 50) distCands.push({c:'#9ccfd8', t:'\u7ed5\u4e0a\u6d77\u5916\u73af\u4e00\u5708', v:_f1(km/FUN.SH_LOOP)+' \u5708', s:km/FUN.SH_LOOP});
+    if(km >= 400) distCands.push({c:'#f6c177', t:'\u5317\u4eac \u2192 \u4e0a\u6d77', v:_f1(km/FUN.BJ_SH)+' \u6b21', s:km/FUN.BJ_SH});
+    if(km >= 1500) distCands.push({c:'#c4a7e7', t:'\u7ed5\u5730\u7403\u8d64\u9053', v:_f2(km/FUN.EARTH)+' \u5708', s:km/FUN.EARTH*8});
+
+    /* 爬升类候选 */
+    const elevCands = [];
+    if(el >= 500) elevCands.push({c:'#ebbcba', t:'\u4e0a\u6d77\u4e2d\u5fc3\u5927\u53a6', v:_f1(el/FUN.SH_TOWER)+' \u5ea7', s:el/FUN.SH_TOWER/2});
+    if(el >= 2000) elevCands.push({c:'#c4a7e7', t:'\u7d2f\u8ba1\u722c\u5347 \u2248 \u73e0\u5cf0', v:_f2(el/FUN.EVEREST)+' \u5ea7', s:el/FUN.EVEREST});
+
+    /* 热量类候选 */
+    const calCands = [];
+    if(cal >= 1000) calCands.push({c:'#a3e635', t:'\u6d88\u8017\u70ed\u91cf \u2248 \u7c73\u996d', v:Math.round(cal/FUN.RICE)+' \u7897', s:cal/FUN.RICE/4});
+    if(cal >= 2500) calCands.push({c:'#fab387', t:'\u2248 \u6c49\u5821\u70ed\u91cf', v:Math.round(cal/FUN.BURGER)+' \u4e2a', s:cal/FUN.BURGER/4});
+
+    distCands.sort((a,b)=>b.s-a.s);
+    elevCands.sort((a,b)=>b.s-a.s);
+    calCands.sort((a,b)=>b.s-a.s);
+
+    const out = [];
+    if(distCands[0]) out.push(distCands[0]);
+    if(elevCands[0]) out.push(elevCands[0]);
+    if(calCands[0]) out.push(calCands[0]);
+    return out.slice(0,3);
   }
+
   function _posterBg(ctx,W,H){
-    const g=ctx.createLinearGradient(0,0,W,H); g.addColorStop(0,'#0b1220'); g.addColorStop(1,'#141d33');
+    const g=ctx.createLinearGradient(0,0,0,H);
+    g.addColorStop(0,POSTER_UI.bgTop); g.addColorStop(0.42,POSTER_UI.bgMid); g.addColorStop(1,POSTER_UI.bgBot);
     ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
-    ctx.fillStyle=cssVar('--blue','#4f8cff'); ctx.fillRect(0,0,W,6);
-    ctx.textBaseline='top'; ctx.textAlign='left';
-    ctx.fillStyle='rgba(255,255,255,.5)'; ctx.font='700 20px system-ui,-apple-system,sans-serif'; ctx.fillText('PROATHLETE', 44, 46);
+    const rg=ctx.createRadialGradient(W*0.5,-H*0.14,40,W*0.5,-H*0.14,W*1.05);
+    rg.addColorStop(0,'rgba(61,220,132,.40)'); rg.addColorStop(0.42,'rgba(18,185,129,.12)'); rg.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.fillStyle=rg; ctx.fillRect(0,0,W,H);
+    ctx.strokeStyle='rgba(163,230,53,.05)'; ctx.lineWidth=1;
+    for(let x=0;x<=W;x+=46){ ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,H); ctx.stroke(); }
+    for(let y=0;y<=H;y+=46){ ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke(); }
+    ctx.textBaseline='alphabetic'; ctx.textAlign='left';
   }
-  function renderActivityPoster(a){
-    const W=660,H=900; const cv=$('#posterCanvas'); const ctx=_posterCtx(cv,W,H); _posterBg(ctx,W,H);
-    const label=(TYPE_META[a.type]||TYPE_META.other).label;
-    ctx.fillStyle='#fff'; ctx.font='800 40px system-ui,-apple-system,sans-serif'; ctx.fillText(String(a.name||label).slice(0,16),44,86);
-    ctx.fillStyle='rgba(255,255,255,.6)'; ctx.font='400 20px system-ui,-apple-system,sans-serif'; ctx.fillText(fmtDate(a.date)+' · '+label,44,140);
-    const mi=State.settings && State.settings.unit==='mi'; const dd=mi?1609.344:1000;
-    const cells=[
-      {t:'距离', v:a.distance>0?(a.distance/dd).toFixed(2)+(mi?' mi':' km'):'—'},
-      {t:'时长', v:fmtHM(a.duration)},
-      {t:a.type==='cycle'?'均速':'配速', v:_paceStr(a.duration,a.distance,mi)},
-      {t:'平均心率', v:a.avgHR?a.avgHR+' bpm':'—'},
-    ];
-    let cy=192; ctx.fillStyle='rgba(255,255,255,.05)'; _rr(ctx,44,cy,W-88,168,18); ctx.fill(); ctx.strokeStyle='rgba(255,255,255,.08)'; ctx.stroke();
-    cells.forEach((c,i)=>{ const col=i%2,row=(i/2)|0; const x=80+col*((W-88-72)/2); const y=cy+34+row*76;
-      ctx.fillStyle='rgba(255,255,255,.55)'; ctx.font='400 16px system-ui,-apple-system,sans-serif'; ctx.fillText(c.t,x,y);
-      ctx.fillStyle='#fff'; ctx.font='800 30px system-ui,-apple-system,sans-serif'; ctx.fillText(c.v,x,y+26); });
-    cy=396; ctx.fillStyle='rgba(255,255,255,.05)'; _rr(ctx,44,cy,W-88,300,18); ctx.fill(); ctx.strokeStyle='rgba(255,255,255,.08)'; ctx.stroke();
-    ctx.fillStyle='rgba(255,255,255,.7)'; ctx.font='600 16px system-ui,-apple-system,sans-serif'; ctx.fillText('心率 / 海拔曲线',72,cy+22);
-    drawPosterSeries(ctx,_posterSeries(a),72,cy+58,W-88-56,208);
-    ctx.fillStyle='rgba(255,255,255,.4)'; ctx.font='400 15px system-ui,-apple-system,sans-serif'; ctx.fillText(new Date().toLocaleString('zh-CN'),44,H-56);
-    ctx.fillStyle=cssVar('--blue','#4f8cff'); ctx.font='700 15px system-ui,-apple-system,sans-serif'; ctx.textAlign='right'; ctx.fillText('由 PROATHLETE 生成',W-44,H-56); ctx.textAlign='left';
+  /* 水波涟漪装饰（用于热力图等页） */
+  function _posterWaves(ctx, cx, cy, count, maxR){
+    ctx.save();
+    for(let i=0;i<count;i++){
+      const r = 60 + (maxR-60) * (i/(count-1||1));
+      ctx.beginPath();
+      ctx.arc(cx, cy, r, 0, Math.PI*2);
+      ctx.strokeStyle = 'rgba(61,220,132,' + (0.10 - i*0.012) + ')';
+      ctx.lineWidth = 1.6;
+      ctx.stroke();
+    }
+    ctx.restore();
   }
-  function renderOverviewPoster(){
-    const W=660,H=900; const cv=$('#posterCanvas'); const ctx=_posterCtx(cv,W,H); _posterBg(ctx,W,H);
-    ctx.fillStyle='#fff'; ctx.font='800 40px system-ui,-apple-system,sans-serif'; ctx.fillText('近 7 天训练概览',44,86);
-    ctx.fillStyle='rgba(255,255,255,.6)'; ctx.font='400 20px system-ui,-apple-system,sans-serif'; ctx.fillText('PROATHLETE · 运动数据中枢',44,140);
-    const mi=State.settings && State.settings.unit==='mi'; const dd=mi?1609.344:1000;
-    const days=[]; for(let i=6;i>=0;i--){ const d=new Date(); d.setDate(d.getDate()-i); days.push({d,dist:0,dur:0,cnt:0}); }
-    const map={}; days.forEach(x=>map[dayKey(x.d)]=x);
-    State.activities.forEach(a=>{ const k=dayKey(new Date(a.date)); const t=map[k]; if(t){ t.dist+=a.distance||0; t.dur+=a.duration||0; t.cnt++; } });
-    const totDist=days.reduce((s,x)=>s+x.dist,0)/dd; const totDur=days.reduce((s,x)=>s+x.dur,0); const totCnt=days.reduce((s,x)=>s+x.cnt,0);
-    const cells=[ {t:'总距离',v:totDist.toFixed(1)+(mi?' mi':' km')}, {t:'总时长',v:fmtHM(totDur)}, {t:'活动次数',v:String(totCnt)} ];
-    let cy=192; ctx.fillStyle='rgba(255,255,255,.05)'; _rr(ctx,44,cy,W-88,120,18); ctx.fill(); ctx.strokeStyle='rgba(255,255,255,.08)'; ctx.stroke();
-    cells.forEach((c,i)=>{ const x=80+i*((W-88-72)/3); ctx.fillStyle='rgba(255,255,255,.55)'; ctx.font='400 15px system-ui,-apple-system,sans-serif'; ctx.fillText(c.t,x,cy+28); ctx.fillStyle='#fff'; ctx.font='800 26px system-ui,-apple-system,sans-serif'; ctx.fillText(c.v,x,cy+54); });
-    cy=348; ctx.fillStyle='rgba(255,255,255,.05)'; _rr(ctx,44,cy,W-88,344,18); ctx.fill(); ctx.strokeStyle='rgba(255,255,255,.08)'; ctx.stroke();
-    ctx.fillStyle='rgba(255,255,255,.7)'; ctx.font='600 16px system-ui,-apple-system,sans-serif'; ctx.fillText('每日距离 ('+(mi?'mi':'km')+')',72,cy+22);
-    const bx=72, by=cy+70, bw=W-88-56, bh=230; const maxD=Math.max.apply(null, days.map(x=>x.dist/dd).concat([1]));
-    const ac=cssVar('--blue','#4f8cff'); const gap=bw/days.length; const bwid=gap*0.56;
-    days.forEach((x,i)=>{ const v=x.dist/dd; const hh=Math.max(2,(v/maxD)*bh); const _x=bx+i*gap+(gap-bwid)/2; const _y=by+bh-hh;
-      ctx.fillStyle=_rgba(ac,v>0?0.9:0.15); _rr(ctx,_x,_y,bwid,hh,6); ctx.fill();
-      ctx.fillStyle='rgba(255,255,255,.5)'; ctx.font='400 13px system-ui,-apple-system,sans-serif'; ctx.textAlign='center'; ctx.fillText(['日','一','二','三','四','五','六'][x.d.getDay()],_x+bwid/2,by+bh+12); ctx.textAlign='left';
+  function _posterHeader(ctx,W,badge){
+    ctx.textAlign='left'; ctx.textBaseline='alphabetic';
+    ctx.fillStyle=POSTER_UI.ink; ctx.font=_pFont(800,21); ctx.fillText('PROATHLETE',52,58);
+    ctx.fillStyle=POSTER_UI.dim2; ctx.font=_pFont(600,12.5); ctx.fillText('运动数据中枢',52,78);
+    if(badge){
+      ctx.font=_pFont(700,13); const tw=ctx.measureText(badge).width; const pw=tw+30; const px=W-52-pw;
+      ctx.fillStyle='rgba(61,220,132,.14)'; _rr(ctx,px,38,pw,30,15); ctx.fill();
+      ctx.strokeStyle='rgba(61,220,132,.42)'; ctx.lineWidth=1; _rr(ctx,px,38,pw,30,15); ctx.stroke();
+      ctx.fillStyle=POSTER_UI.green; ctx.fillText(badge,px+15,58);
+    }
+  }
+  function _posterFooter(ctx,W,H){
+    ctx.textAlign='left'; ctx.font=_pFont(400,13); ctx.fillStyle=POSTER_UI.dim2;
+    ctx.fillText(new Date().toLocaleString('zh-CN'),52,H-34);
+    ctx.textAlign='right'; ctx.fillStyle=POSTER_UI.green; ctx.font=_pFont(700,13);
+    ctx.fillText('由 PROATHLETE 生成',W-52,H-34); ctx.textAlign='left';
+  }
+  function _fitFont(ctx,text,maxW,startPx,weight){
+    let px=startPx; ctx.font=_pFont(weight,px);
+    while(px>12 && ctx.measureText(text).width>maxW){ px-=2; ctx.font=_pFont(weight,px); }
+    return px;
+  }
+  function _ellipsis(ctx,text,maxW,weight,px){
+    ctx.font=_pFont(weight,px);
+    if(ctx.measureText(text).width<=maxW) return text;
+    let t=String(text);
+    while(t.length>1 && ctx.measureText(t+'…').width>maxW) t=t.slice(0,-1);
+    return t+'…';
+  }
+  function _gpsPts(pts){ return (pts||[]).filter(p=>p&&p.lat!=null&&p.lon!=null&&isFinite(p.lat)&&isFinite(p.lon)); }
+  function _drawTrackBox(ctx,pts,x,y,w,h,color,lw){
+    if(!pts||pts.length<2) return false;
+    let mnLa=Infinity,mxLa=-Infinity,mnLo=Infinity,mxLo=-Infinity;
+    for(const p of pts){ if(p.lat<mnLa)mnLa=p.lat; if(p.lat>mxLa)mxLa=p.lat; if(p.lon<mnLo)mnLo=p.lon; if(p.lon>mxLo)mxLo=p.lon; }
+    const pad=Math.min(w,h)*0.14; const cw=w-pad*2, ch=h-pad*2;
+    const rLa=(mxLa-mnLa)||1e-6, rLo=(mxLo-mnLo)||1e-6;
+    const sc=Math.min(cw/rLo, ch/rLa);
+    const ox=x+pad+(cw-rLo*sc)/2, oy=y+pad+(ch-rLa*sc)/2;
+    ctx.strokeStyle=color; ctx.lineWidth=lw||1.6; ctx.lineJoin='round'; ctx.lineCap='round';
+    ctx.beginPath();
+    for(let i=0;i<pts.length;i++){ const px=ox+(pts[i].lon-mnLo)*sc, py=oy+(mxLa-pts[i].lat)*sc; if(i)ctx.lineTo(px,py); else ctx.moveTo(px,py); }
+    ctx.stroke(); return true;
+  }
+  function _drawTrackGrid(ctx,x,y,w,h,list,cols){
+    const n=list.length; if(!n) return;
+    const rows=Math.max(1,Math.ceil(n/cols));
+    const gap=10; const bw=(w-gap*(cols-1))/cols, bh=(h-gap*(rows-1))/rows;
+    for(let i=0;i<n;i++){
+      const c=i%cols, r=(i/cols)|0;
+      _drawTrackBox(ctx,list[i],x+c*(bw+gap),y+r*(bh+gap),bw,bh,'rgba(163,230,53,.75)',1.5);
+    }
+  }
+  function _cardBox(ctx,x,y,w,h,r){
+    ctx.fillStyle=POSTER_UI.card; _rr(ctx,x,y,w,h,r||20); ctx.fill();
+    ctx.strokeStyle=POSTER_UI.cardLine; ctx.lineWidth=1; _rr(ctx,x,y,w,h,r||20); ctx.stroke();
+  }
+  function _drawCompare(ctx,x,y,w,rows,lineH){
+    ctx.textBaseline='middle';
+    rows.forEach((r,i)=>{
+      const ry=y+i*lineH;
+      ctx.fillStyle = r.c || POSTER_UI.green;
+      ctx.beginPath(); ctx.arc(x+5, ry, 4, 0, Math.PI*2); ctx.fill();
+      ctx.textAlign='left'; ctx.font=_pFont(500,18); ctx.fillStyle=POSTER_UI.dim;
+      ctx.fillText(r.t||'', x+20, ry);
+      ctx.textAlign='right'; ctx.font=_pFont(800,19); ctx.fillStyle=POSTER_UI.lime;
+      ctx.fillText(r.v, x+w, ry);
     });
-    ctx.fillStyle='rgba(255,255,255,.4)'; ctx.font='400 15px system-ui,-apple-system,sans-serif'; ctx.fillText(new Date().toLocaleString('zh-CN'),44,H-56);
-    ctx.fillStyle=ac; ctx.font='700 15px system-ui,-apple-system,sans-serif'; ctx.textAlign='right'; ctx.fillText('由 PROATHLETE 生成',W-44,H-56); ctx.textAlign='left';
+    ctx.textAlign='left';
+    ctx.textBaseline='alphabetic';
   }
+
+  /* 通用海报渲染器：动态计算高度，防止下半页空、防溢出 */
+  function renderSigmaPoster(o){
+    o=o||{};
+    const W = 680;
+    const M = 52;
+    const IW = W - M*2;
+    const compares = (o.compares || []).slice(0, 4);
+    const hasTracks = !!(o.tracks && o.tracks.length);
+    const trackH = hasTracks ? (o.singleTrack ? 244 : 272) : 0;
+    const compareH = compares.length ? (46 + compares.length*38) : 0;
+
+    /* 动态高度计算 */
+    let y = 40;
+    y += 50;                // 品牌头
+    const titleY = y + 28; y += 40;
+    let subtitleY = 0;
+    if(o.subtitle){ subtitleY = y + 14; y += 26; }
+    y += 20;
+    const heroY = y; y += 190;
+    y += 24;
+    let tracksY = 0;
+    if(hasTracks){ tracksY = y; y += trackH; y += 22; }
+    let compareY = 0;
+    if(compares.length){ compareY = y; y += compareH; y += 22; }
+    const H = Math.max(660, y + 52);
+
+    const cv = $('#posterCanvas');
+    const ctx = _posterCtx(cv, W, H);
+    _posterBg(ctx, W, H);
+    _posterHeader(ctx, W, o.badge || '');
+
+    /* 标题 */
+    const title = String(o.title||'运动数据');
+    ctx.fillStyle = POSTER_UI.ink;
+    ctx.font = _pFont(800, _fitFont(ctx, title, IW, 34, 800));
+    ctx.fillText(_ellipsis(ctx, title, IW, 800, 34), M, titleY);
+
+    if(o.subtitle){
+      ctx.fillStyle = POSTER_UI.dim;
+      ctx.font = _pFont(400, 15);
+      ctx.fillText(_ellipsis(ctx, o.subtitle, IW, 400, 15), M, subtitleY);
+    }
+
+    /* Hero 卡片 */
+    _cardBox(ctx, M, heroY, IW, 190, 24);
+    const hv = String(o.heroValue == null ? '—' : o.heroValue);
+    const hu = o.heroUnit || '';
+    ctx.fillStyle = POSTER_UI.dim;
+    ctx.font = _pFont(600, 14);
+    ctx.fillText(o.heroLabel || '累计', M+28, heroY+44);
+    const vpx = _fitFont(ctx, hv, IW-56-90, 92, 800);
+    ctx.fillStyle = POSTER_UI.green;
+    ctx.font = _pFont(800, vpx);
+    const vw = ctx.measureText(hv).width;
+    ctx.fillText(hv, M+28, heroY+142);
+    if(hu){
+      ctx.fillStyle = POSTER_UI.dim;
+      ctx.font = _pFont(600, 24);
+      ctx.fillText(hu, M+28+vw+12, heroY+142);
+    }
+    if(o.heroNote){
+      ctx.fillStyle = POSTER_UI.dim2;
+      ctx.font = _pFont(400, 14);
+      ctx.fillText(_ellipsis(ctx, o.heroNote, IW-56, 400, 14), M+28, heroY+170);
+    }
+
+    /* 轨迹区 */
+    if(hasTracks){
+      _cardBox(ctx, M, tracksY, IW, trackH, 22);
+      ctx.fillStyle = POSTER_UI.dim;
+      ctx.font = _pFont(600, 14);
+      const trackTitle = o.tracksTitle || '轨迹剪影';
+      ctx.fillText(o.singleTrack ? trackTitle : (_ellipsis(ctx, trackTitle + ' · ' + o.tracks.length + ' 条', IW-56, 600, 14)), M+28, tracksY+36);
+      if(o.singleTrack){
+        _drawTrackBox(ctx, o.tracks[0], M+26, tracksY+52, IW-52, trackH-74, POSTER_UI.green, 2.4);
+      } else {
+        _drawTrackGrid(ctx, M+26, tracksY+52, IW-52, trackH-74, o.tracks, 5);
+      }
+    }
+
+    /* 相当于 */
+    if(compares.length){
+      _cardBox(ctx, M, compareY, IW, compareH, 22);
+      ctx.fillStyle = POSTER_UI.dim;
+      ctx.font = _pFont(600, 14);
+      ctx.fillText('相当于', M+28, compareY+36);
+      _drawCompare(ctx, M+28, compareY+76, IW-56, compares, 38);
+    }
+
+    _posterFooter(ctx, W, H);
+  }
+
+  function renderActivityPoster(a){
+    const meta=TYPE_META[a.type]||TYPE_META.other;
+    const mi=State.settings && State.settings.unit==='mi';
+    const dd=mi?1609.344:1000;
+    const gp=_gpsPts(a.points||[]);
+    const tracks= gp.length>2 ? [ gp.filter((_,i)=> i%Math.max(1,Math.floor(gp.length/400))===0) ] : [];
+    renderSigmaPoster({
+      title:(a.name||meta.label),
+      subtitle: meta.label+(a.indoor?' · \u5ba4\u5185':'')+' · '+fmtDate(a.date)+' · \u6765\u6e90 '+(a.source||'\u672a\u77e5'),
+      badge: meta.label,
+      heroValue: a.distance>0? (a.distance/dd).toFixed(2) : '\u2014',
+      heroUnit: mi?'mi':'km',
+      heroLabel:'\u672c\u6b21\u8ddd\u79bb',
+      heroNote:'\u65f6\u957f '+fmtHM(a.duration)+(a.avgHR?(' · \u5e73\u5747\u5fc3\u7387 '+a.avgHR+' bpm'):'')+(a.avgPower?(' · \u5e73\u5747\u529f\u7387 '+a.avgPower+' W'):''),
+      singleTrack: tracks.length>0,
+      tracks: tracks,
+      tracksTitle:'\u672c\u6b21\u8fd0\u52a8\u8f68\u8ff9',
+      compares: funComparisons({dist:a.distance||0, elev:a.elevation||0, cal:a.calories||0}),
+    });
+  }
+
+  /* 近 7 天概览：主数值与"相当于"使用同一份最近 7 天的数据 */
+  function renderOverviewPoster(){
+    const mi = State.settings && State.settings.unit === 'mi';
+    const dd = mi ? 1609.344 : 1000;
+    const days = [];
+    for(let i=6;i>=0;i--){
+      const d=new Date(); d.setHours(0,0,0,0); d.setDate(d.getDate()-i);
+      days.push({ d, dist:0, cnt:0, dur:0, elev:0, cal:0 });
+    }
+    const map = {};
+    days.forEach(x => map[dayKey(x.d)] = x);
+    State.activities.forEach(a => {
+      const t = map[dayKey(new Date(a.date))];
+      if(t){
+        t.dist += (a.distance||0);
+        t.cnt++;
+        t.dur += (a.duration||0);
+        t.elev += (a.elevation||0);
+        t.cal += (a.calories||0);
+      }
+    });
+    const tot = days.reduce((s,x)=>({
+      dist: s.dist + x.dist,
+      cnt:  s.cnt + x.cnt,
+      dur:  s.dur + x.dur,
+      elev: s.elev + x.elev,
+      cal:  s.cal + x.cal,
+    }), {dist:0,cnt:0,dur:0,elev:0,cal:0});
+
+    renderSigmaPoster({
+      title:'\u8fd1 7 \u5929\u8bad\u7ec3\u6982\u89c8',
+      subtitle:'PROATHLETE · \u8fd0\u52a8\u6570\u636e\u4e2d\u67a2',
+      badge:'\u6700\u8fd1 7 \u5929',
+      heroValue:(tot.dist/dd).toFixed(1),
+      heroUnit: mi?'mi':'km',
+      heroLabel:'7 \u5929\u7d2f\u8ba1\u8ddd\u79bb',
+      heroNote:'7 \u5929\u5171 '+tot.cnt+' \u6b21\u8fd0\u52a8 · '+fmtHM(tot.dur),
+      compares: funComparisons(tot),
+    });
+  }
+
   function showPoster(sub){
     const m=$('#posterModal'); if(!m) return;
     if($('#posterSub')) $('#posterSub').textContent=sub||'';
@@ -6848,58 +7150,404 @@ async function init(){
 
   $('#posterClose') && $('#posterClose').addEventListener('click',()=>$('#posterModal').classList.remove('open'));
   $('#posterModal') && $('#posterModal').addEventListener('click',e=>{ if(e.target.id==='posterModal') e.currentTarget.classList.remove('open'); });
-  /* ---- 卡片 / 汇总分享海报 ---- */
-  function renderTextPoster(title, value, sub){
-    const W=660,H=900; const cv=$('#posterCanvas'); const ctx=_posterCtx(cv,W,H); _posterBg(ctx,W,H);
-    const ac=cssVar('--blue','#4f8cff');
-    ctx.textAlign='left';
-    ctx.fillStyle='#fff'; ctx.font='800 40px system-ui,-apple-system,sans-serif'; ctx.fillText(String(title||'运动数据').slice(0,16),44,86);
-    ctx.fillStyle='rgba(255,255,255,.6)'; ctx.font='400 20px system-ui,-apple-system,sans-serif'; ctx.fillText('PROATHLETE · 运动数据中枢',44,140);
-    ctx.fillStyle='rgba(255,255,255,.05)'; _rr(ctx,44,204,W-88,352,20); ctx.fill(); ctx.strokeStyle='rgba(255,255,255,.08)'; ctx.stroke();
-    ctx.textAlign='center';
-    ctx.fillStyle=ac; ctx.font='800 118px system-ui,-apple-system,sans-serif'; ctx.fillText(String(value||'—').slice(0,12),W/2,296);
-    ctx.fillStyle='rgba(255,255,255,.78)'; ctx.font='400 22px system-ui,-apple-system,sans-serif'; ctx.fillText(String(sub||'').slice(0,32),W/2,444);
-    ctx.textAlign='left';
-    ctx.fillStyle='rgba(255,255,255,.4)'; ctx.font='400 15px system-ui,-apple-system,sans-serif'; ctx.fillText(new Date().toLocaleString('zh-CN'),44,H-56);
-    ctx.fillStyle=ac; ctx.font='700 15px system-ui,-apple-system,sans-serif'; ctx.textAlign='right'; ctx.fillText('由 PROATHLETE 生成',W-44,H-56); ctx.textAlign='left';
+
+  function _collectTracks(){
+    const out=[]; const acts=(State.activities||[]).slice().sort((a,b)=>new Date(b.date)-new Date(a.date));
+    for(const a of acts){
+      const gp=_gpsPts(a.points||[]); if(gp.length<2) continue;
+      const step=Math.max(1,Math.floor(gp.length/140));
+      out.push(gp.filter((_,i)=>i%step===0));
+      if(out.length>=15) break;
+    }
+    return out;
   }
-  function renderSummaryPoster(){
-    const W=660,H=900; const cv=$('#posterCanvas'); const ctx=_posterCtx(cv,W,H); _posterBg(ctx,W,H);
-    const mi=State.settings && State.settings.unit==='mi'; const dd=mi?1609.344:1000;
-    const acts=State.activities||[];
-    const totDist=acts.reduce((s,a)=>s+(a.distance||0),0)/dd;
-    const totDur=acts.reduce((s,a)=>s+(a.duration||0),0);
-    const totCnt=acts.length;
-    const byType={}; acts.forEach(a=>{ const t=a.type||'other'; (byType[t]=byType[t]||{d:0}).d+=(a.distance||0); });
-    ctx.textAlign='left';
-    ctx.fillStyle='#fff'; ctx.font='800 40px system-ui,-apple-system,sans-serif'; ctx.fillText('全部运动汇总',44,86);
-    ctx.fillStyle='rgba(255,255,255,.6)'; ctx.font='400 20px system-ui,-apple-system,sans-serif'; ctx.fillText('PROATHLETE · 累计数据总览',44,140);
-    const cells=[{t:'总距离',v:totDist.toFixed(1)+(mi?' mi':' km')},{t:'总时长',v:fmtHM(totDur)},{t:'总次数',v:String(totCnt)+' 次'}];
-    let cy=192; ctx.fillStyle='rgba(255,255,255,.05)'; _rr(ctx,44,cy,W-88,132,18); ctx.fill(); ctx.strokeStyle='rgba(255,255,255,.08)'; ctx.stroke();
-    cells.forEach((c,i)=>{ const x=72+i*((W-88-56)/3); ctx.fillStyle='rgba(255,255,255,.55)'; ctx.font='400 15px system-ui,-apple-system,sans-serif'; ctx.fillText(c.t,x,cy+30); ctx.fillStyle='#fff'; ctx.font='800 30px system-ui,-apple-system,sans-serif'; ctx.fillText(c.v,x,cy+58); });
-    cy=356; ctx.fillStyle='rgba(255,255,255,.05)'; _rr(ctx,44,cy,W-88,360,18); ctx.fill(); ctx.strokeStyle='rgba(255,255,255,.08)'; ctx.stroke();
-    ctx.fillStyle='rgba(255,255,255,.7)'; ctx.font='600 16px system-ui,-apple-system,sans-serif'; ctx.fillText('各运动类型累计距离',72,cy+22);
-    const order=['run','cycle','swim','walk','hike','gym','other'].filter(t=>byType[t]&&byType[t].d>0);
-    const maxD=Math.max.apply(null, order.map(t=>byType[t].d).concat([1]));
-    const ac=cssVar('--blue','#4f8cff'); let ry=cy+64;
-    order.slice(0,6).forEach(t=>{
-      const d=byType[t].d/dd, w=(byType[t].d/maxD)*(W-88-56-140);
-      ctx.fillStyle='rgba(255,255,255,.75)'; ctx.font='500 15px system-ui,-apple-system,sans-serif'; ctx.textAlign='left'; ctx.fillText((TYPE_META[t]||TYPE_META.other).label,72,ry);
-      ctx.fillStyle=_rgba(ac,0.85); _rr(ctx,180,ry-3,Math.max(4,w),22,6); ctx.fill();
-      ctx.fillStyle='rgba(255,255,255,.85)'; ctx.font='600 14px system-ui,-apple-system,sans-serif'; ctx.fillText(d.toFixed(1)+(mi?' mi':' km'),186+Math.max(4,w),ry);
-      ry+=46;
+
+  /* 单卡片海报：主数值与"相当于"共享同一份活动列表数据 */
+  function renderTextPoster(cardType){
+    const info = filterActivitiesForCard(cardType);
+    const list = info.list || [];
+    const mi = State.settings && State.settings.unit === 'mi';
+    const dd = mi ? 1609.344 : 1000;
+    const du = mi ? 'mi' : 'km';
+    const totals = { dist:0, dur:0, elev:0, cal:0, cnt:list.length };
+    list.forEach(a=>{
+      totals.dist += (a.distance||0);
+      totals.dur  += (a.duration||0);
+      totals.elev += (a.elevation||0);
+      totals.cal  += (a.calories||0);
     });
-    ctx.fillStyle='rgba(255,255,255,.4)'; ctx.font='400 15px system-ui,-apple-system,sans-serif'; ctx.textAlign='left'; ctx.fillText(new Date().toLocaleString('zh-CN'),44,H-56);
-    ctx.fillStyle=ac; ctx.font='700 15px system-ui,-apple-system,sans-serif'; ctx.textAlign='right'; ctx.fillText('由 PROATHLETE 生成',W-44,H-56); ctx.textAlign='left';
+
+    let heroValue, heroUnit, heroLabel;
+    if(info.mode === 'count'){
+      heroValue = String(totals.cnt);
+      heroUnit  = '次';
+      heroLabel = '累计运动次数';
+    } else if(cardType === 'total-time'){
+      heroValue = (totals.dur/3600).toFixed(1);
+      heroUnit  = 'h';
+      heroLabel = '累计运动时长';
+    } else {
+      heroValue = (totals.dist/dd).toFixed(2);
+      heroUnit  = du;
+      heroLabel = '累计距离';
+    }
+
+    renderSigmaPoster({
+      title: info.title || '运动数据',
+      subtitle: 'PROATHLETE · ' + (info.sub || '数据卡片'),
+      badge: info.mode === 'count' ? '次数统计' : '距离统计',
+      heroValue,
+      heroUnit,
+      heroLabel,
+      heroNote: totals.cnt ? ('累计 '+totals.cnt+' 次运动' + (totals.dur ? ' · '+fmtHM(totals.dur) : '')) : '',
+      compares: funComparisons(totals),
+    });
   }
+
+  /* 汇总海报：主数值与"相当于"共享同一份 posterTotals */
+  function renderSummaryPoster(){
+    const mi=State.settings && State.settings.unit==='mi'; const dd=mi?1609.344:1000;
+    const t=posterTotals();
+    const types={}; (State.activities||[]).forEach(a=>{ const k=a.type||'other'; types[k]=(types[k]||0)+(a.distance||0); });
+    const typeStr=['run','cycle','swim','walk','hike','gym'].filter(k=>types[k]>0)
+      .map(k=>(TYPE_META[k]||TYPE_META.other).label+' '+(types[k]/dd).toFixed(1)).join(' · ');
+    renderSigmaPoster({
+      title:'\u5168\u90e8\u8fd0\u52a8\u6c47\u603b',
+      subtitle: typeStr? ('\u7d2f\u8ba1 '+(t.dist/dd).toFixed(1)+(mi?' mi':' km')+' · '+t.cnt+' \u6b21 · '+fmtHM(t.dur)) : 'PROATHLETE · \u7d2f\u8ba1\u6570\u636e\u603b\u89c8',
+      badge:'\u751f\u6daf\u7d2f\u8ba1',
+      heroValue: t.dist>0? (t.dist/dd).toFixed(1):'\u2014',
+      heroUnit: mi?'mi':'km',
+      heroLabel:'\u7d2f\u8ba1\u603b\u8ddd\u79bb',
+      heroNote: t.cnt+' \u6b21\u8fd0\u52a8 · \u5171 '+fmtHM(t.dur)+(t.elev>0?(' · \u7d2f\u8ba1\u722c\u5347 '+Math.round(t.elev)+' m'):''),
+      tracks:_collectTracks(),
+      tracksTitle:'\u8f68\u8ff9\u526a\u5f71',
+      compares: funComparisons(t),
+    });
+  }
+
+  /* 热力图海报：保留原热力图 + 水波涟漪装饰 */
+  function renderHeatmapPoster(){
+    const mi = State.settings && State.settings.unit === 'mi';
+    const dd = mi ? 1609.344 : 1000;
+    const t = posterTotals();
+    const W = 680, M = 52, IW = W - M*2;
+
+    const hc = $('#heatmapCanvas');
+    /* 计算热力图等比高度 */
+    const availW = IW - 44;
+    const srcW = (hc && hc.width) ? hc.width : 700;
+    const srcH = (hc && hc.height) ? hc.height : 120;
+    let heatImgH = Math.round(availW * (srcH / srcW));
+    heatImgH = Math.max(120, Math.min(240, heatImgH));
+    const heatCardH = heatImgH + 84;
+
+    const compares = funComparisons(t);
+    const compareH = compares.length ? (46 + compares.length*38) : 0;
+
+    let y = 40;
+    y += 50;
+    const titleY = y + 28; y += 40;
+    const subtitleY = y + 14; y += 26;
+    y += 20;
+    const heatY = y; y += heatCardH + 24;
+    const statsY = y; y += 118 + 24;
+    let compareY = 0;
+    if(compares.length){ compareY = y; y += compareH + 22; }
+    const H = Math.max(660, y + 52);
+
+    const cv = $('#posterCanvas');
+    const ctx = _posterCtx(cv, W, H);
+    _posterBg(ctx, W, H);
+    _posterHeader(ctx, W, '最近 365 天');
+
+    /* 标题 */
+    ctx.fillStyle = POSTER_UI.ink;
+    ctx.font = _pFont(800, 34);
+    ctx.fillText('年度运动热力图', M, titleY);
+    ctx.fillStyle = POSTER_UI.dim;
+    ctx.font = _pFont(400, 15);
+    ctx.fillText('PROATHLETE · 全年运动活跃度', M, subtitleY);
+
+    /* 热力图卡片 + 水波涟漪背景 */
+    _cardBox(ctx, M, heatY, IW, heatCardH, 22);
+    ctx.save();
+    _rr(ctx, M, heatY, IW, heatCardH, 22);
+    ctx.clip();
+    _posterWaves(ctx, M + IW/2, heatY + heatCardH*0.62, 5, Math.max(240, IW*0.9));
+    ctx.restore();
+
+    ctx.fillStyle = POSTER_UI.dim;
+    ctx.font = _pFont(600, 14);
+    ctx.fillText('活跃度分布', M+28, heatY+38);
+
+    /* 热力图位图绘制 */
+    let drew = false;
+    if(hc && hc.width > 0){
+      try{
+        const ax = M + 22, ay = heatY + 56, aw = IW - 44, ah = heatImgH;
+        const r = Math.min(aw / hc.width, ah / hc.height);
+        const dw = hc.width * r, dh = hc.height * r;
+        ctx.save();
+        _rr(ctx, M+16, heatY+52, IW-32, heatImgH+8, 12);
+        ctx.clip();
+        ctx.globalAlpha = 0.96;
+        ctx.drawImage(hc, ax + (aw - dw)/2, ay + (ah - dh)/2, dw, dh);
+        ctx.globalAlpha = 1;
+        ctx.restore();
+        drew = true;
+      }catch(e){ drew = false; }
+    }
+    if(!drew){
+      ctx.fillStyle = POSTER_UI.dim2;
+      ctx.font = _pFont(400, 15);
+      ctx.textAlign = 'center';
+      ctx.fillText('暂无热力图数据', M+IW/2, heatY+56+heatImgH/2);
+      ctx.textAlign = 'left';
+    }
+
+    /* 三格统计 */
+    const cells=[
+      {l:'累计距离', v:(t.dist/dd).toFixed(1)+(mi?' mi':' km')},
+      {l:'运动次数', v:t.cnt+' 次'},
+      {l:'累计时长', v:fmtHM(t.dur)},
+    ];
+    _cardBox(ctx, M, statsY, IW, 118, 22);
+    cells.forEach((c,i)=>{
+      const cw = (IW - 56) / 3;
+      const x = M + 28 + i*cw;
+      ctx.fillStyle = POSTER_UI.dim;
+      ctx.font = _pFont(600, 13);
+      ctx.fillText(c.l, x, statsY + 46);
+      ctx.fillStyle = POSTER_UI.green;
+      ctx.font = _pFont(800, _fitFont(ctx, c.v, cw-12, 26, 800));
+      ctx.fillText(c.v, x, statsY + 84);
+    });
+
+    if(compares.length){
+      _cardBox(ctx, M, compareY, IW, compareH, 22);
+      ctx.fillStyle = POSTER_UI.dim;
+      ctx.font = _pFont(600, 14);
+      ctx.fillText('相当于', M+28, compareY+36);
+      _drawCompare(ctx, M+28, compareY+76, IW-56, compares, 38);
+    }
+
+    _posterFooter(ctx, W, H);
+  }
+
+  /* 分段最佳时间海报：按运动类型分区 */
+  function renderSegPBPoster(){
+    const allSeg = computeAllSegPBs();
+    const mi = State.settings && State.settings.unit === 'mi';
+    const dd = mi ? 1609.344 : 1000;
+    const du = mi ? 'mi' : 'km';
+    const W = 680, M = 52, IW = W - M*2;
+
+    /* 收集有数据的运动类型 */
+    const typeOrder = ['run', 'cycle', 'swim', 'hike'];
+    const sections = [];
+    for(const type of typeOrder){
+      const typeData = allSeg[type];
+      if(!typeData || !Object.keys(typeData).length) continue;
+      const meta = TYPE_META[type] || TYPE_META.other;
+      const segDef = SEG_DEFS[type];
+      const rows = [];
+      for(const seg of segDef.segments){
+        const pb = typeData[seg.key];
+        if(!pb) continue;
+        rows.push({
+          label: seg.label,
+          time: fmtDur(pb.value),
+          date: (()=>{const d=new Date(pb.activity.date); return (d.getMonth()+1)+'/'+d.getDate();})(),
+          name: pb.activity.name,
+        });
+      }
+      if(rows.length) sections.push({ type, meta, rows });
+    }
+
+    if(!sections.length){
+      /* 空状态海报 */
+      const H = 500;
+      const cv = $('#posterCanvas');
+      const ctx = _posterCtx(cv, W, H);
+      _posterBg(ctx, W, H);
+      _posterHeader(ctx, W, '全部时间');
+      ctx.fillStyle = POSTER_UI.ink; ctx.font = _pFont(800, 34);
+      ctx.fillText('分段最佳时间', M, 130);
+      ctx.fillStyle = POSTER_UI.dim2; ctx.font = _pFont(400, 15);
+      ctx.fillText('暂无分段数据', M, 200);
+      _posterFooter(ctx, W, H);
+      return;
+    }
+
+    /* 布局：每个运动区块卡片 */
+    const sectionH = (rows)=> 66 + rows.length*38;
+    let y = 40;
+    y += 50;
+    const titleY = y + 28; y += 40;
+    const subtitleY = y + 14; y += 26;
+    y += 24;
+    const startY = y;
+    for(const s of sections){ y += sectionH(s.rows) + 22; }
+    const H = Math.max(660, y + 52);
+
+    const cv = $('#posterCanvas');
+    const ctx = _posterCtx(cv, W, H);
+    _posterBg(ctx, W, H);
+    _posterHeader(ctx, W, '全部时间');
+
+    ctx.fillStyle = POSTER_UI.ink;
+    ctx.font = _pFont(800, 34);
+    ctx.fillText('分段最佳时间', M, titleY);
+    ctx.fillStyle = POSTER_UI.dim;
+    ctx.font = _pFont(400, 15);
+    ctx.fillText('PROATHLETE · 各运动分段最佳', M, subtitleY);
+
+    let cy = startY;
+    for(const s of sections){
+      const sh = sectionH(s.rows);
+      _cardBox(ctx, M, cy, IW, sh, 22);
+      /* 类型标题 + 色条 */
+      ctx.fillStyle = s.meta.color;
+      _rr(ctx, M+22, cy+24, 6, 22, 3); ctx.fill();
+      ctx.fillStyle = POSTER_UI.ink;
+      ctx.font = _pFont(700, 17);
+      ctx.fillText(s.meta.label, M+38, cy+40);
+      /* 行 */
+      ctx.textBaseline = 'middle';
+      s.rows.forEach((r, i)=>{
+        const ry = cy + 76 + i*38;
+        ctx.textAlign = 'left';
+        ctx.fillStyle = POSTER_UI.dim2;
+        ctx.font = _pFont(600, 14);
+        ctx.fillText(r.label, M+24, ry);
+        ctx.fillStyle = POSTER_UI.lime;
+        ctx.font = _pFont(800, 18);
+        const segLabelW = 62;
+        ctx.fillText(r.time, M+24+segLabelW, ry);
+        ctx.fillStyle = POSTER_UI.dim2;
+        ctx.font = _pFont(500, 12);
+        const timeW = ctx.measureText(r.time).width;
+        ctx.fillText(r.date, M+24+segLabelW+88, ry);
+        ctx.textAlign = 'right';
+        ctx.fillStyle = POSTER_UI.dim2;
+        ctx.font = _pFont(500, 12);
+        ctx.fillText(_ellipsis(ctx, r.name, IW-260, 500, 12), M+IW-24, ry);
+      });
+      ctx.textAlign = 'left';
+      ctx.textBaseline = 'alphabetic';
+      cy += sh + 22;
+    }
+
+    _posterFooter(ctx, W, H);
+  }
+
+  /* PB 海报：按运动类型分区展示 */
+  function renderPBPoster(){
+    const W = 680, M = 52, IW = W - M*2;
+    const pb = State.pbCache.byType;
+    const typeOrder = ['run', 'cycle', 'swim', 'walk', 'hike', 'gym'].filter(k=>pb[k] && Object.keys(pb[k]).length);
+
+    if(!typeOrder.length){
+      const H = 500;
+      const cv = $('#posterCanvas');
+      const ctx = _posterCtx(cv, W, H);
+      _posterBg(ctx, W, H);
+      _posterHeader(ctx, W, '全部时间');
+      ctx.fillStyle = POSTER_UI.ink; ctx.font = _pFont(800, 34);
+      ctx.fillText('生涯个人最佳', M, 130);
+      ctx.fillStyle = POSTER_UI.dim2; ctx.font = _pFont(400, 15);
+      ctx.fillText('暂无 PB 数据', M, 200);
+      _posterFooter(ctx, W, H);
+      return;
+    }
+
+    /* 布局：每个运动区块，PB 瓷砖 2 列 */
+    const tilesPerRow = 2;
+    const tileGap = 14;
+    const tileW = (IW - 44 - tileGap) / tilesPerRow;
+    const tileH = 92;
+    const sectionInfo = typeOrder.map(type=>{
+      const tiles = PB_DEFS[type].filter(def => pb[type][def.key]).map(def=>{
+        const rec = pb[type][def.key];
+        const d = new Date(rec.activity.date);
+        return { label: def.label, value: rec.formatted, date: (d.getMonth()+1)+'/'+d.getDate() };
+      });
+      const rows = Math.ceil(tiles.length / tilesPerRow);
+      return { type, tiles, rows, height: 66 + rows*tileH + Math.max(0, rows-1)*tileGap };
+    });
+
+    let y = 40;
+    y += 50;
+    const titleY = y + 28; y += 40;
+    const subtitleY = y + 14; y += 26;
+    y += 24;
+    const startY = y;
+    for(const s of sectionInfo) y += s.height + 22;
+    const H = Math.max(660, y + 52);
+
+    const cv = $('#posterCanvas');
+    const ctx = _posterCtx(cv, W, H);
+    _posterBg(ctx, W, H);
+    _posterHeader(ctx, W, '全部时间');
+
+    ctx.fillStyle = POSTER_UI.ink;
+    ctx.font = _pFont(800, 34);
+    ctx.fillText('生涯个人最佳', M, titleY);
+    ctx.fillStyle = POSTER_UI.dim;
+    ctx.font = _pFont(400, 15);
+    ctx.fillText('PROATHLETE · Personal Best Records', M, subtitleY);
+
+    let cy = startY;
+    for(const s of sectionInfo){
+      const meta = TYPE_META[s.type] || TYPE_META.other;
+      _cardBox(ctx, M, cy, IW, s.height, 22);
+      /* 类型标题 + 色条 */
+      ctx.fillStyle = meta.color;
+      _rr(ctx, M+22, cy+24, 6, 22, 3); ctx.fill();
+      ctx.fillStyle = POSTER_UI.ink;
+      ctx.font = _pFont(700, 17);
+      ctx.fillText(meta.label, M+38, cy+40);
+      /* PB 瓷砖 */
+      s.tiles.forEach((t, i)=>{
+        const col = i % tilesPerRow;
+        const row = Math.floor(i / tilesPerRow);
+        const tx = M + 22 + col * (tileW + tileGap);
+        const ty = cy + 60 + row * (tileH + tileGap);
+        _rr(ctx, tx, ty, tileW, tileH, 14);
+        ctx.fillStyle = 'rgba(163,230,53,.06)';
+        ctx.fill();
+        ctx.strokeStyle = 'rgba(163,230,53,.22)';
+        ctx.lineWidth = 1;
+        _rr(ctx, tx, ty, tileW, tileH, 14);
+        ctx.stroke();
+        ctx.fillStyle = POSTER_UI.dim;
+        ctx.font = _pFont(600, 12);
+        ctx.textBaseline = 'alphabetic';
+        ctx.textAlign = 'left';
+        ctx.fillText(t.label, tx+16, ty+26);
+        const fpx = _fitFont(ctx, t.value, tileW-32, 24, 800);
+        ctx.fillStyle = POSTER_UI.lime;
+        ctx.font = _pFont(800, fpx);
+        ctx.fillText(t.value, tx+16, ty+62);
+        ctx.fillStyle = POSTER_UI.dim2;
+        ctx.font = _pFont(500, 11);
+        ctx.fillText(t.date, tx+16, ty+82);
+      });
+      cy += s.height + 22;
+    }
+
+    _posterFooter(ctx, W, H);
+  }
+
+  /* 卡片分享：主数值与对比共用同一份数据 */
   function shareCard(card){
-    const labelEl=card.querySelector('.card-label');
-    let label=labelEl?labelEl.textContent.trim():'运动数据';
-    label=label.replace(/详情\s*$/,'').trim();
-    const kpiEl=card.querySelector('.kpi,.kpi-sm');
-    const val=kpiEl?kpiEl.textContent.trim():'—';
-    const subEl=card.querySelector('.sub'); const sub=subEl?subEl.textContent.trim():'';
-    renderTextPoster(label, val, sub); showPoster(label);
+    const cardType = card.dataset.card;
+    if(!cardType){ toast('该卡片暂不支持分享','warn'); return; }
+    renderTextPoster(cardType);
+    const labelEl = card.querySelector('.card-label');
+    let label = labelEl ? labelEl.textContent.trim() : '运动数据';
+    label = label.replace(/详情\s*$/,'').trim();
+    showPoster(label);
   }
   $$('.card.clickable[data-card]').forEach(card=>{
     if(card.querySelector('.fig-share')) return;
@@ -6909,6 +7557,7 @@ async function init(){
     card.appendChild(b);
     b.addEventListener('click', ev=>{ ev.stopPropagation(); ev.preventDefault(); shareCard(card); });
   });
+
   $('#btnShareSummary') && $('#btnShareSummary').addEventListener('click',()=>{
     if(!State.activities.length){ toast('暂无数据可分享','warn'); return; }
     renderSummaryPoster(); showPoster('全部运动汇总');
@@ -6933,6 +7582,18 @@ async function init(){
     const a=State.activities.find(x=>String(x.id)===String(aid));
     if(!a){ toast('未找到活动数据','warn'); return; }
     renderActivityPoster(a); showPoster(a.name||'活动海报');
+  });
+  $('#btnShareHeatmap') && $('#btnShareHeatmap').addEventListener('click',()=>{
+    if(!State.activities.length){ toast('暂无数据可分享','warn'); return; }
+    renderHeatmapPoster(); showPoster('年度运动热力图');
+  });
+  $('#btnSharePB') && $('#btnSharePB').addEventListener('click',()=>{
+    if(!State.activities.length){ toast('暂无数据可分享','warn'); return; }
+    renderPBPoster(); showPoster('生涯个人最佳');
+  });
+  $('#btnShareSegPB') && $('#btnShareSegPB').addEventListener('click',()=>{
+    if(!State.activities.length){ toast('暂无数据可分享','warn'); return; }
+    renderSegPBPoster(); showPoster('分段最佳时间');
   });
 
   $('#btnBackupRaw') && $('#btnBackupRaw').addEventListener('click', async ()=>{
